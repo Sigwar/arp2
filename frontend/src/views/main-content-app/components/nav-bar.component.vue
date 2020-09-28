@@ -32,7 +32,6 @@ export default defineComponent({
 <style lang="scss"
        scoped>
 .gc-nav-bar {
-  width: 100vw;
   grid-column-start: 1;
   grid-column-end: 3;
   grid-row-start: 1;

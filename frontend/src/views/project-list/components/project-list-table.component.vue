@@ -55,11 +55,11 @@
                      width="260">
 
       <template slot-scope="scope">
-        <span class="gc-project-list-table__column__action gc-project-list-table__column__action--red"
-              @click="setProjectToDelete(scope.row)">DELETE {{scope.row.index}}</span>
+        <span @click="setProjectToDelete(scope.row)"
+              class="gc-project-list-table__column__action gc-project-list-table__column__action--red">DELETE {{scope.row.index}}</span>
 
-        <span class="gc-project-list-table__column__action gc-project-list-table__column__action--yellow"
-              @click="setProjectDetail(scope.row)">EDIT</span>
+        <span @click="setProjectDetail(scope.row)"
+              class="gc-project-list-table__column__action gc-project-list-table__column__action--yellow">EDIT</span>
       </template>
     </gc-table-column>
   </gc-table>
@@ -92,7 +92,7 @@ export default defineComponent({
       setSort,
       projects,
       setProjectDetail,
-      setProjectToDelete
+      setProjectToDelete,
     };
   },
 });

@@ -21,7 +21,7 @@ const state = {
     itKnowledge: [],
     projects: '',
     picture: {
-      src: '',
+      url: '',
       file: {},
     },
   },
@@ -125,7 +125,7 @@ const mutations = {
   },
   setEmployeePicture: (state, payload) => {
     state.employeeForm.picture = {
-      src: URL.createObjectURL(payload),
+      url: URL.createObjectURL(payload),
       file: payload,
     };
   },

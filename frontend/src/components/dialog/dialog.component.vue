@@ -25,6 +25,7 @@ export default {
   .el-dialog__header {
     padding: 0;
   }
+
   .el-dialog__body {
     padding: 2rem 2rem 3rem;
   }

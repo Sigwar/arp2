@@ -18,7 +18,7 @@ export const useFilters = (context) => {
   };
 
   const changeValueModal = () => {
-    context.emit('change-modal-state')
+    context.emit('change-modal-state');
   };
 
   return {

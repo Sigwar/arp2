@@ -5,8 +5,8 @@
                 :show-button="true"
                 :show-checkboxes="true"
                 :show-search="true"
-                @change-search="changeSearch"
                 @change-modal-state="changeModalState"
+                @change-search="changeSearch"
                 button-label="Create new employee"></gc-filters>
 
     <gc-employee-list-table></gc-employee-list-table>

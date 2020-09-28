@@ -28,7 +28,8 @@
          v-if="showButton">
 
       <gc-button @click="changeValueModal"
-                 type="default">{{ buttonLabel }}</gc-button>
+                 type="default">{{ buttonLabel }}
+      </gc-button>
     </div>
   </div>
 </template>

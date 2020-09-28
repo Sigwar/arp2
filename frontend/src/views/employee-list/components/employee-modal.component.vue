@@ -1,50 +1,50 @@
 <template>
-  <gc-dialog :visible.sync="isModalOpen"
-             :before-close="resetEmployeeForm"
-             width="45%"
+  <gc-dialog :before-close="resetEmployeeForm"
+             :visible.sync="isModalOpen"
              center
-             class="gc-employee-modal">
+             class="gc-employee-modal"
+             width="45%">
 
     <h2 class="gc-employee-modal__title">Create new employee</h2>
 
     <gc-form :modal="employeeForm"
-             ref="gcNewProjectModal"
-             class="gc-employee-modal__form">
+             class="gc-employee-modal__form"
+             ref="gcNewProjectModal">
 
       <div class="gc-employee-modal__form__row">
 
-        <div class="gc-employee-modal__form__row__avatar-uploader"
-             @click="$refs.pictureUpload.click()">
+        <div @click="$refs.pictureUpload.click()"
+             class="gc-employee-modal__form__row__avatar-uploader">
 
-          <input type="file"
-                 @change="handleAvatarSuccess"
+          <input @change="handleAvatarSuccess"
+                 class="avatar-input"
                  ref="pictureUpload"
-                 class="avatar-input" />
+                 type="file" />
 
-          <img v-if="employeeForm.picture.src !== ''"
-               :src="employeeForm.picture.src"
-               :alt="employeeForm.name"
-               class="picture" />
+          <img :alt="employeeForm.name"
+               :src="employeeForm.picture.url"
+               class="picture"
+               v-if="employeeForm.picture.url !== ''" />
 
-          <i v-if="employeeForm.picture.src === ''"
-             class="el-icon-plus avatar-uploader-icon"></i>
+          <i class="el-icon-plus avatar-uploader-icon"
+             v-if="employeeForm.picture.url === ''"></i>
         </div>
 
         <div class="gc-employee-modal__form__row__wrapper gc-employee-modal__form__row__wrapper--no-margin">
-          <gc-form-item prop="name"
+          <gc-form-item class="gc-employee-modal__form__item"
                         label="Name"
-                        class="gc-employee-modal__form__item">
+                        prop="name">
 
-            <gc-input v-model="employeeForm.name"
-                      class="gc-employee-modal__form__item__value"></gc-input>
+            <gc-input class="gc-employee-modal__form__item__value"
+                      v-model="employeeForm.name"></gc-input>
           </gc-form-item>
 
-          <gc-form-item prop="latName"
+          <gc-form-item class="gc-employee-modal__form__item"
                         label="Last name:"
-                        class="gc-employee-modal__form__item">
+                        prop="latName">
 
-            <gc-input v-model="employeeForm.lastName"
-                      class="gc-employee-modal__form__item__value"></gc-input>
+            <gc-input class="gc-employee-modal__form__item__value"
+                      v-model="employeeForm.lastName"></gc-input>
           </gc-form-item>
         </div>
       </div>
@@ -52,102 +52,102 @@
       <div class="gc-employee-modal__form__row">
 
         <div class="gc-employee-modal__form__row__wrapper">
-          <gc-form-item prop="profession"
+          <gc-form-item class="gc-employee-modal__form__item"
                         label="Profession"
-                        class="gc-employee-modal__form__item">
+                        prop="profession">
 
-            <gc-input v-model="employeeForm.profession"
-                      class="gc-employee-modal__form__item__value"></gc-input>
+            <gc-input class="gc-employee-modal__form__item__value"
+                      v-model="employeeForm.profession"></gc-input>
           </gc-form-item>
 
-          <gc-form-item prop="level"
+          <gc-form-item class="gc-employee-modal__form__item gc-employee-modal__form__item"
                         label="Level"
-                        class="gc-employee-modal__form__item gc-employee-modal__form__item">
+                        prop="level">
 
-            <gc-select v-model="employeeForm.level"
-                       placeholder="Select level..."
+            <gc-select allow-create
+                       default-first-option
                        filterable
-                       allow-create
-                       default-first-option>
+                       placeholder="Select level..."
+                       v-model="employeeForm.level">
 
-              <gc-option v-for="profession in professionList"
-                         :key="profession"
+              <gc-option :key="profession"
                          :label="profession"
-                         :value="profession"></gc-option>
+                         :value="profession"
+                         v-for="profession in professionList"></gc-option>
             </gc-select>
           </gc-form-item>
         </div>
 
         <div class="gc-employee-modal__form__row__wrapper">
-          <gc-form-item prop="birthDay"
+          <gc-form-item class="gc-employee-modal__form__item"
                         label="Birthday"
-                        class="gc-employee-modal__form__item">
+                        prop="birthDay">
 
-            <gc-input v-model="employeeForm.birthDay"
-                      class="gc-employee-modal__form__item__value"></gc-input>
+            <gc-input class="gc-employee-modal__form__item__value"
+                      v-model="employeeForm.birthDay"></gc-input>
           </gc-form-item>
 
-          <gc-form-item prop="itExperience"
+          <gc-form-item class="gc-employee-modal__form__item"
                         label="IT Experience:"
-                        class="gc-employee-modal__form__item">
+                        prop="itExperience">
 
-            <gc-input v-model="employeeForm.itExperience"
-                      class="gc-employee-modal__form__item__value"></gc-input>
+            <gc-input class="gc-employee-modal__form__item__value"
+                      v-model="employeeForm.itExperience"></gc-input>
           </gc-form-item>
         </div>
 
         <div class="gc-employee-modal__form__row__wrapper">
-          <gc-form-item prop="language"
+          <gc-form-item class="gc-employee-modal__form__item"
                         label="Language"
-                        class="gc-employee-modal__form__item">
+                        prop="language">
 
-            <gc-input v-model="employeeForm.language"
-                      class="gc-employee-modal__form__item__value"></gc-input>
+            <gc-input class="gc-employee-modal__form__item__value"
+                      v-model="employeeForm.language"></gc-input>
           </gc-form-item>
 
-          <gc-form-item prop="active"
+          <gc-form-item class="gc-employee-modal__form__item gc-employee-modal__form__item--switch"
                         label="Active"
-                        class="gc-employee-modal__form__item gc-employee-modal__form__item--switch">
+                        prop="active">
 
-            <gc-switch v-model="employeeForm.isActive"
-                       class="gc-employee-modal__form__item__value"></gc-switch>
+            <gc-switch class="gc-employee-modal__form__item__value"
+                       v-model="employeeForm.isActive"></gc-switch>
           </gc-form-item>
         </div>
       </div>
 
-      <gc-form-item prop="itKnowledge"
+      <gc-form-item class="gc-employee-modal__form__item"
                     label="IT knowledge:"
-                    class="gc-employee-modal__form__item">
+                    prop="itKnowledge">
 
-        <gc-select v-model="employeeForm.itKnowledge"
-                   placeholder="Select knowledge..."
-                   multiple
+        <gc-select allow-create
+                   default-first-option
                    filterable
-                   allow-create
-                   default-first-option>
+                   multiple
+                   placeholder="Select knowledge..."
+                   v-model="employeeForm.itKnowledge">
 
-          <gc-option v-for="tag in knowledgeTags"
-                     :key="tag"
+          <gc-option :key="tag"
                      :label="tag"
-                     :value="tag"></gc-option>
+                     :value="tag"
+                     v-for="tag in knowledgeTags"></gc-option>
         </gc-select>
       </gc-form-item>
 
-      <gc-form-item prop="projects"
+      <gc-form-item class="gc-employee-modal__form__item"
                     label="Project:"
-                    class="gc-employee-modal__form__item">
+                    prop="projects">
 
-        <gc-select v-model="employeeForm.projects"
-                   placeholder="Select projects..."
-                   multiple
+        <gc-select allow-create
+                   default-first-option
                    filterable
-                   allow-create
-                   default-first-option>
+                   multiple
+                   placeholder="Select projects..."
+                   v-model="employeeForm.projects">
 
-          <gc-option v-for="project in projects"
-                     :key="project.uuid"
+          <gc-option :key="project.uuid"
                      :label="project.label"
-                     :value="project.uuid"></gc-option>
+                     :value="project.uuid"
+                     v-for="project in projects"></gc-option>
         </gc-select>
       </gc-form-item>
 

@@ -6,8 +6,8 @@
 
     <main class="gc-main-content-app__content">
 
-      <transition name="slide-fade"
-                  mode="out-in">
+      <transition mode="out-in"
+                  name="slide-fade">
 
         <router-view />
       </transition>
@@ -33,19 +33,21 @@ export default {
 .slide-fade-enter-active {
   transition: var(--transition);
 }
+
 .slide-fade-leave-active {
   transition: var(--transition);
 }
+
 .slide-fade-enter, .slide-fade-leave-to
-  /* .slide-fade-leave-active below version 2.1.8 */ {
+  /* .slide-fade-leave-active below version 2.1.8 */
+{
   transform: translateX(1.7rem);
   opacity: 0;
 }
 
 .gc-main-content-app {
-  width: 10rem;
   display: grid;
-  grid-template-columns: 10.3rem auto;
+  grid-template-columns: 10rem auto;
   grid-template-rows: 7.9rem auto;
   height: 100vh;
 
@@ -55,7 +57,7 @@ export default {
     grid-row-start: 2;
     grid-row-end: 3;
     padding: 2.9rem 7.1rem;
-    width: calc(100vw - 11rem);
+    width: calc(100vw - 12rem);
   }
 }
 </style>

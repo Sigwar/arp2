@@ -32,7 +32,7 @@ export const useProjectList = () => {
     store.dispatch('projectsModule/createNewProject');
   };
 
-  const changeDeleteModal = () => {
+  const closeDeleteModal = () => {
     store.commit('projectsModule/setDeleteModal');
     store.commit('projectsModule/resetProjectToDelete');
   };
@@ -72,7 +72,7 @@ export const useProjectList = () => {
     createNewProject,
     changeModalState,
     setProjectDetail,
-    changeDeleteModal,
+    closeDeleteModal,
     setProjectToDelete,
   };
 };

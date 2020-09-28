@@ -1,26 +1,28 @@
 <template>
-  <gc-dialog :visible.sync="isDeleteModal"
-             :before-close="changeDeleteModal"
-             width="40%"
-             class="delete-modal">
+  <gc-dialog :before-close="closeDeleteModal"
+             :visible.sync="isDeleteModal"
+             class="gc-delete-modal"
+             width="40%">
 
-    <h2 class="delete-modal__title">Are you sure you want
-      <span class="delete-modal__title__highlighted">remove</span></h2>
+    <h2 class="gc-delete-modal__title">Are you sure you want
+      <span class="gc-delete-modal__title__highlighted">remove:</span></h2>
 
-    <p class="delete-modal__project">{{projectToDelete.name}}
-      <span class="delete-modal__project__insertion">from</span>
+    <p class="gc-delete-modal__project">{{projectToDelete.name}}
+      <span class="gc-delete-modal__project__insertion">from</span>
       {{projectToDelete.client}}
     </p>
 
-    <div class="delete-modal__buttons">
+    <div class="gc-delete-modal__buttons">
 
-      <gc-button @click.native.prevent="changeDeleteModal"
+      <gc-button @click.native.prevent="closeDeleteModal"
                  class="button"
-                 type="info">Cancel</gc-button>
+                 type="info">Cancel
+      </gc-button>
 
       <gc-button @click.native.prevent="deleteProject"
                  class="button"
-                 type="danger">Delete</gc-button>
+                 type="danger">Delete
+      </gc-button>
     </div>
   </gc-dialog>
 </template>
@@ -42,14 +44,14 @@ export default defineComponent({
       isDeleteModal,
       deleteProject,
       projectToDelete,
-      changeDeleteModal,
+      closeDeleteModal,
     } = useProjectList();
 
     return {
       isDeleteModal,
       deleteProject,
       projectToDelete,
-      changeDeleteModal,
+      closeDeleteModal,
     };
   },
 });
@@ -57,7 +59,7 @@ export default defineComponent({
 
 <style lang="scss"
        scoped>
-.delete-modal {
+.gc-delete-modal {
   padding: 2rem;
 
   &__title {

@@ -8,7 +8,7 @@ export const useLoginForm = () => {
   });
 
   const signIn = () => {
-    router.push({ name: 'Home' });
+    router.push({ name: 'Home' }).catch(() => {});
   };
 
   return {

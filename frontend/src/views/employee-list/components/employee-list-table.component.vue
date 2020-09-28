@@ -75,7 +75,10 @@
       <template slot-scope="scope">
         <span class="gc-employee-list-table__column__action gc-employee-list-table__column__action--red">PDF {{scope.row.index}}</span>
         <span class="gc-employee-list-table__column__action gc-employee-list-table__column__action--red-dark">BLIND PDF</span>
-        <span class="gc-employee-list-table__column__action gc-employee-list-table__column__action--yellow">EDIT</span>
+
+        <span @click="goToDetail(scope.row.uuid)"
+              class="gc-employee-list-table__column__action gc-employee-list-table__column__action--yellow">EDIT</span>
+
       </template>
     </gc-table-column>
   </gc-table>
@@ -100,11 +103,13 @@ export default defineComponent({
     const {
       setSort,
       employees,
+      goToDetail,
     } = useEmployeeList();
 
     return {
       setSort,
       employees,
+      goToDetail,
     };
   },
 });

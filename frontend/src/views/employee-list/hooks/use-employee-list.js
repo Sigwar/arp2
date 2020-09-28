@@ -1,5 +1,6 @@
 import { computed, ref } from '@vue/composition-api';
 import store             from '@/store/store';
+import router            from '@/router';
 
 export const useEmployeeList = () => {
 
@@ -51,11 +52,16 @@ export const useEmployeeList = () => {
     store.commit('employeesModule/setEmployeePicture', blobFile);
   };
 
+  const goToDetail = (uuid) => {
+    router.push({ name: 'Employee detail', params: { uuid: uuid } }).catch(() => {});
+  };
+
   return {
     sort,
     setSort,
     projects,
     employees,
+    goToDetail,
     valueInput,
     isModalOpen,
     getProjects,

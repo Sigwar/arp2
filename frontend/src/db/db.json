@@ -30,18 +30,23 @@
     }
   ],
   "knowledgeTags": [
-    "JAVA",
-    "VUE.JS",
-    "HTML5",
-    "CSS3",
-    "SASS",
-    "SPRING",
-    "GIT",
-    "FIGMA",
-    "NPM",
-    "JAVASCRIPT",
-    "HIBERNATE",
-    "POSTGRESQL"
+    "Java",
+    "C++",
+    "Node.js",
+    "JavaScript",
+    "Vue.js",
+    "Vuex",
+    "Sass",
+    "Element.io",
+    "Gitlab",
+    "Jenkins",
+    "Es6",
+    "Figma",
+    "Zeplin",
+    "Invision",
+    "Npm",
+    "Scrum",
+    "Jira"
   ],
   "projects": [
     {
@@ -89,5 +94,154 @@
     "employees": [
       "rafal-krukowski-001"
     ]
-  }
+  },
+  "employeeProfile": {
+    "name": "Rafał",
+    "lastName": "Krukowski",
+    "picture": {
+      "url": "https://images.unsplash.com/photo-1517423568366-8b83523034fd?ixlib=rb-1.2.1&auto=format&fit=crop&w=675&q=80",
+      "file": {}
+    },
+    "level": "Senior",
+    "profession": "Front-end",
+    "birthDay": "14/01/1993",
+    "itExperience": "Since 2014",
+    "language": "English, Polish",
+    "isActive": true,
+    "itKnowledge": [
+      "Vue.js",
+      "Vuex",
+      "Html5",
+      "Css3",
+      "Es6",
+      "Figma",
+      "UX/UI",
+      "JavaScript"
+    ],
+    "uuid": "rafal-krukowski-001"
+  },
+  "employeeEducation": [
+    {
+      "educationDate": [
+        "2010",
+        "2013"
+      ],
+      "schoolName": "Hight school in Głubczyce",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
+      "uuid": "project-001"
+    },
+    {
+      "educationDate": [
+        "2013",
+        "2016"
+      ],
+      "schoolName": "Bachelor of science",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
+      "uuid": "project-002"
+    }
+  ],
+  "employeeProjects": [
+    {
+      "date": [
+        "01/2014",
+        "01/2018"
+      ],
+      "projectName": "Yieldon",
+      "clientName": "Antologic",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
+      "topic": "Hotel revenue managemenet",
+      "roles": [
+        "Frontend developer",
+        "Team leader",
+        "Designer"
+      ],
+      "technologies": [
+        "JavaScript",
+        "Vue.js",
+        "Vuex",
+        "Sass",
+        "Element.io",
+        "Gitlab",
+        "Jenkins",
+        "ES6",
+        "Figma",
+        "Zeplin",
+        "Invision",
+        "NPM",
+        "Scrum",
+        "Jira"
+      ],
+      "activities": [
+        "Prototyping",
+        "Synchronizing development processes between three backend streams and frontend stream."
+      ],
+      "order": 1,
+      "uuid": "yieldon-antologic-01"
+    },
+    {
+      "date": [
+        "02/2018",
+        "01/2020"
+      ],
+      "projectName": "Happy Hands",
+      "clientName": "Antologic",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
+      "topic": "IoT",
+      "roles": [
+        "Frontend developer",
+        "Team leader",
+        "Designer"
+      ],
+      "technologies": [
+        "JavaScript",
+        "Vue.js",
+        "Vuex",
+        "Sass",
+        "Element.io",
+        "Gitlab",
+        "Jenkins",
+        "ES6",
+        "Figma",
+        "Zeplin",
+        "Invision",
+        "NPM",
+        "Scrum",
+        "Jira"
+      ],
+      "activities": [
+        "Prototyping",
+        "Synchronizing development processes between three backend streams and frontend stream."
+      ],
+      "order": 2,
+      "uuid": "happy-hands-antologic-01"
+    }
+  ],
+  "professionList": [
+    "Trainee",
+    "Junior",
+    "Professional",
+    "Senior"
+  ],
+  "allProjects": [
+    {
+      "name": "Yieldon",
+      "client": "Antologic",
+      "uuid": "yieldon-antologic-01"
+    },
+    {
+      "name": "Happy Hands",
+      "client": "Antologic",
+      "uuid": "happy-hands-antologic-01"
+    },
+    {
+      "name": "Team We",
+      "client": "Antologic",
+      "uuid": "team-we-antologic-01"
+    },
+    {
+      "name": "IntelliseQ",
+      "client": "IntelliseQ",
+      "uuid": "intelliseq-01"
+    }
+  ]
 }

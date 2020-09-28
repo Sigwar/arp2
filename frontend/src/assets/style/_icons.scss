@@ -1,7 +1,17 @@
 .icon {
 
+  &-avatar {
+    background: url("~@/assets/icons/avatar/avatar.svg") no-repeat center;
+    background-size: contain;
+  }
+
   &-logout {
     background: url("~@/assets/icons/logout/logout.svg") no-repeat center;
+    background-size: contain;
+  }
+
+  &-arrow {
+    background: url("~@/assets/icons/arrow/arrow.svg") no-repeat center;
     background-size: contain;
   }
 
@@ -15,13 +25,58 @@
     background-size: contain;
   }
 
+  &-project--dark {
+    background: url("~@/assets/icons/project/project--dark.svg") no-repeat center;
+    background-size: contain;
+  }
+
+  &-project--yellow {
+    background: url("~@/assets/icons/project/project--yellow.svg") no-repeat center;
+    background-size: contain;
+  }
+
   &-user {
     background: url("~@/assets/icons/user/user.svg") no-repeat center;
     background-size: contain;
   }
 
+  &-user--dark {
+    background: url("~@/assets/icons/user/user--dark.svg") no-repeat center;
+    background-size: contain;
+  }
+
+  &-user--yellow {
+    background: url("~@/assets/icons/user/user--yellow.svg") no-repeat center;
+    background-size: contain;
+  }
+
   &-next {
     background: url("~@/assets/icons/next/next.svg") no-repeat center;
+    background-size: contain;
+  }
+
+  &-education--dark {
+    background: url("~@/assets/icons/education/education--dark.svg") no-repeat center;
+    background-size: contain;
+  }
+
+  &-education--yellow {
+    background: url("~@/assets/icons/education/education--yellow.svg") no-repeat center;
+    background-size: contain;
+  }
+
+  &-doc--dark {
+    background: url("~@/assets/icons/doc/doc--dark.svg") no-repeat center;
+    background-size: contain;
+  }
+
+  &-doc--yellow {
+    background: url("~@/assets/icons/doc/doc--yellow.svg") no-repeat center;
+    background-size: contain;
+  }
+
+  &-settings {
+    background: url("~@/assets/icons/settings/settings.svg") no-repeat center;
     background-size: contain;
   }
 }

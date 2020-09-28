@@ -1,7 +1,7 @@
 <template>
   <el-switch class="gc-switch"
-            v-bind="$attrs"
-            v-on="$listeners">
+             v-bind="$attrs"
+             v-on="$listeners">
 
     <slot :name="slot"
           :slot="slot"
@@ -17,9 +17,9 @@ export default {
 
 <style lang="scss">
 .gc-switch.el-switch.is-checked {
-    .el-switch__core {
-      background: var(--primary-color);
-      border: 1px solid var(--primary-color);
-    }
+  .el-switch__core {
+    background: var(--primary-color);
+    border: 1px solid var(--primary-color);
+  }
 }
 </style>

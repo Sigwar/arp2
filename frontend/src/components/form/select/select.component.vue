@@ -46,6 +46,7 @@ export default {
     }
   }
 }
+
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
   color: var(--primary-color) !important;
 }

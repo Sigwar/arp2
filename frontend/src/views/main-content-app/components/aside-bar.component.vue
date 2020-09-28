@@ -48,8 +48,8 @@ export default defineComponent({
   justify-content: center;
 
   &__content {
+    position: fixed;
     margin-top: 20vh;
-    position: relative;
 
     &__icon {
       height: 4.7rem;

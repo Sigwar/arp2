@@ -1,76 +1,77 @@
 <template>
-  <gc-dialog :visible.sync="modal"
-             :before-close="changeModalState"
-             width="42%"
-             class="gc-project-modal">
+  <gc-dialog :before-close="changeModalState"
+             :visible.sync="modal"
+             class="gc-project-modal"
+             width="42%">
 
     <h2 class="gc-project-modal__title">Create new project</h2>
 
     <gc-form :modal="projectForm"
-             ref="gcNewProjectModal"
-             class="gc-project-modal__form">
+             class="gc-project-modal__form"
+             ref="gcNewProjectModal">
 
-      <gc-form-item prop="name"
-                    label="Name:"
-                    class="gc-project-modal__form__item">
+      <gc-form-item class="gc-project-modal__form__item"
+                    label="Project name:"
+                    prop="name">
 
-        <gc-input v-model="projectForm.name"
-                  class="gc-project-modal__form__item__value"></gc-input>
+        <gc-input class="gc-project-modal__form__item__value"
+                  v-model="projectForm.name"></gc-input>
       </gc-form-item>
 
-      <gc-form-item prop="client"
+      <gc-form-item class="gc-project-modal__form__item"
                     label="Client:"
-                    class="gc-project-modal__form__item">
+                    prop="client">
 
-        <gc-input v-model="projectForm.client"
-                  class="gc-project-modal__form__item__value"></gc-input>
+        <gc-input class="gc-project-modal__form__item__value"
+                  v-model="projectForm.client"></gc-input>
       </gc-form-item>
 
       <div class="gc-project-modal__form__wrapper">
-        <gc-form-item prop="employees"
+        <gc-form-item class="gc-project-modal__form__item"
                       label="Employees:"
-                      class="gc-project-modal__form__item">
+                      prop="employees">
 
-          <gc-select v-model="projectForm.employees"
+          <gc-select collapse-tags
                      multiple
-                     collapse-tags>
+                     v-model="projectForm.employees">
 
-            <gc-option v-for="employee in employees"
+            <gc-option :key="employee.uuid"
                        :labe="employee.label"
-                       :key="employee.uuid"
-                       :value="employee.uuid">{{employee.label}}</gc-option>
+                       :value="employee.uuid"
+                       v-for="employee in employees">{{employee.label}}
+            </gc-option>
           </gc-select>
         </gc-form-item>
 
-        <gc-form-item prop="client"
+        <gc-form-item class="gc-project-modal__form__item"
                       label="Time frame:"
-                      class="gc-project-modal__form__item">
+                      prop="client">
 
-          <gc-date-picker v-model="projectForm.date"
-                          type="monthrange"
+          <gc-date-picker class="gc-project-modal__form__item__value"
+                          end-placeholder="End month"
                           range-separator="-"
                           start-placeholder="Start month"
-                          end-placeholder="End month"
-                          class="gc-project-modal__form__item__value"></gc-date-picker>
+                          type="monthrange"
+                          v-model="projectForm.date"></gc-date-picker>
         </gc-form-item>
       </div>
 
-      <gc-form-item prop="topic"
+      <gc-form-item class="gc-project-modal__form__item"
                     label="Topic:"
-                    class="gc-project-modal__form__item">
+                    prop="topic">
 
-        <gc-input v-model="projectForm.topic"
-                  class="gc-project-modal__form__item__value"></gc-input>
+        <gc-input class="gc-project-modal__form__item__value"
+                  v-model="projectForm.topic"></gc-input>
       </gc-form-item>
 
-      <gc-form-item prop="description"
+      <gc-form-item class="gc-project-modal__form__item"
                     label="Description"
-                    class="gc-project-modal__form__item">
+                    prop="description">
 
-        <gc-input v-model="projectForm.description"
-                  :autosize="{minRows: 4}"
+        <gc-input :autosize="{minRows: 4}"
+                  class="gc-project-modal__form__item__value"
                   type="textarea"
-                  class="gc-project-modal__form__item__value"></gc-input>
+                  v-model="projectForm.description"></gc-input>
       </gc-form-item>
 
       <div class="gc-project-modal__form__buttons">
@@ -80,16 +81,16 @@
                    type="info">Cancel
         </gc-button>
 
-        <gc-button v-if="!isEditMode"
-                   @click.native.prevent="createNewProject"
+        <gc-button @click.native.prevent="createNewProject"
                    class="button"
-                   type="default">Create
+                   type="default"
+                   v-if="!isEditMode">Create
         </gc-button>
 
-        <gc-button v-if="isEditMode"
-                   @click.native.prevent="updateProject"
+        <gc-button @click.native.prevent="updateProject"
                    class="button"
-                   type="default">Update
+                   type="default"
+                   v-if="isEditMode">Update
         </gc-button>
       </div>
     </gc-form>

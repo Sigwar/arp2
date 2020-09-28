@@ -5,8 +5,8 @@
                 :show-button="true"
                 :show-checkboxes="false"
                 :show-search="true"
-                @change-search="changeSearch"
                 @change-modal-state="changeModalState"
+                @change-search="changeSearch"
                 button-label="Create new project"></gc-filters>
 
     <gc-project-list-table></gc-project-list-table>
@@ -24,7 +24,7 @@ import store               from '@/store/store';
 import gcFilters           from '@/components/filters/filters.component.vue';
 import gcNewProjectModal   from './components/project-modal.component.vue';
 import gcProjectListTable  from './components/project-list-table.component.vue';
-import gcDeleteModal       from './components/delete-modal.component.vue'
+import gcDeleteModal       from './components/delete-modal.component.vue';
 
 export default defineComponent({
   name: 'gcProjectList',
