@@ -6,24 +6,24 @@
 
     <h2 class="gc-project-modal__title">Create new project</h2>
 
-    <gc-form :modal="projectForm"
-             class="gc-project-modal__form"
-             ref="gcNewProjectModal">
+    <gc-form ref="gcNewProjectModal"
+             :modal="projectForm"
+             class="gc-project-modal__form">
 
       <gc-form-item class="gc-project-modal__form__item"
                     label="Project name:"
                     prop="name">
 
-        <gc-input class="gc-project-modal__form__item__value"
-                  v-model="projectForm.name"></gc-input>
+        <gc-input v-model="projectForm.name"
+                  class="gc-project-modal__form__item__value"></gc-input>
       </gc-form-item>
 
       <gc-form-item class="gc-project-modal__form__item"
                     label="Client:"
                     prop="client">
 
-        <gc-input class="gc-project-modal__form__item__value"
-                  v-model="projectForm.client"></gc-input>
+        <gc-input v-model="projectForm.client"
+                  class="gc-project-modal__form__item__value"></gc-input>
       </gc-form-item>
 
       <div class="gc-project-modal__form__wrapper">
@@ -31,15 +31,14 @@
                       label="Employees:"
                       prop="employees">
 
-          <gc-select collapse-tags
-                     multiple
-                     v-model="projectForm.employees">
+          <gc-select v-model="projectForm.employees"
+                     collapse-tags
+                     multiple>
 
-            <gc-option :key="employee.uuid"
-                       :labe="employee.label"
-                       :value="employee.uuid"
-                       v-for="employee in employees">{{employee.label}}
-            </gc-option>
+            <gc-option v-for="employee in employees"
+                       :key="employee.uuid"
+                       :label="`${employee.name} ${employee.lastName}`"
+                       :value="employee.uuid"></gc-option>
           </gc-select>
         </gc-form-item>
 
@@ -47,12 +46,12 @@
                       label="Time frame:"
                       prop="client">
 
-          <gc-date-picker class="gc-project-modal__form__item__value"
+          <gc-date-picker v-model="projectForm.date"
+                          class="gc-project-modal__form__item__value"
                           end-placeholder="End month"
                           range-separator="-"
                           start-placeholder="Start month"
-                          type="monthrange"
-                          v-model="projectForm.date"></gc-date-picker>
+                          type="monthrange"></gc-date-picker>
         </gc-form-item>
       </div>
 
@@ -60,37 +59,39 @@
                     label="Topic:"
                     prop="topic">
 
-        <gc-input class="gc-project-modal__form__item__value"
-                  v-model="projectForm.topic"></gc-input>
+        <gc-input v-model="projectForm.topic"
+                  class="gc-project-modal__form__item__value"></gc-input>
       </gc-form-item>
 
       <gc-form-item class="gc-project-modal__form__item"
                     label="Description"
                     prop="description">
 
-        <gc-input :autosize="{minRows: 4}"
+        <gc-input v-model="projectForm.description"
+                  :autosize="{minRows: 4}"
                   class="gc-project-modal__form__item__value"
-                  type="textarea"
-                  v-model="projectForm.description"></gc-input>
+                  type="textarea"></gc-input>
       </gc-form-item>
 
       <div class="gc-project-modal__form__buttons">
 
-        <gc-button @click.native.prevent="changeModalState"
-                   class="button"
-                   type="info">Cancel
+        <gc-button class="button"
+                   type="info"
+                   @click.native.prevent="changeModalState">Cancel
         </gc-button>
 
-        <gc-button @click.native.prevent="createNewProject"
+        <gc-button v-if="!isEditMode"
+                   :loading="loading"
                    class="button"
                    type="default"
-                   v-if="!isEditMode">Create
+                   @click.native.prevent="createNewProject">Create
         </gc-button>
 
-        <gc-button @click.native.prevent="updateProject"
+        <gc-button v-if="isEditMode"
+                   :loading="loading"
                    class="button"
                    type="default"
-                   v-if="isEditMode">Update
+                   @click.native.prevent="updateProject">Update
         </gc-button>
       </div>
     </gc-form>
@@ -124,6 +125,7 @@ export default defineComponent({
   setup() {
     const {
       modal,
+      loading,
       employees,
       isEditMode,
       projectForm,
@@ -134,6 +136,7 @@ export default defineComponent({
 
     return {
       modal,
+      loading,
       employees,
       isEditMode,
       projectForm,

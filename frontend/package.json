@@ -10,9 +10,15 @@
   "dependencies": {
     "@vue/composition-api": "^1.0.0-beta.9",
     "axios": "^0.19.2",
+    "body-parser": "latest",
     "core-js": "^3.6.5",
     "element-ui": "^2.13.2",
+    "express": "latest",
+    "express-handlebars": "latest",
     "lodash": "^4.17.20",
+    "moment": "^2.29.1",
+    "moment-precise-range-plugin": "^1.3.0",
+    "vue": "^2.6.11",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0"

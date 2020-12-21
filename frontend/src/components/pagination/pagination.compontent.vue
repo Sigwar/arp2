@@ -1,13 +1,13 @@
 <template>
-  <el-pagination background
+  <el-pagination v-bind="$attrs"
+                 v-on="$listeners"
+                 background
                  class="gc-pagination"
-                 layout="prev, pager, next, total"
-                 v-bind="$attrs"
-                 v-on="$listeners">
+                 layout="prev, pager, next, total">
 
-    <slot :name="slot"
+    <slot v-for="(_, slot) of $slots"
           :slot="slot"
-          v-for="(_, slot) of $slots" />
+          :name="slot" />
   </el-pagination>
 </template>
 

@@ -1,8 +1,8 @@
 <template>
   <nav class="gc-nav-bar">
     <div class="gc-nav-bar__content">
-      <div @click="logOut"
-           class="gc-nav-bar__content__wrapper">
+      <div class="gc-nav-bar__content__wrapper"
+           @click="logOut">
 
         <span class="gc-nav-bar__content__wrapper__label">Logout</span>
         <div class="gc-nav-bar__content__wrapper__icon icon-logout"></div>

@@ -1,12 +1,12 @@
 <template>
   <div class="gc-box-sort">
 
-    <div :class="{'gc-box-sort__icon--upside-down': sort.direction === 'DES'}"
-         class="gc-box-sort__icon icon-next"
-         v-if="name === sort.sortBy"></div>
+    <div v-if="name === sort.sortBy"
+         :class="{'gc-box-sort__icon--upside-down': sort.direction === 'DESC'}"
+         class="gc-box-sort__icon icon-next"></div>
 
-    <div class="gc-box-sort__icon icon-minus"
-         v-else></div>
+    <div v-else
+         class="gc-box-sort__icon icon-minus"></div>
   </div>
 </template>
 

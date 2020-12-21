@@ -9,22 +9,21 @@
     </h2>
 
     <p class="delete-modal__content">
-
-      <span v-if="deleteModalData.data.type === 'education'">School - </span>
-      {{deleteModalData.data.name}}
-      <span v-if="deleteModalData.data.client"> for {{deleteModalData.data.client}}</span>
+      <span v-if="deleteModalData.data.type === 'education'">{{ deleteModalData.data.name }}</span>
+      <span v-if="deleteModalData.data.type === 'project'">{{ deleteModalData.data.name }} for {{ deleteModalData.data.client }}</span>
+      <span v-if="deleteModalData.data.type === 'certificate'">{{ deleteModalData.data.name }}</span>
     </p>
 
     <div class="delete-modal__buttons">
 
-      <gc-button @click.native.prevent="closeDeleteModal"
-                 class="button"
-                 type="info">Cancel
+      <gc-button class="button"
+                 type="info"
+                 @click.native.prevent="closeDeleteModal">Cancel
       </gc-button>
 
-      <gc-button @click.native.prevent="deleteEducation"
-                 class="button"
-                 type="danger">Delete
+      <gc-button class="button"
+                 type="danger"
+                 @click.native.prevent="deleteItem(employeeUuid)">Delete
       </gc-button>
     </div>
   </gc-dialog>
@@ -43,19 +42,23 @@ export default defineComponent({
     gcButton,
     gcDialog,
   },
-  setup() {
+
+  setup(props, { root }) {
+    const employeeUuid = root.$route.params.uuid;
+
     const {
       deleteModalData,
       closeDeleteModal,
     } = useEmployeeDetail();
 
     const {
-      deleteEducation,
+      deleteItem,
     } = useEmployeeDetailEducation();
 
     return {
+      deleteItem,
+      employeeUuid,
       deleteModalData,
-      deleteEducation,
       closeDeleteModal,
     };
   },

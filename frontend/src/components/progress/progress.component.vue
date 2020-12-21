@@ -1,11 +1,11 @@
 <template>
-  <el-progress class="gc-progress"
-               v-bind="$attrs"
-               v-on="$listeners">
+  <el-progress v-bind="$attrs"
+               v-on="$listeners"
+               class="gc-progress">
 
-    <slot :name="slot"
+    <slot v-for="(_, slot) of $slots"
           :slot="slot"
-          v-for="(_, slot) of $slots" />
+          :name="slot" />
   </el-progress>
 </template>
 

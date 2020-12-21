@@ -1,10 +1,10 @@
 import axios from 'axios';
+import store from '../../store';
 
 const state = {
   employees: [],
-  knowledgeTags: [],
-  professionList: [ 'TRAINEE', 'JUNIOR', 'PROFESSIONAL', 'SENIOR' ],
   sort: {
+    statusSearch: [ 1, 0 ],
     sortBy: 'NAME',
     direction: 'ASC',
   },
@@ -14,16 +14,13 @@ const state = {
     lastName: '',
     level: '',
     profession: '',
-    birthDay: '',
+    birthday: '',
     itExperience: '',
-    language: '',
+    languages: [],
     isActive: true,
     itKnowledge: [],
     projects: '',
-    picture: {
-      url: '',
-      file: {},
-    },
+    loadingBtn: false,
   },
   projects: [],
 };
@@ -39,47 +36,58 @@ const getters = {
   isModalOpen: (state) => {
     return state.isModalOpen;
   },
-  knowledgeTags: (state) => {
-    return state.knowledgeTags;
-  },
   projects: (state) => {
     return state.projects;
+  },
+  statusSearch: (state) => {
+    return state.statusSearch;
+  },
+  loadingBtn: (state) => {
+    return state.loadingBtn;
   },
 };
 
 // actions
 const actions = {
-  async getTagsKnowledge({ commit }) {
+  async getEmployees({ state, commit }) {
+
+    const reqData = {
+      userUuid: store.getters[ 'userUuid' ],
+      ...state.sort,
+    };
+
     try {
-      const { data } = await axios.get('http://localhost:3000/knowledgeTags');
-      commit('setKnowledgeTags', data);
-    } catch (e) {
-      console.log('e: ', e);
-    }
-  },
-  async getEmployees({ commit }) {
-    try {
-      const { data } = await axios.get('http://localhost:3000/employees');
+      const { data } = await axios.post('http://localhost:8081/employees/employees', reqData);
       commit('setEmployees', data);
     } catch (e) {
-      console.log('e: ', e);
+      console.error(e);
     }
   },
-  async createNewEmployee({ state, commit }) {
+  async createNewEmployee({ state, commit, dispatch }) {
+    commit('setLoadingBtn', true);
+    const reqData = {
+      userUuid: store.getters[ 'userUuid' ],
+      ...state.employeeForm,
+    };
+
     try {
-      await axios.post('', state.employeeForm);
+      await axios.post('http://localhost:8081/employee/create', reqData);
+      dispatch('getEmployees');
       commit('setIsModalOpen', false);
       commit('resetEmployeeForm');
+      commit('setLoadingBtn', false);
     } catch (e) {
-      console.log('e: ', e);
+      commit('setLoadingBtn', false);
+      console.error(e);
     }
   },
   async getProjects({ commit }) {
+    const uuid = store.getters[ 'userUuid' ];
     try {
-      const { data } = await axios.get('http://localhost:3000/projectsList');
+      const { data } = await axios.post('http://localhost:8081/projects/projectsList', { userUuid: uuid });
       commit('setProjects', data);
     } catch (e) {
-      console.log('e: ', e);
+      console.error(e);
     }
   },
 };
@@ -89,12 +97,20 @@ const mutations = {
   setEmployees: (state, payload) => {
     state.employees = payload;
   },
+  setLoadingBtn: (state, payload) => {
+    state.loadingBtn = payload;
+  },
   setSort: (state, payload) => {
     if (state.sort.sortBy === payload) {
-      state.sort.direction = state.sort.direction === 'ASC' ? 'DES' : 'ASC';
+      state.sort.direction = state.sort.direction === 'ASC' ? 'DESC' : 'ASC';
     } else {
       state.sort.sortBy = payload;
     }
+  },
+  setStatusSearch: (state, payload) => {
+    if (payload.active && payload.inactive) state.sort.statusSearch = [ 1, 0 ];
+    else if (payload.active && !payload.inactive) state.sort.statusSearch = [ 1 ];
+    else state.sort.statusSearch = [ 0 ];
   },
   setIsModalOpen: (state, payload) => {
     state.isModalOpen = payload;
@@ -106,28 +122,15 @@ const mutations = {
     state.employeeForm = {
       name: '',
       lastName: '',
-      birthDay: '',
+      birthday: '',
       itExperience: '',
-      language: '',
+      languages: '',
       isActive: true,
       itKnowledge: [],
-      picture: {
-        src: '',
-        file: {},
-      },
     };
-  },
-  setKnowledgeTags: (state, payload) => {
-    state.knowledgeTags = payload;
   },
   setProjects: (state, payload) => {
     state.projects = payload;
-  },
-  setEmployeePicture: (state, payload) => {
-    state.employeeForm.picture = {
-      url: URL.createObjectURL(payload),
-      file: payload,
-    };
   },
 };
 

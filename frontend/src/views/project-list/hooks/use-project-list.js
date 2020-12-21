@@ -1,9 +1,11 @@
 import { computed, ref } from '@vue/composition-api';
 import store             from '@/store/store';
+import 'moment-precise-range-plugin';
 
 export const useProjectList = () => {
 
   const valueInput = ref('');
+  const loading = ref(false);
 
   const sort = computed(() => store.state.projectsModule.sort);
   const isEditMode = computed(() => store.state.projectsModule.isEditMode);
@@ -20,6 +22,7 @@ export const useProjectList = () => {
 
   const setSort = (value) => {
     store.commit('projectsModule/setSort', value);
+    store.dispatch('projectsModule/getProjects');
   };
 
   const changeModalState = () => {
@@ -28,8 +31,10 @@ export const useProjectList = () => {
     store.commit('projectsModule/resetForm');
   };
 
-  const createNewProject = () => {
-    store.dispatch('projectsModule/createNewProject');
+  const createNewProject = async () => {
+    loading.value = true;
+    await store.dispatch('projectsModule/createNewProject', projectForm.value);
+    loading.value = false;
   };
 
   const closeDeleteModal = () => {
@@ -51,14 +56,17 @@ export const useProjectList = () => {
     store.dispatch('projectsModule/getProjectDetail', project.uuid);
   };
 
-  const updateProject = () => {
-    store.dispatch('projectsModule/updateProject');
+  const updateProject = async () => {
+    loading.value = true;
+    await store.dispatch('projectsModule/updateProject');
+    loading.value = false;
   };
 
   return {
     sort,
     modal,
     setSort,
+    loading,
     projects,
     employees,
     isEditMode,

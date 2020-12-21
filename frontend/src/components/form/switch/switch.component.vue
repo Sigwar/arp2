@@ -1,11 +1,11 @@
 <template>
-  <el-switch class="gc-switch"
-             v-bind="$attrs"
-             v-on="$listeners">
+  <el-switch v-bind="$attrs"
+             v-on="$listeners"
+             class="gc-switch">
 
-    <slot :name="slot"
+    <slot v-for="(_, slot) of $slots"
           :slot="slot"
-          v-for="(_, slot) of $slots" />
+          :name="slot" />
   </el-switch>
 </template>
 

@@ -4,9 +4,9 @@
       Sign in
     </h1>
 
-    <gc-form :model="loginForm"
-             class="gc-login-form__form"
-             ref="gcLoginForm">
+    <gc-form ref="gcLoginForm"
+             :model="loginForm"
+             class="gc-login-form__form">
 
       <gc-form-item class="gc-login-form__form__item"
                     label="Login"
@@ -20,16 +20,16 @@
                     label="Password"
                     prop="password">
 
-        <gc-input type="password"
-                  v-model="loginForm.password"></gc-input>
+        <gc-input v-model="loginForm.password"
+                  type="password"></gc-input>
 
       </gc-form-item>
 
       <gc-form-item class="gc-login-form__form__item">
 
-        <gc-button @click="signIn"
-                   class="gc-login-form__form__item__btn"
-                   type="default">Login
+        <gc-button class="gc-login-form__form__item__btn"
+                   type="default"
+                   @click="signIn">Login
         </gc-button>
 
       </gc-form-item>

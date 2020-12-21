@@ -1,13 +1,18 @@
 import { computed } from '@vue/composition-api';
-import store             from '@/store/store';
+import store        from '@/store/store';
 
 export const useEmployeeDetailEducation = () => {
-  const deleteEducation = () => {
-    store.dispatch('employeeDetailModule/deleteEducation');
+
+  const getEducation = (uuid) => {
+    store.dispatch('employeeDetailModule/getEmployeeEducation', uuid);
   };
 
-  const updateEducation = () => {
-    store.dispatch('employeeDetailModule/updateEducation');
+  const deleteItem = (uuid) => {
+    store.dispatch('employeeDetailModule/deleteItem', uuid);
+  };
+
+  const updateEducation = (uuid) => {
+    store.dispatch('employeeDetailModule/updateEducation', uuid);
   };
 
   const closeEditEducationModal = () => {
@@ -28,7 +33,9 @@ export const useEmployeeDetailEducation = () => {
     const params = {
       visibility: true,
       isNew: false,
-      data: { ...education },
+      data: {
+        ...education,
+      },
     };
 
     store.commit('employeeDetailModule/setEditEducationModal', params);
@@ -39,7 +46,7 @@ export const useEmployeeDetailEducation = () => {
       visibility: true,
       isNew: true,
       data: {
-        educationDate: [ '', '' ],
+        date: [ '', '' ],
         schoolName: '',
         description: '',
       },
@@ -48,8 +55,8 @@ export const useEmployeeDetailEducation = () => {
     store.commit('employeeDetailModule/setEditEducationModal', params);
   };
 
-  const createEducation = () => {
-    store.dispatch('employeeDetailModule/createNewEducation');
+  const createEducation = (uuid) => {
+    store.dispatch('employeeDetailModule/createNewEducation', uuid);
   };
 
   const educations = computed(() => store.state.employeeDetailModule.educations);
@@ -58,12 +65,13 @@ export const useEmployeeDetailEducation = () => {
 
   return {
     educations,
+    deleteItem,
+    getEducation,
     openEditModal,
     createEducation,
     updateEducation,
-    deleteEducation,
     editEducationModal,
     openNewEducationModal,
-    closeEditEducationModal
-  }
+    closeEditEducationModal,
+  };
 };

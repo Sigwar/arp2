@@ -1,11 +1,11 @@
 <template>
-  <el-tooltip class="gc-tooltip"
-              v-bind="$attrs"
-              v-on="$listeners">
+  <el-tooltip v-bind="$attrs"
+              v-on="$listeners"
+              class="gc-tooltip">
 
-    <slot :name="slot"
+    <slot v-for="(_, slot) of $slots"
           :slot="slot"
-          v-for="(_, slot) of $slots" />
+          :name="slot" />
   </el-tooltip>
 </template>
 

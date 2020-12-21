@@ -38,9 +38,7 @@ export default {
   transition: var(--transition);
 }
 
-.slide-fade-enter, .slide-fade-leave-to
-  /* .slide-fade-leave-active below version 2.1.8 */
-{
+.slide-fade-enter, .slide-fade-leave-to {
   transform: translateX(1.7rem);
   opacity: 0;
 }

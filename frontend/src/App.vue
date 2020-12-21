@@ -1,6 +1,6 @@
 <template>
-  <div class="gc-app"
-       id="app">
+  <div id="app"
+       class="gc-app">
     <router-view />
   </div>
 </template>
@@ -15,6 +15,8 @@ export default {
 @import 'assets/style/main';
 
 .gc-app {
+  overflow-x: hidden;
+
   /deep/ {
     .el-loading-mask {
       background: var(--transparent-75);

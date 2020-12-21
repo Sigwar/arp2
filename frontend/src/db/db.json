@@ -104,7 +104,7 @@
     },
     "level": "Professional",
     "profession": "Front-end",
-    "birthDay": "14/01/1993",
+    "birthday": "14/01/1993",
     "itExperience": "Since 2014",
     "language": "English, Polish",
     "isActive": true,

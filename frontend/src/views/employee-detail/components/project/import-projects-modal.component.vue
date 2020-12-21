@@ -9,33 +9,40 @@
 
     <div class="gc-import-projects-modal__container">
 
-      <gc-checkbox-group v-model="selectedProjectsToImport"
-                         class="gc-import-projects-modal__container__checkboxes">
+      <template v-if="projectsToImport.projects.length">
+        <gc-checkbox-group v-model="selectedProjectsToImport"
+                           class="gc-import-projects-modal__container__checkboxes">
 
-        <gc-checkbox v-for="project in projectsToImport.projects"
-                     :key="project.uuid"
-                     :value="project.uuid"
-                     :label="project.uuid"
-                     class="gc-import-projects-modal__container__checkboxes__item">
+          <gc-checkbox v-for="project in projectsToImport.projects"
+                       :key="project.uuid"
+                       :label="project.uuid"
+                       :value="project.uuid"
+                       class="gc-import-projects-modal__container__checkboxes__item">
 
-          <p class="gc-import-projects-modal__container__checkboxes__item__label">
-            {{project.name}} <span class="small">for</span> {{project.client}}
-          </p>
-        </gc-checkbox>
+            <p class="gc-import-projects-modal__container__checkboxes__item__label">
+              {{ project.name }} <span class="small">for</span> {{ project.client }}
+            </p>
+          </gc-checkbox>
 
-      </gc-checkbox-group>
+        </gc-checkbox-group>
+      </template>
+
+      <template v-else>
+        <span class="gc-import-projects-modal__container__empty">No projects to import!</span>
+      </template>
     </div>
 
     <div class="gc-import-projects-modal__buttons">
 
-      <gc-button @click.native.prevent="closeImportModal"
-                 class="button"
-                 type="info">Cancel
+      <gc-button class="button"
+                 type="info"
+                 @click.native.prevent="closeImportModal">Cancel
       </gc-button>
 
-      <gc-button @click.native.prevent="importProjects"
+      <gc-button :disabled="projectsToImport.projects.length === 0"
                  class="button"
-                 type="default">Import
+                 type="default"
+                 @click.native.prevent="importProjects(employeeUuid)">Import
       </gc-button>
     </div>
   </gc-dialog>
@@ -43,7 +50,7 @@
 
 <script>
 import { defineComponent }           from '@vue/composition-api';
-import { useEmployeeDetailProjects } from '../hooks/use-employee-detail-projects';
+import { useEmployeeDetailProjects } from '../../hooks/use-employee-detail-projects';
 import gcDialog                      from '@/components/dialog/dialog.component.vue';
 import gcButton                      from '@/components/form/button/button.component.vue';
 import gcCheckbox                    from '@/components/form/checkbox/checkbox.component.vue';
@@ -57,7 +64,8 @@ export default defineComponent({
     gcCheckbox,
     gcCheckboxGroup,
   },
-  setup() {
+  setup(props, { root }) {
+    const employeeUuid = root.$route.params.uuid;
 
     const {
       importProjects,
@@ -67,6 +75,7 @@ export default defineComponent({
     } = useEmployeeDetailProjects();
 
     return {
+      employeeUuid,
       importProjects,
       closeImportModal,
       projectsToImport,
@@ -112,6 +121,15 @@ export default defineComponent({
           background: var(--background-color);
         }
       }
+    }
+
+    &__empty {
+      display: block;
+      font-size: 2rem;
+      text-align: center;
+      padding: 1.1rem;
+      background: var(--warning-20);
+      border: 1px solid var(--warning);
     }
   }
 

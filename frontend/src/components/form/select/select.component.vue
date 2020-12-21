@@ -1,11 +1,11 @@
 <template>
-  <el-select class="gc-select"
-             v-bind="$attrs"
-             v-on="$listeners">
+  <el-select v-bind="$attrs"
+             v-on="$listeners"
+             class="gc-select">
 
-    <slot :name="slot"
+    <slot v-for="(_, slot) of $slots"
           :slot="slot"
-          v-for="(_, slot) of $slots" />
+          :name="slot" />
   </el-select>
 </template>
 

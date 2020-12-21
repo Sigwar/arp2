@@ -1,8 +1,9 @@
 <template>
-  <div class="gc-employee-detail-projects">
+  <div v-if="Array.isArray(projects) && projects.length"
+       class="gc-employee-detail-projects">
 
-    <el-collapse class="gc-employee-detail-projects__collapse"
-                 v-model="activeNames">
+    <el-collapse v-model="activeNames"
+                 class="gc-employee-detail-projects__collapse">
 
       <el-collapse-item class="gc-employee-detail-projects__collapse__item"
                         name="Projects">
@@ -13,11 +14,11 @@
 
         <div class="gc-employee-detail-projects__collapse__item__content">
 
-          <gc-project :detail="project"
+          <gc-project v-for="project in projects"
                       :key="project.uuid"
+                      :detail="project"
                       @edit-project="openEditProjectModal"
-                      @remove-project="openDeleteModal"
-                      v-for="project in projects"></gc-project>
+                      @remove-project="openDeleteModal"></gc-project>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -26,8 +27,8 @@
 
 <script>
 import { defineComponent }           from '@vue/composition-api';
-import { useEmployeeDetailProjects } from '../hooks/use-employee-detail-projects';
-import { useEmployeeDetail }         from '../hooks/use-employee-detail';
+import { useEmployeeDetailProjects } from '../../hooks/use-employee-detail-projects';
+import { useEmployeeDetail }         from '../../hooks/use-employee-detail';
 import gcProject                     from '@/components/project/project.component.vue';
 import gcCollapse                    from '@/components/collapse/collapse.component.vue';
 import gcCollapseItem                from '@/components/collapse/collapse-item.component.vue';
@@ -66,6 +67,8 @@ export default defineComponent({
        scoped>
 
 .gc-employee-detail-projects {
+  margin-bottom: 5rem;
+
   &__collapse {
     &__item {
       &__title {

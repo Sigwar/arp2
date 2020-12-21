@@ -1,28 +1,26 @@
 <template>
-  <div @mouseenter="isHover = true"
-       @mouseleave="isHover = false"
-       class="gc-education">
+  <div class="gc-education"
+       @mouseenter="isHover = true"
+       @mouseleave="isHover = false">
 
     <div class="gc-education__circle"></div>
 
     <div class="gc-education__content">
-
       <div class="gc-education__content__header">
+        <span class="gc-education__content__header__date">{{ dateYYYYMM(detail.date[ 0 ]) }} - {{ dateYYYYMM(detail.date[ 1 ]) }}</span>
 
-        <span class="gc-education__content__header__date">{{detail.educationDate[0]}} - {{detail.educationDate[1]}}</span>
+        <span v-show="isHover"
+              class="gc-education__content__header__wrapper">
 
-        <span class="gc-education__content__header__wrapper"
-              v-show="isHover">
+          <span class="gc-education__content__header__remove"
+                @click="removeEducation(detail)">REMOVE</span>
 
-          <span @click="removeEducation(detail)"
-                class="gc-education__content__header__remove">REMOVE</span>
-
-          <span @click="editEducation(detail)"
-                class="gc-education__content__header__edit">EDIT</span>
+          <span class="gc-education__content__header__edit"
+                @click="editEducation(detail)">EDIT</span>
         </span>
       </div>
-      <h2 class="gc-education__content__name">{{detail.schoolName}}</h2>
-      <p class="gc-education__content__description">{{detail.description}}</p>
+      <h2 class="gc-education__content__name">{{ detail.schoolName }}</h2>
+      <p class="gc-education__content__description">{{ detail.description }}</p>
     </div>
   </div>
 </template>
@@ -30,6 +28,7 @@
 <script>
 import { defineComponent } from '@vue/composition-api';
 import { useEducation }    from './hooks/use-education';
+import { useGlobals }      from '../../hooks/use-globals';
 
 export default defineComponent({
   name: 'gcEducation',
@@ -40,6 +39,10 @@ export default defineComponent({
   setup(props, context) {
 
     const {
+      dateYYYYMM,
+    } = useGlobals();
+
+    const {
       isHover,
       editEducation,
       removeEducation,
@@ -47,6 +50,7 @@ export default defineComponent({
 
     return {
       isHover,
+      dateYYYYMM,
       editEducation,
       removeEducation,
     };

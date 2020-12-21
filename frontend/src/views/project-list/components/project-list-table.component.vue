@@ -9,8 +9,8 @@
 
       <template #header>
         <div class="gc-project-list-table__column__header">
-          <span @click="setSort('NAME')"
-                class="gc-project-list-table__column__header__label">
+          <span class="gc-project-list-table__column__header__label"
+                @click="setSort('NAME')">
 
             Name
             <gc-box-sort :name="'NAME'"></gc-box-sort>
@@ -27,8 +27,8 @@
 
       <template #header>
         <div class="gc-project-list-table__column__header">
-          <span @click="setSort('CLIENT')"
-                class="gc-project-list-table__column__header__label">
+          <span class="gc-project-list-table__column__header__label"
+                @click="setSort('CLIENT')">
 
             Client
             <gc-box-sort :name="'CLIENT'"></gc-box-sort>
@@ -40,8 +40,13 @@
 
     <gc-table-column class="gc-project-list-table__column"
                      label="Time frame"
-                     prop="timeFrame"
-                     width="200"></gc-table-column>
+                     prop="dateStart"
+                     width="200">
+
+      <template slot-scope="scope">
+        {{ calculateDifference(scope.row.dateStart, scope.row.dateEnd) }}
+      </template>
+    </gc-table-column>
 
     <gc-table-column class="gc-project-list-table__column"
                      label="Topic"
@@ -55,11 +60,11 @@
                      width="260">
 
       <template slot-scope="scope">
-        <span @click="setProjectToDelete(scope.row)"
-              class="gc-project-list-table__column__action gc-project-list-table__column__action--red">DELETE {{scope.row.index}}</span>
+        <span class="gc-project-list-table__column__action gc-project-list-table__column__action--red"
+              @click="setProjectToDelete(scope.row)">DELETE {{ scope.row.index }}</span>
 
-        <span @click="setProjectDetail(scope.row)"
-              class="gc-project-list-table__column__action gc-project-list-table__column__action--yellow">EDIT</span>
+        <span class="gc-project-list-table__column__action gc-project-list-table__column__action--yellow"
+              @click="setProjectDetail(scope.row)">EDIT</span>
       </template>
     </gc-table-column>
   </gc-table>
@@ -68,6 +73,7 @@
 <script>
 import { defineComponent } from '@vue/composition-api';
 import { useProjectList }  from '../hooks/use-project-list.js';
+import { useGlobals }      from '../../../hooks/use-globals';
 import gcTable             from '@/components/table/table.component.vue';
 import gcTableColumn       from '@/components/table/table-column.component.vue';
 import gcBoxSort           from './box-sort.component';
@@ -88,11 +94,16 @@ export default defineComponent({
       setProjectToDelete,
     } = useProjectList();
 
+    const {
+      calculateDifference,
+    } = useGlobals();
+
     return {
       setSort,
       projects,
       setProjectDetail,
       setProjectToDelete,
+      calculateDifference,
     };
   },
 });

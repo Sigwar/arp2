@@ -1,11 +1,11 @@
 <template>
-  <el-upload class="gc-upload"
-             v-bind="$attrs"
-             v-on="$listeners">
+  <el-upload v-bind="$attrs"
+             v-on="$listeners"
+             class="gc-upload">
 
-    <slot :name="slot"
+    <slot v-for="(_, slot) of $slots"
           :slot="slot"
-          v-for="(_, slot) of $slots" />
+          :name="slot" />
   </el-upload>
 </template>
 

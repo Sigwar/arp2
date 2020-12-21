@@ -1,11 +1,11 @@
 <template>
-  <el-dialog class="gc-dialog"
-             v-bind="$attrs"
-             v-on="$listeners">
+  <el-dialog v-bind="$attrs"
+             v-on="$listeners"
+             class="gc-dialog">
 
-    <slot :name="slot"
+    <slot v-for="(_, slot) of $slots"
           :slot="slot"
-          v-for="(_, slot) of $slots" />
+          :name="slot" />
   </el-dialog>
 </template>
 

@@ -5,9 +5,10 @@
                 :show-button="true"
                 :show-checkboxes="true"
                 :show-search="true"
+                button-label="Create new employee"
+                @change-boxes="changeFilterBoxes"
                 @change-modal-state="changeModalState"
-                @change-search="changeSearch"
-                button-label="Create new employee"></gc-filters>
+                @change-search="changeSearch"></gc-filters>
 
     <gc-employee-list-table></gc-employee-list-table>
 
@@ -19,6 +20,7 @@
 <script>
 import { defineComponent } from '@vue/composition-api';
 import { useEmployeeList } from './hooks/use-employee-list';
+import { useGlobals }      from '../../hooks/use-globals';
 import gcFilters           from '@/components/filters/filters.component.vue';
 import gcEmployeeListTable from './components/employee-list-table.component.vue';
 import gcNewEmployeeModal  from './components/employee-modal.component.vue';
@@ -35,22 +37,33 @@ export default defineComponent({
 
     const {
       valueInput,
-      getProjects,
       changeSearch,
       employeesList,
-      getKnowledgeTags,
       changeModalState,
+      changeFilterBoxes,
     } = useEmployeeList();
+
+    const {
+      getProjects,
+      getLanguages,
+      getLevelList,
+      getWorkstation,
+      getItTechnologies,
+    } = useGlobals();
 
     // GET DATA FROM API
     getProjects();
+    getLanguages();
+    getLevelList();
     employeesList();
-    getKnowledgeTags();
+    getWorkstation();
+    getItTechnologies();
 
     return {
       valueInput,
       changeSearch,
       changeModalState,
+      changeFilterBoxes,
     };
   },
 });

@@ -1,18 +1,18 @@
 <template>
-  <el-table-column class="gc-table-column"
-                   v-bind="$attrs"
-                   v-on="$listeners">
+  <el-table-column v-bind="$attrs"
+                   v-on="$listeners"
+                   class="gc-table-column">
 
-    <slot :name="slot"
+    <slot v-for="(_, slot) of $slots"
           :slot="slot"
-          v-for="(_, slot) of $slots" />
+          :name="slot" />
 
-    <template :slot="slot"
-              slot-scope="scope"
-              v-for="slot in Object.keys($scopedSlots)">
+    <template v-for="slot in Object.keys($scopedSlots)"
+              :slot="slot"
+              slot-scope="scope">
 
-      <slot :name="slot"
-            v-bind="scope" />
+      <slot v-bind="scope"
+            :name="slot" />
     </template>
   </el-table-column>
 </template>

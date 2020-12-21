@@ -1,11 +1,11 @@
 <template>
-  <el-form class="gc-form"
-           v-bind="$attrs"
-           v-on="$listeners">
+  <el-form v-bind="$attrs"
+           v-on="$listeners"
+           class="gc-form">
 
-    <slot :name="slot"
+    <slot v-for="(_, slot) of $slots"
           :slot="slot"
-          v-for="(_, slot) of $slots" />
+          :name="slot" />
   </el-form>
 </template>
 

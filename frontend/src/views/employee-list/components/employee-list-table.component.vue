@@ -8,8 +8,8 @@
 
       <template #header>
         <div class="gc-employee-list-table__column__header">
-          <span @click="setSort('NAME')"
-                class="gc-employee-list-table__column__header__label">
+          <span class="gc-employee-list-table__column__header__label"
+                @click="setSort('NAME')">
 
             Name
             <gc-box-sort :name="'NAME'"></gc-box-sort>
@@ -21,13 +21,21 @@
       <template slot-scope="scope">
         <div class="gc-employee-list-table__column__name">
 
-          <img :alt="scope.row.lastName"
+          <img v-if="scope.row.picture !== ''"
+               :alt="scope.row.lastName"
                :class="{'active' : scope.row.isActive,
                         'inactive' : !scope.row.isActive}"
                :src="scope.row.picture"
                class="gc-employee-list-table__column__name__picture">
 
-          {{ scope.row.name }} {{ scope.row.lastName}}
+          <img v-else
+               :alt="scope.row.lastName"
+               :class="{'active' : scope.row.isActive,
+                        'inactive' : !scope.row.isActive}"
+               class="gc-employee-list-table__column__name__picture gc-employee-list-table__column__name__picture--small"
+               src="../../../assets/icons/user/user-fill.svg">
+
+          {{ scope.row.name }} {{ scope.row.lastName }}
         </div>
       </template>
     </gc-table-column>
@@ -38,11 +46,11 @@
 
       <template #header>
         <div class="gc-employee-list-table__column__header">
-          <span @click="setSort('PROFESSION')"
-                class="gc-employee-list-table__column__header__label">
+          <span class="gc-employee-list-table__column__header__label"
+                @click="setSort('workstationId')">
 
             Profession
-            <gc-box-sort :name="'PROFESSION'"></gc-box-sort>
+            <gc-box-sort :name="'workstationId'"></gc-box-sort>
           </span>
 
         </div>
@@ -56,11 +64,11 @@
       <template #header>
         <div class="gc-employee-list-table__column__header">
 
-          <span @click="setSort('LEVEL')"
-                class="gc-employee-list-table__column__header__label">
+          <span class="gc-employee-list-table__column__header__label"
+                @click="setSort('levelId')">
 
             Level
-            <gc-box-sort :name="'LEVEL'"></gc-box-sort>
+            <gc-box-sort :name="'levelId'"></gc-box-sort>
           </span>
 
         </div>
@@ -73,11 +81,11 @@
                      prop="uuid">
 
       <template slot-scope="scope">
-        <span class="gc-employee-list-table__column__action gc-employee-list-table__column__action--red">PDF {{scope.row.index}}</span>
+        <span class="gc-employee-list-table__column__action gc-employee-list-table__column__action--red">PDF {{ scope.row.index }}</span>
         <span class="gc-employee-list-table__column__action gc-employee-list-table__column__action--red-dark">BLIND PDF</span>
 
-        <span @click="goToDetail(scope.row.uuid)"
-              class="gc-employee-list-table__column__action gc-employee-list-table__column__action--yellow">EDIT</span>
+        <span class="gc-employee-list-table__column__action gc-employee-list-table__column__action--yellow"
+              @click="goToDetail(scope.row.uuid)">EDIT</span>
 
       </template>
     </gc-table-column>
@@ -143,6 +151,10 @@ export default defineComponent({
         border-radius: 50%;
         margin-right: 1rem;
         object-fit: fill;
+
+        &--small {
+          padding: 0.5rem;
+        }
       }
 
       .active {
@@ -151,6 +163,10 @@ export default defineComponent({
 
       .inactive {
         border: 3px solid var(--gray-dark);
+
+        &.gc-employee-list-table__column__name__picture--small {
+          filter: grayscale(1) brightness(.5);
+        }
       }
     }
 

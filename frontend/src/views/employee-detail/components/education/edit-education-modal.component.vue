@@ -5,90 +5,79 @@
              class="gc-edit-education-modal"
              width="40%">
 
-    <h2 class="gc-edit-education-modal__title"
-        v-if="!editEducationModal.isNew">Update education</h2>
+    <h2 v-if="!editEducationModal.isNew"
+        class="gc-edit-education-modal__title">Update education</h2>
 
-    <h2 class="gc-edit-education-modal__title"
-        v-else>Create new education</h2>
+    <h2 v-else
+        class="gc-edit-education-modal__title">Create new education</h2>
 
-    <gc-form :modal="editEducationModal.data"
-             class="gc-edit-education-modal__form"
-             ref="gcEditEducationModal">
+    <gc-form ref="gcEditEducationModal"
+             :modal="editEducationModal.data"
+             class="gc-edit-education-modal__form">
 
       <gc-form-item class="gc-edit-education-modal__form__item"
                     label="School"
                     prop="client">
 
-        <gc-input class="gc-edit-education-modal__form__item__value"
-                  placeholder="School name"
-                  v-model="editEducationModal.data.schoolName"></gc-input>
+        <gc-input v-model="editEducationModal.data.schoolName"
+                  class="gc-edit-education-modal__form__item__value"
+                  placeholder="School name"></gc-input>
 
       </gc-form-item>
 
-      <div class="gc-edit-education-modal__form__wrapper">
+      <gc-form-item class="gc-edit-education-modal__form__item gc-edit-education-modal__form__item--date-picker"
+                    label="Education date"
+                    prop="client">
 
-        <gc-form-item class="gc-edit-education-modal__form__item"
-                      label="Start education date"
-                      prop="client">
+        <gc-date-picker v-model="editEducationModal.data.date"
+                        class="gc-edit-education-modal__form__item__value"
+                        placeholder="Date..."
+                        range-separator="-"
+                        type="monthrange"></gc-date-picker>
 
-          <gc-input class="gc-edit-education-modal__form__item__value"
-                    placeholder="Date..."
-                    v-model="editEducationModal.data.educationDate[0]"></gc-input>
-
-        </gc-form-item>
-
-        <gc-form-item class="gc-edit-education-modal__form__item"
-                      label="End education date"
-                      prop="client">
-
-          <gc-input class="gc-edit-education-modal__form__item__value"
-                    placeholder="Date..."
-                    v-model="editEducationModal.data.educationDate[1]"></gc-input>
-
-        </gc-form-item>
-      </div>
+      </gc-form-item>
 
       <gc-form-item class="gc-edit-education-modal__form__item"
                     label="Start education date"
                     prop="client">
 
-        <gc-input :autosize="{minRows: 3}"
+        <gc-input v-model="editEducationModal.data.description"
+                  :autosize="{minRows: 3}"
                   class="gc-edit-education-modal__form__item__value"
                   placeholder="Description"
-                  type="textarea"
-                  v-model="editEducationModal.data.description"></gc-input>
+                  type="textarea"></gc-input>
 
       </gc-form-item>
 
       <div class="gc-edit-education-modal__buttons">
 
-        <gc-button @click.native.prevent="closeEditEducationModal"
-                   class="button"
-                   type="info">Cancel
+        <gc-button class="button"
+                   type="info"
+                   @click.native.prevent="closeEditEducationModal">Cancel
         </gc-button>
 
-        <gc-button @click.native.prevent="updateEducation"
+        <gc-button v-if="!editEducationModal.isNew"
                    class="button"
-                   v-if="!editEducationModal.isNew">Update
+                   @click.native.prevent="updateEducation(employeeUuid)">Update
         </gc-button>
-        <gc-button @click.native.prevent="createEducation"
+        <gc-button v-else
                    class="button"
-                   v-else>Create
+                   @click.native.prevent="createEducation(employeeUuid)">Create
         </gc-button>
       </div>
-
     </gc-form>
   </gc-dialog>
 </template>
 
 <script>
 import { defineComponent }            from '@vue/composition-api';
-import { useEmployeeDetailEducation } from '../hooks/use-employee-detail-education';
+import { useEmployeeDetailEducation } from '../../hooks/use-employee-detail-education';
 import gcButton                       from '@/components/form/button/button.component.vue';
 import gcDialog                       from '@/components/dialog/dialog.component.vue';
 import gcInput                        from '@/components/form/input/input.component.vue';
 import gcForm                         from '@/components/form/form/form.component.vue';
 import gcFormItem                     from '@/components/form/form-item/form-item.component.vue';
+import gcDatePicker                   from '@/components/date-picker/date-picker.component.vue';
 
 export default defineComponent({
   name: 'gcEditEducationModal',
@@ -98,8 +87,10 @@ export default defineComponent({
     gcButton,
     gcDialog,
     gcFormItem,
+    gcDatePicker,
   },
-  setup() {
+  setup(props, { root }) {
+    const employeeUuid = root.$route.params.uuid;
 
     const {
       createEducation,
@@ -109,6 +100,7 @@ export default defineComponent({
     } = useEmployeeDetailEducation();
 
     return {
+      employeeUuid,
       createEducation,
       updateEducation,
       editEducationModal,
@@ -145,6 +137,12 @@ export default defineComponent({
 
       &__value {
         width: 100%;
+      }
+
+      &--date-picker {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
   }

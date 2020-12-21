@@ -3,20 +3,23 @@
 
     <gc-tool-bar @add-new-education="openNewEducationModal"
                  @change-edit-profile-modal="openEditProfileModal"
+                 @add-new-certificate="openNewCertificateModal"
                  @import-project="openImportModal"></gc-tool-bar>
 
     <div class="gc-employee-detail__base-info">
       <div class="gc-employee-detail__base-info__picture">
 
-        <img :alt="profile.lastName"
+        <img v-if="profile.picture"
+             :alt="profile.lastName"
              :class="{'active': profile.isActive}"
              :src="profile.picture.url"
-             class="avatar"
-             v-if="profile.picture" />
+             class="avatar" />
 
-        <div :class="{'active': profile.isActive}"
-             class="avatar icon icon-avatar"
-             v-else></div>
+        <img v-else
+             :alt="profile.lastName"
+             :class="{'active': profile.isActive}"
+             class="avatar icon"
+             src="@/assets/icons/user/user-fill.svg" />
       </div>
 
       <div class="gc-employee-detail__base-info__credentials">
@@ -25,16 +28,18 @@
         </p>
 
         <p class="profession-and-level">
-          {{ profile.level }} {{ profile.profession }}
+          {{ profile.level }} {{ profile.workstation }}
         </p>
       </div>
     </div>
 
     <gc-employee-detail-profile></gc-employee-detail-profile>
 
-    <gc-employee-detail-education></gc-employee-detail-education>
-
     <gc-employee-detail-projects></gc-employee-detail-projects>
+
+    <gc-employee-detail-certificate></gc-employee-detail-certificate>
+
+    <gc-employee-detail-education></gc-employee-detail-education>
 
     <gc-delete-modal></gc-delete-modal>
 
@@ -46,24 +51,30 @@
 
     <gc-import-projects-modal></gc-import-projects-modal>
 
+    <gc-edit-certificate-modal></gc-edit-certificate-modal>
+
   </div>
 </template>
 
 <script>
-import { defineComponent }            from '@vue/composition-api';
-import { useEmployeeDetail }          from './hooks/use-employee-detail';
-import { useEmployeeDetailProfile }   from './hooks/use-employee-detail-profile';
-import { useEmployeeDetailEducation } from './hooks/use-employee-detail-education';
-import { useEmployeeDetailProjects }  from './hooks/use-employee-detail-projects';
-import gcToolBar                      from '@/components/tool-bar/tool-bar.component.vue';
-import gcDeleteModal                  from './components/delete-modal.component.vue';
-import gcEditProfileModal             from './components/edit-employee-modal.component.vue';
-import gcEditProjectModal             from './components/edit-project-modal.component.vue';
-import gcEditEducationModal           from './components/edit-education-modal.component.vue';
-import gcEmployeeDetailProfile        from './components/employee-detail-profile.component.vue';
-import gcEmployeeDetailProjects       from './components/employee-detail-project.component.vue';
-import gcEmployeeDetailEducation      from './components/employee-detail-education.component.vue';
-import gcImportProjectsModal          from './components/import-projects-modal.component.vue';
+import { defineComponent }              from '@vue/composition-api';
+import { useEmployeeDetail }            from './hooks/use-employee-detail';
+import { useEmployeeDetailProfile }     from './hooks/use-employee-detail-profile';
+import { useEmployeeDetailEducation }   from './hooks/use-employee-detail-education';
+import { useEmployeeDetailProjects }    from './hooks/use-employee-detail-projects';
+import { useEmployeeDetailCertificate } from './hooks/use-employee-detail-certificate';
+import { useGlobals }                   from '../../hooks/use-globals';
+import gcToolBar                        from '@/components/tool-bar/tool-bar.component.vue';
+import gcDeleteModal                    from './components/delete-modal.component.vue';
+import gcEditProjectModal               from './components/project/edit-project-modal.component.vue';
+import gcEditProfileModal               from './components/profile/edit-employee-modal.component.vue';
+import gcImportProjectsModal            from './components/project/import-projects-modal.component.vue';
+import gcEditCertificateModal           from './components/certificate/edit-certificate-modal.component';
+import gcEditEducationModal             from './components/education/edit-education-modal.component.vue';
+import gcEmployeeDetailProfile          from './components/profile/employee-detail-profile.component.vue';
+import gcEmployeeDetailProjects         from './components/project/employee-detail-project.component.vue';
+import gcEmployeeDetailEducation        from './components/education/employee-detail-education.component.vue';
+import gcEmployeeDetailCertificate      from './components/certificate/employee-detail-certificate.component';
 
 export default defineComponent({
   name: 'gcEmployeeDetail',
@@ -74,21 +85,29 @@ export default defineComponent({
     gcEditProfileModal,
     gcEditEducationModal,
     gcImportProjectsModal,
+    gcEditCertificateModal,
     gcEmployeeDetailProfile,
     gcEmployeeDetailProjects,
     gcEmployeeDetailEducation,
+    gcEmployeeDetailCertificate,
   },
 
-  setup() {
+  setup(props, { root }) {
+
+    const employeeUuid = root.$route.params.uuid;
+
+    const {
+      getEducation,
+    } = useEmployeeDetailEducation();
 
     const {
       getEmployeesProfile,
+      getAllProjectsToImport,
     } = useEmployeeDetail();
-
-    getEmployeesProfile();
 
     const {
       openImportModal,
+      getEmployeeProjects,
     } = useEmployeeDetailProjects();
 
     const {
@@ -100,12 +119,37 @@ export default defineComponent({
       openEditProfileModal,
     } = useEmployeeDetailProfile();
 
+    const {
+      getCertificate,
+      openNewCertificateModal,
+    } = useEmployeeDetailCertificate();
+
+    const {
+      getProjects,
+      getLanguages,
+      getLevelList,
+      getWorkstation,
+      getItTechnologies,
+    } = useGlobals();
+
+    // GET DATA FROM API
+    getProjects();
+    getLanguages();
+    getLevelList();
+    getWorkstation();
+    getItTechnologies();
+    getEducation(employeeUuid);
+    getEmployeesProfile(employeeUuid);
+    getEmployeeProjects(employeeUuid);
+    getCertificate(employeeUuid);
+    getAllProjectsToImport(employeeUuid);
 
     return {
       profile,
       openImportModal,
       openEditProfileModal,
       openNewEducationModal,
+      openNewCertificateModal,
     };
   },
 });
@@ -138,9 +182,15 @@ export default defineComponent({
 
       .active {
         border: 7px solid var(--primary-color);
+
+        &.icon {
+          filter: grayscale(0) brightness(1);
+        }
       }
 
       .icon {
+        filter: grayscale(1) brightness(.5);
+        padding: 1.5rem;
         width: 100%;
         height: 100%;
       }

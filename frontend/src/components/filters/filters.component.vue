@@ -1,34 +1,34 @@
 <template>
   <div class="gc-filters">
-    <div class="gc-filters__input"
-         v-if="showSearch">
+    <div v-if="showSearch"
+         class="gc-filters__input">
 
-      <gc-input @input="changeValueInput"
+      <gc-input v-model="valueInput"
                 placeholder="Search..."
-                v-model="valueInput"></gc-input>
+                @input="changeValueInput"></gc-input>
     </div>
 
-    <div class="gc-filters__checkboxes"
-         v-if="showCheckboxes">
+    <div v-if="showCheckboxes"
+         class="gc-filters__checkboxes">
 
-      <gc-checkbox class="gc-filters__checkboxes__item"
-                   v-model="checkboxes.active">
+      <gc-checkbox v-model="checkboxes.active"
+                   class="gc-filters__checkboxes__item">
 
         Show active
       </gc-checkbox>
 
-      <gc-checkbox class="gc-filters__checkboxes__item"
-                   v-model="checkboxes.inactive">
+      <gc-checkbox v-model="checkboxes.inactive"
+                   class="gc-filters__checkboxes__item">
 
         Show inactive
       </gc-checkbox>
     </div>
 
-    <div class="gc-filters__button"
-         v-if="showButton">
+    <div v-if="showButton"
+         class="gc-filters__button">
 
-      <gc-button @click="changeValueModal"
-                 type="default">{{ buttonLabel }}
+      <gc-button type="default"
+                 @click="changeValueModal">{{ buttonLabel }}
       </gc-button>
     </div>
   </div>
@@ -62,6 +62,7 @@ export default defineComponent({
       isOpenModal,
       changeValueModal,
       changeValueInput,
+      checkValueOfCheckboxes,
     } = useFilters(context);
 
     return {
@@ -70,6 +71,7 @@ export default defineComponent({
       isOpenModal,
       changeValueModal,
       changeValueInput,
+      checkValueOfCheckboxes,
     };
   },
 });

@@ -5,11 +5,14 @@
       <div :class="activeLink"
            class="gc-aside-bar__content__circle"></div>
 
-      <div @click="setActiveLink('active-employees')"
-           class="gc-aside-bar__content__icon icon-user"></div>
+      <div class="gc-aside-bar__content__icon icon-user"
+           @click="setActiveLink('active-employees')"></div>
 
-      <div @click="setActiveLink('active-projects')"
-           class="gc-aside-bar__content__icon icon-project"></div>
+      <div class="gc-aside-bar__content__icon icon-project"
+           @click="setActiveLink('active-projects')"></div>
+
+      <div class="gc-aside-bar__content__icon icon-settings-circle"
+           @click="setActiveLink('active-settings')"></div>
     </div>
   </aside>
 </template>
@@ -58,7 +61,7 @@ export default defineComponent({
       cursor: pointer;
       display: block;
 
-      &:nth-child(3) {
+      &:nth-child(4) {
         margin-bottom: 0;
       }
     }
@@ -82,6 +85,9 @@ export default defineComponent({
       top: 9rem;
     }
 
+    .active-settings {
+      top: 17.5rem;
+    }
   }
 }
 </style>

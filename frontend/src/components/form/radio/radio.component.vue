@@ -1,11 +1,11 @@
 <template>
-  <el-radio class="gc-radio"
-            v-bind="$attrs"
-            v-on="$listeners">
+  <el-radio v-bind="$attrs"
+            v-on="$listeners"
+            class="gc-radio">
 
-    <slot :name="slot"
+    <slot v-for="(_, slot) of $slots"
           :slot="slot"
-          v-for="(_, slot) of $slots" />
+          :name="slot" />
   </el-radio>
 </template>
 

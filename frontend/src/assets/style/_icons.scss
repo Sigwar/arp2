@@ -79,4 +79,24 @@
     background: url("~@/assets/icons/settings/settings.svg") no-repeat center;
     background-size: contain;
   }
+
+  &-settings-circle {
+    background: url("~@/assets/icons/settings/settings-circle.svg") no-repeat center;
+    background-size: contain;
+  }
+
+  &-user-fill {
+    background: url("~@/assets/icons/user/user-fill.svg") no-repeat center;
+    background-size: contain;
+  }
+
+  &-certificate {
+    background: url("~@/assets/icons/certificate/certificate.svg") no-repeat center;
+    background-size: contain;
+  }
+
+  &-certificate--yellow {
+    background: url("~@/assets/icons/certificate/certificate--yellow.svg") no-repeat center;
+    background-size: contain;
+  }
 }

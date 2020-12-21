@@ -1,11 +1,11 @@
 <template>
-  <el-checkbox-group class="gc-checkbox-group"
-                     v-bind="$attrs"
-                     v-on="$listeners">
+  <el-checkbox-group v-bind="$attrs"
+                     v-on="$listeners"
+                     class="gc-checkbox-group">
 
-    <slot :name="slot"
+    <slot v-for="(_, slot) of $slots"
           :slot="slot"
-          v-for="(_, slot) of $slots" />
+          :name="slot" />
   </el-checkbox-group>
 </template>
 

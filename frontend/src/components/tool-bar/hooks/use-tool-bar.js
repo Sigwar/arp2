@@ -12,9 +12,13 @@ export const useToolbar = (context) => {
     context.emit('import-project');
   };
 
+  const addNewCertificate = () => {
+    context.emit('add-new-certificate');
+  };
   return {
     importProject,
     addNewEducation,
+    addNewCertificate,
     changeEditProfileModal,
   };
 };

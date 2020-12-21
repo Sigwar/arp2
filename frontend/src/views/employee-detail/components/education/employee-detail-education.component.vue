@@ -1,8 +1,9 @@
 <template>
-  <div class="gc-employee-detail-education">
+  <div v-if="Array.isArray(educations) && educations.length"
+       class="gc-employee-detail-education">
 
-    <el-collapse class="gc-employee-detail-education__collapse"
-                 v-model="activeNames">
+    <el-collapse v-model="activeNames"
+                 class="gc-employee-detail-education__collapse">
 
       <el-collapse-item class="gc-employee-detail-education__collapse__item"
                         name="education">
@@ -13,11 +14,11 @@
 
         <div class="gc-employee-detail-education__collapse__item__content">
 
-          <gc-education :detail="education"
+          <gc-education v-for="education in educations"
                         :key="education.uuid"
+                        :detail="education"
                         @edit-education="openEditModal"
-                        @remove-education="openDeleteModal"
-                        v-for="education in educations"></gc-education>
+                        @remove-education="openDeleteModal"></gc-education>
 
         </div>
       </el-collapse-item>
@@ -27,8 +28,8 @@
 
 <script>
 import { defineComponent }            from '@vue/composition-api';
-import { useEmployeeDetail }          from '../hooks/use-employee-detail';
-import { useEmployeeDetailEducation } from '../hooks/use-employee-detail-education';
+import { useEmployeeDetail }          from '../../hooks/use-employee-detail';
+import { useEmployeeDetailEducation } from '../../hooks/use-employee-detail-education';
 import gcCollapse                     from '@/components/collapse/collapse.component.vue';
 import gcCollapseItem                 from '@/components/collapse/collapse-item.component.vue';
 import gcEducation                    from '@/components/education/education.component.vue';

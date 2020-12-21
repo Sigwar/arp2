@@ -7,21 +7,21 @@
     <h2 class="gc-delete-modal__title">Are you sure you want
       <span class="gc-delete-modal__title__highlighted">remove:</span></h2>
 
-    <p class="gc-delete-modal__project">{{projectToDelete.name}}
+    <p class="gc-delete-modal__project">{{ projectToDelete.name }}
       <span class="gc-delete-modal__project__insertion">from</span>
-      {{projectToDelete.client}}
+      {{ projectToDelete.client }}
     </p>
 
     <div class="gc-delete-modal__buttons">
 
-      <gc-button @click.native.prevent="closeDeleteModal"
-                 class="button"
-                 type="info">Cancel
+      <gc-button class="button"
+                 type="info"
+                 @click.native.prevent="closeDeleteModal">Cancel
       </gc-button>
 
-      <gc-button @click.native.prevent="deleteProject"
-                 class="button"
-                 type="danger">Delete
+      <gc-button class="button"
+                 type="danger"
+                 @click.native.prevent="deleteProject">Delete
       </gc-button>
     </div>
   </gc-dialog>

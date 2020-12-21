@@ -1,11 +1,11 @@
 <template>
-  <el-table class="gc-table"
-            v-bind="$attrs"
-            v-on="$listeners">
+  <el-table v-bind="$attrs"
+            v-on="$listeners"
+            class="gc-table">
 
-    <slot :name="slot"
+    <slot v-for="(_, slot) of $slots"
           :slot="slot"
-          v-for="(_, slot) of $slots" />
+          :name="slot" />
   </el-table>
 </template>
 

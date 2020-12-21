@@ -5,9 +5,9 @@
                 :show-button="true"
                 :show-checkboxes="false"
                 :show-search="true"
+                button-label="Create new project"
                 @change-modal-state="changeModalState"
-                @change-search="changeSearch"
-                button-label="Create new project"></gc-filters>
+                @change-search="changeSearch"></gc-filters>
 
     <gc-project-list-table></gc-project-list-table>
 

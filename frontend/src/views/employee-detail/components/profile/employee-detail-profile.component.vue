@@ -1,8 +1,8 @@
 <template>
   <div class="gc-employee-detail-profile">
 
-    <el-collapse class="gc-employee-detail-profile__collapse"
-                 v-model="activeNames">
+    <el-collapse v-model="activeNames"
+                 class="gc-employee-detail-profile__collapse">
 
       <el-collapse-item class="gc-employee-detail-profile__collapse__item"
                         name="profile">
@@ -15,28 +15,38 @@
           <div class="gc-employee-detail-profile__collapse__item__content__wrapper">
 
             <div class="gc-employee-detail-profile__collapse__item__content__base-info">
-              <p class="text">Birthday:
-                <span class="value">{{profile.birthDay}}</span>
+
+              <p v-if="profile.birthday"
+                 class="text">Birthday:
+                <span class="value">{{ profile.birthday }}</span>
               </p>
 
-              <p class="text">IT Experience:
-                <span class="value">{{profile.itExperience}}</span>
+              <p v-if="profile.itExperience !== ''"
+                 class="text">IT Experience:
+                <span class="value">{{ calculateDifference(profile.itExperience) }}</span>
               </p>
             </div>
 
             <div class="gc-employee-detail-profile__collapse__item__content__base-info">
-              <p class="text">Language:
-                <span class="value">{{profile.language}}</span>
+
+              <p v-if="Array.isArray(profile.languages) && profile.languages.length"
+                 class="text">
+
+                Languages:
+                <span v-for="item in profile.languages"
+                      :key="item"
+                      class="value">{{ item }}</span>
               </p>
             </div>
           </div>
 
-          <div class="gc-employee-detail-profile__collapse__item__content__it-knowledge">
+          <div v-if="Array.isArray(profile.itTechnologies) && profile.itTechnologies"
+               class="gc-employee-detail-profile__collapse__item__content__it-knowledge">
 
             IT Knowledge:
-            <span :key="item"
-                  class="it-tag"
-                  v-for="item in profile.itKnowledge">{{ item }}</span>
+            <span v-for="item in profile.itTechnologies"
+                  :key="item"
+                  class="it-tag">{{ item }}</span>
           </div>
         </div>
       </el-collapse-item>
@@ -46,7 +56,8 @@
 
 <script>
 import { defineComponent }          from '@vue/composition-api';
-import { useEmployeeDetailProfile } from '../hooks/use-employee-detail-profile';
+import { useEmployeeDetailProfile } from '../../hooks/use-employee-detail-profile';
+import { useGlobals }               from '../../../../hooks/use-globals';
 import gcCollapse                   from '@/components/collapse/collapse.component.vue';
 import gcCollapseItem               from '@/components/collapse/collapse-item.component.vue';
 
@@ -65,9 +76,14 @@ export default defineComponent({
       profile,
     } = useEmployeeDetailProfile();
 
+    const {
+      calculateDifference,
+    } = useGlobals();
+
     return {
       profile,
       activeNames,
+      calculateDifference,
     };
   },
 });
@@ -109,6 +125,17 @@ export default defineComponent({
             .value {
               margin-left: 1rem;
               font-weight: var(--font-bold);
+
+              &:after {
+                content: ',';
+                margin-left: 1px;
+              }
+
+              &:last-child {
+                &:after {
+                  content: ''
+                }
+              }
             }
           }
         }

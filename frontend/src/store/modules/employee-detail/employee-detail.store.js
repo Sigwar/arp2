@@ -1,4 +1,5 @@
 import axios from 'axios';
+import store from '../../store';
 
 const state = {
   profile: {},
@@ -10,7 +11,7 @@ const state = {
     visibility: false,
     isNew: true,
     data: {
-      educationDate: [ '', '' ],
+      date: [ '', '' ],
       schoolName: '',
       description: '',
     },
@@ -26,13 +27,21 @@ const state = {
     projects: [],
   },
 
+  certificates: [],
+  editCertificatesModal: {
+    visibility: false,
+    isNew: true,
+    data: {
+      name: '',
+      date: '',
+      credentialId: '',
+    },
+  },
+
   deleteModalData: {
     visibility: false,
     data: {},
   },
-
-  knowledgeTags: [],
-  professionList: [],
 };
 
 // getters
@@ -46,7 +55,12 @@ const getters = {
   projects: (state) => {
     return state.projects;
   },
-
+  certificates: (state) => {
+    return state.certificates;
+  },
+  editCertificatesModal: (state) => {
+    return state.editCertificatesModal;
+  },
   deleteModalData: (state) => {
     return state.deleteModalData;
   },
@@ -60,13 +74,6 @@ const getters = {
   editProjectModal: (state) => {
     return state.editEducationModal;
   },
-
-  knowledgeTags: (state) => {
-    return state.knowledgeTags;
-  },
-  professionList: (state) => {
-    return state.professionList;
-  },
   projectToImports: (state) => {
     return state.projectsToImport;
   },
@@ -76,132 +83,199 @@ const getters = {
 const actions = {
   async getEmployeeProfile({ commit }, payload) {
     try {
-      console.log('payload: ', payload);
-      const { data } = await axios.get('http://localhost:3000/employeeProfile');
+      const { data } = await axios.post('http://localhost:8081/employee/detail', payload);
       commit('setEmployeeProfile', { ...data });
       commit('setProfileModal', { ...data });
     } catch (e) {
-      console.log('e: ', e);
+      console.error(e);
     }
   },
+
   async getEmployeeEducation({ commit }, payload) {
+    const userUuid = store.getters[ 'userUuid' ];
+
     try {
-      console.log('payload: ', payload);
-      const { data } = await axios.get('http://localhost:3000/employeeEducation');
+      const { data } = await axios.post('http://localhost:8081/employee/educations', { userUuid: userUuid, employeeUuid: payload });
       commit('setEmployeeEducation', data);
     } catch (e) {
-      console.log('e: ', e);
+      console.error(e);
     }
   },
+
   async getEmployeeProjects({ commit }, payload) {
+    const userUuid = store.getters[ 'userUuid' ];
     try {
-      console.log('payload: ', payload);
-      const { data } = await axios.get('http://localhost:3000/employeeProjects');
+      const { data } = await axios.post('http://localhost:8081/employee/projects', { userUuid: userUuid, employeeUuid: payload });
       commit('setEmployeeProjects', data);
     } catch (e) {
-      console.log('e: ', e);
-    }
-  },
-  async getKnowledgeTags({ commit }) {
-    try {
-      const { data } = await axios.get('http://localhost:3000/knowledgeTags');
-      commit('setKnowledgeTags', data);
-    } catch (e) {
-      console.log('e: ', e);
+      console.error(e);
     }
   },
 
-  async getProfessionList({ commit }) {
+  async getEmployeeCertificate({ commit }, payload) {
+    const userUuid = store.getters[ 'userUuid' ];
+
     try {
-      const { data } = await axios.get('http://localhost:3000/professionList');
-      commit('setProfessionList', data);
+      const { data } = await axios.post('http://localhost:8081/employee/certificate', { userUuid: userUuid, employeeUuid: payload });
+      commit('setCertificate', data);
     } catch (e) {
-      console.log('e: ', e);
+      console.error(e);
     }
   },
 
-  async getAllProjects({ commit }) {
+  async getAllProjectsToImport({ commit }, payload) {
+    const userUuid = store.getters[ 'userUuid' ];
     try {
-      const { data } = await axios.get('http://localhost:3000/allProjects');
+      const { data } = await axios.post('http://localhost:8081/employee/projects-to-import', { userUuid: userUuid, employeeUuid: payload });
       commit('setProjectsToImport', data);
     } catch (e) {
-      console.log('e: ', e);
+      console.error(e);
     }
   },
 
   async updateProfile({ state, dispatch, commit }) {
+    const userUuid = store.getters[ 'userUuid' ];
     try {
-      await axios.patch(`updateProfile/${state.profileModal.uuid}`, state.profileModal);
-      dispatch('getEmployeeProfile', state.profileModal.uuid);
+      await axios.patch('http://localhost:8081/employee/update', { userUuid: userUuid, employee: state.profileModal });
+      dispatch('getEmployeeProfile', { userUuid: userUuid, employeeUuid: state.profileModal.uuid });
       commit('setEditProfileModal', false);
     } catch (e) {
-      console.log('e: ', e);
-    }
-  },
-  async updateEducation({ state, dispatch, commit }) {
-    try {
-      await axios.patch(`updateProfile/${state.editEducationModal.uuid}`, state.editEducationModal.data);
-      dispatch('getEmployeeEducation');
-      const params = {
-        visibility: false,
-        isNew: true,
-        data: {
-          educationDate: [ '', '' ],
-          schoolName: '',
-          description: '',
-        },
-      };
-      commit('setEditEducationModal', params);
-    } catch (e) {
-      console.log('e: ', e);
+      console.error(e);
     }
   },
 
-  async createNewEducation({ state, commit, dispatch }) {
+  async updateProject({ state, dispatch, commit }) {
     try {
-      await axios.post(`createNewEducation`, state.editEducationModal.data);
-      dispatch('getEmployeeEducation');
-      const params = {
-        visibility: false,
-        isNew: true,
-        data: {
-          educationDate: [ '', '' ],
-          schoolName: '',
-          description: '',
-        },
-      };
-      commit('setEditEducationModal', params);
-    } catch (e) {
-      console.log('e: ', e);
-    }
-  },
-
-  async importProjects({ commit, dispatch }, payload) {
-    console.log('payload: ', payload);
-    try {
-      // await axios.post(`importProjects`, payload);
-      commit('setProjectsToImportVisibility', false);
-      dispatch('getEmployeeProjects')
-    } catch (e) {
-      console.log('e: ', e);
-    }
-  },
-
-  async deleteEducation({ state, commit }) {
-    try {
-      await axios.delete('http://localhost:3000/employeeProjects', state.deleteModalData.data.uuid);
+      await axios.patch('http://localhost:8081/employee/update-project', state.editProjectModal.data);
+      dispatch('getEmployeeProjects', state.profileModal.uuid);
       const params = {
         visibility: false,
         data: {},
       };
+      commit('setEditProjectModal', params);
+    } catch (e) {
+      console.error(e);
+    }
+  },
 
+  async updateCertificate({ state, dispatch, commit }, payload) {
+    try {
+      await axios.patch('http://localhost:8081/employee/update-certificate', state.editCertificatesModal.data);
+      const params = {
+        visibility: false,
+        isNew: true,
+        data: {},
+      };
+      commit('setEditCertificateModal', params);
+      dispatch('getEmployeeCertificate', payload);
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  async updateEducation({ state, dispatch, commit }, payload) {
+    try {
+      await axios.patch(`http://localhost:8081/employee/update-education`, state.editEducationModal.data);
+      const params = {
+        visibility: false,
+        isNew: true,
+        data: {
+          date: [ '', '' ],
+          schoolName: '',
+          description: '',
+        },
+      };
+      commit('setEditEducationModal', params);
+      dispatch('getEmployeeEducation', payload);
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  async createNewEducation({ state, commit, dispatch }, payload) {
+    const user = store.getters[ 'user' ];
+    try {
+      const data = {
+        userUuid: user.uuid,
+        employeeUuid: payload,
+        ...state.editEducationModal.data,
+      };
+      await axios.post(`http://localhost:8081/employee/create-education`, data);
+      dispatch('getEmployeeEducation', payload);
+      const params = {
+        visibility: false,
+        isNew: true,
+        data: {
+          date: [ '', '' ],
+          schoolName: '',
+          description: '',
+        },
+      };
+      commit('setEditEducationModal', params);
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  async createNewCertificate({ state, commit, dispatch }, payload) {
+    const user = store.getters[ 'user' ];
+    try {
+      const data = {
+        userUuid: user.uuid,
+        employeeUuid: payload,
+        ...state.editCertificatesModal.data,
+      };
+      await axios.post(`http://localhost:8081/employee/create-certificate`, data);
+      const params = {
+        visibility: false,
+        isNew: true,
+        data: {
+          name: '',
+          date: '',
+          credentialId: '',
+        },
+      };
+      commit('setEditCertificateModal', params);
+      dispatch('getEmployeeCertificate', payload);
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  async importProjects({ commit, dispatch }, payload) {
+    try {
+      await axios.post('http://localhost:8081/employee/import-project', payload);
+      commit('setProjectsToImportVisibility', false);
+      dispatch('getEmployeeProjects', payload.employeeUuid);
+      dispatch('getAllProjectsToImport', payload.employeeUuid);
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  async deleteItem({ state, commit, dispatch }, payload) {
+    try {
+      if (state.deleteModalData.data.type === 'project') {
+        await axios.delete('http://localhost:8081/employee/delete-project', { data: { uuid: state.deleteModalData.data.uuid } });
+        dispatch('getEmployeeProjects', payload);
+        dispatch('getAllProjectsToImport', payload);
+      } else if (state.deleteModalData.data.type === 'education') {
+        await axios.delete('http://localhost:8081/employee/delete-education', { data: { uuid: state.deleteModalData.data.uuid } });
+        dispatch('getEmployeeEducation', payload);
+      } else if (state.deleteModalData.data.type === 'certificate') {
+        await axios.delete('http://localhost:8081/employee/delete-certificate', { data: { uuid: state.deleteModalData.data.uuid } });
+        dispatch('getEmployeeCertificate', payload);
+      }
+      const params = {
+        visibility: false,
+        data: {},
+      };
       commit('setDeleteModalData', params);
     } catch (e) {
       const params = {
         visibility: false,
         data: {},
       };
-
       commit('setDeleteModalData', params);
     }
   },
@@ -210,7 +284,10 @@ const actions = {
 // mutations
 const mutations = {
   setEmployeeProfile: (state, payload) => {
-    state.profile = payload;
+    state.profile = {
+      ...payload,
+      isActive: payload.isActive === 1,
+    };
   },
   setEmployeeEducation: (state, payload) => {
     state.educations = payload;
@@ -225,24 +302,56 @@ const mutations = {
     state.editEducationModal = payload;
   },
   setEditProjectModal: (state, payload) => {
-    state.editProjectModal = payload;
-  },
-  setKnowledgeTags: (state, payload) => {
-    state.knowledgeTags = payload;
+    state.editProjectModal = {
+      visibility: payload.visibility,
+      data: {
+        ...payload.data,
+        date: [ payload.data.dateStart, payload.data.dateEnd ],
+      },
+    };
   },
   setEditProfileModal: (state, payload) => {
     state.editProfileModal = payload;
   },
   setProfileModal: (state, payload) => {
-    state.profileModal = payload;
+    state.profileModal = {
+      ...payload,
+      isActive: payload.isActive === 1,
+    };
   },
-  setProfessionList: (state, payload) => {
-    state.professionList = payload;
+  setRolesInProject: (state, payload) => {
+    if (state.editProjectModal.data.roles) {
+      const isRoleInArray = state.editProjectModal.data.roles.find(el => el === payload);
+
+      if (!isRoleInArray) {
+        state.editProjectModal.data.roles.push(payload);
+      }
+    }
+  },
+  removeRoleInProject: (state, payload) => {
+    state.editProjectModal.data.roles.splice(state.editProjectModal.data.roles.indexOf(payload), 1);
+  },
+  setActivitiesInProject: (state, payload) => {
+    if (state.editProjectModal.data.activities) {
+      const isActivitiesInArray = state.editProjectModal.data.activities.find(el => el === payload);
+
+      if (!isActivitiesInArray) {
+        state.editProjectModal.data.activities.push(payload);
+      }
+    }
+  },
+  removeActivitiesInProject: (state, payload) => {
+    state.editProjectModal.data.activities.splice(state.editProjectModal.data.activities.indexOf(payload), 1);
   },
   setEmployeePicture: (state, payload) => {
+    let fd = new FormData();
+    fd.append('image', payload[ 0 ]);
+    const blobFile = new Blob([ payload.target.files[ 0 ] ], { type: payload.target.files [ 0 ].type });
+
+
     state.profileModal.picture = {
-      url: URL.createObjectURL(payload),
-      file: payload,
+      url: URL.createObjectURL(blobFile),
+      image: fd,
     };
   },
   setProjectsToImport: (state, payload) => {
@@ -250,6 +359,18 @@ const mutations = {
   },
   setProjectsToImportVisibility: (state, payload) => {
     state.projectsToImport.visibility = payload;
+  },
+  setCertificate: (state, payload) => {
+    state.certificates = payload;
+  },
+  setEditCertificateModal: (state, payload) => {
+    state.editCertificatesModal = {
+      visibility: payload.visibility,
+      isNew: payload.isNew,
+      data: {
+        ...payload.data,
+      },
+    };
   },
 };
 

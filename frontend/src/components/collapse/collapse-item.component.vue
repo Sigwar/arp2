@@ -1,11 +1,11 @@
 <template>
-  <el-collapse class="gc-collapse-item"
-               v-bind="$attrs"
-               v-on="$listeners">
+  <el-collapse v-bind="$attrs"
+               v-on="$listeners"
+               class="gc-collapse-item">
 
-    <slot :name="slot"
+    <slot v-for="(_, slot) of $slots"
           :slot="slot"
-          v-for="(_, slot) of $slots" />
+          :name="slot" />
   </el-collapse>
 </template>
 

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import store from '../../store';
 
 const state = {
   isModalOpen: false,
@@ -51,56 +52,75 @@ const getters = {
 
 //actions
 const actions = {
-  async getProjects({ commit }) {
+  async getProjects({ state, commit }) {
+    const reqData = {
+      userUuid: store.getters[ 'userUuid' ],
+      ...state.sort,
+    };
+
     try {
-      const { data } = await axios.get('http://localhost:3000/projects');
+      const { data } = await axios.post('http://localhost:8081/projects/projects', reqData);
       commit('setProjects', data);
     } catch (e) {
-      console.log('e: ', e);
+      console.error(e);
     }
   },
   async getProjectDetail({ commit }, payload) {
+    const reqData = {
+      userUuid: store.getters[ 'userUuid' ],
+      projectUuid: payload,
+    };
+
     try {
-      const { data } = await axios.get('http://localhost:3000/projectDetail', payload);
+      const { data } = await axios.post('http://localhost:8081/project/getDetail', reqData);
       commit('setProjectForm', data);
       commit('setModal');
     } catch (e) {
-      console.log('e: ', e);
+      console.error(e);
     }
   },
   async getEmployees({ commit }) {
+    const uuid = store.getters[ 'userUuid' ];
     try {
-      const { data } = await axios.get('http://localhost:3000/projectsEmployees');
+      const { data } = await axios.post('http://localhost:8081/employees/employeeList', { userUuid: uuid });
       commit('setEmployees', data);
     } catch (e) {
-      console.log('e: ', e);
+      console.error(e);
     }
   },
-  async createNewProject({ commit }) {
+  async createNewProject({ commit, dispatch }, payload) {
+    const reqData = {
+      ...payload,
+      userUuid: store.getters[ 'userUuid' ],
+    };
+
     try {
-      // await axios.get('http://localhost:3000/projectsEmployees');
+      await axios.post('http://localhost:8081/project/create', reqData);
+      dispatch('getProjects');
       commit('resetForm');
       commit('setModal');
     } catch (e) {
-      console.log('e: ', e);
+      console.error(e);
     }
   },
-  async updateProject({ commit }) {
+  async updateProject({ state, commit, dispatch }) {
     try {
-      // await axios.post('URL', state.projectForm)
+      await axios.post('http://localhost:8081/project/update', state.projectForm);
       commit('resetForm');
       commit('setModal');
+      dispatch('getProjects');
     } catch (e) {
-      console.log('e: ', e);
+      console.error(e);
     }
   },
-  async deleteProject({ commit }) {
+  async deleteProject({ state, commit, dispatch }) {
     try {
-      // await axios.get('http://localhost:3000/projectsEmployees');
+      await axios.delete('http://localhost:8081/project/delete', { data: { uuid: state.projectToDelete.uuid } });
+      dispatch('getProjects');
       commit('setDeleteModal');
       commit('resetProjectToDelete');
     } catch (e) {
-      console.log('e: ', e);
+      console.error(e);
     }
   },
 };
@@ -112,7 +132,7 @@ const mutations = {
   },
   setSort: (state, payload) => {
     if (state.sort.sortBy === payload) {
-      state.sort.direction = state.sort.direction === 'ASC' ? 'DES' : 'ASC';
+      state.sort.direction = state.sort.direction === 'ASC' ? 'DESC' : 'ASC';
     } else {
       state.sort.sortBy = payload;
     }

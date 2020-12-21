@@ -5,13 +5,10 @@ export const useEmployeeDetail = () => {
 
   const showDeleteModal = ref(true);
 
-  const getEmployeesProfile = () => {
-    store.dispatch('employeeDetailModule/getEmployeeProfile');
-    store.dispatch('employeeDetailModule/getEmployeeEducation');
-    store.dispatch('employeeDetailModule/getEmployeeProjects');
-    store.dispatch('employeeDetailModule/getKnowledgeTags');
-    store.dispatch('employeeDetailModule/getProfessionList');
-    store.dispatch('employeeDetailModule/getAllProjects');
+  const getEmployeesProfile = (employeeUuid) => {
+    const user = store.getters[ 'user' ];
+
+    store.dispatch('employeeDetailModule/getEmployeeProfile', { userUuid: user.uuid, employeeUuid: employeeUuid });
   };
 
   //DELETE MODAL
@@ -33,6 +30,10 @@ export const useEmployeeDetail = () => {
     store.commit('employeeDetailModule/setDeleteModalData', params);
   };
 
+  const getAllProjectsToImport = (payload) => {
+    store.dispatch('employeeDetailModule/getAllProjectsToImport', payload);
+  };
+
   const deleteModalData = computed(() => store.state.employeeDetailModule.deleteModalData);
 
   return {
@@ -41,5 +42,6 @@ export const useEmployeeDetail = () => {
     showDeleteModal,
     closeDeleteModal,
     getEmployeesProfile,
+    getAllProjectsToImport,
   };
 };

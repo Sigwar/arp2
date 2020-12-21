@@ -1,11 +1,11 @@
 <template>
-  <el-dropdown class="gc-dropdown"
-               v-bind="$attrs"
-               v-on="$listeners">
+  <el-dropdown v-bind="$attrs"
+               v-on="$listeners"
+               class="gc-dropdown">
 
-    <slot :name="slot"
+    <slot v-for="(_, slot) of $slots"
           :slot="slot"
-          v-for="(_, slot) of $slots" />
+          :name="slot" />
   </el-dropdown>
 </template>
 

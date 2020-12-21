@@ -1,11 +1,11 @@
 <template>
-  <el-input class="gc-input"
-            v-bind="$attrs"
-            v-on="$listeners">
+  <el-input v-bind="$attrs"
+            v-on="$listeners"
+            class="gc-input">
 
-    <slot :name="slot"
+    <slot v-for="(_, slot) of $slots"
           :slot="slot"
-          v-for="(_, slot) of $slots" />
+          :name="slot" />
   </el-input>
 </template>
 

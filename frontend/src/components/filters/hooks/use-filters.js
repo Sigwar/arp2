@@ -1,4 +1,4 @@
-import { reactive, ref } from '@vue/composition-api';
+import { reactive, ref, watch } from '@vue/composition-api';
 
 export const useFilters = (context) => {
 
@@ -12,6 +12,14 @@ export const useFilters = (context) => {
     active: true,
     inactive: true,
   });
+  watch(checkboxes, () => {
+    if (!checkboxes.active && !checkboxes.inactive) {
+      checkboxes.active = true;
+      checkboxes.inactive = true;
+    }
+
+    context.emit('change-boxes', checkboxes);
+  });
 
   const changeValueInput = (value) => {
     context.emit('change-search', value);
@@ -20,6 +28,7 @@ export const useFilters = (context) => {
   const changeValueModal = () => {
     context.emit('change-modal-state');
   };
+
 
   return {
     search,

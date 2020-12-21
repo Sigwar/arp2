@@ -8,10 +8,6 @@ export const useEmployeeList = () => {
     store.dispatch('employeesModule/getEmployees');
   };
 
-  const getKnowledgeTags = () => {
-    store.dispatch('employeesModule/getTagsKnowledge');
-  };
-
   const getProjects = () => {
     store.dispatch('employeesModule/getProjects');
   };
@@ -22,9 +18,8 @@ export const useEmployeeList = () => {
   const employees = computed(() => store.state.employeesModule.employees);
   const employeeForm = computed(() => store.state.employeesModule.employeeForm);
   const isModalOpen = computed(() => store.state.employeesModule.isModalOpen);
-  const knowledgeTags = computed(() => store.state.employeesModule.knowledgeTags);
-  const professionList = computed(() => store.state.employeesModule.professionList);
   const projects = computed(() => store.state.employeesModule.projects);
+  const loadingBtn = computed(() => store.state.employeesModule.loadingBtn);
 
   const changeSearch = (value) => {
     valueInput.value = value;
@@ -32,6 +27,7 @@ export const useEmployeeList = () => {
 
   const setSort = (value) => {
     store.commit('employeesModule/setSort', value);
+    store.dispatch('employeesModule/getEmployees');
   };
 
   const changeModalState = () => {
@@ -47,13 +43,14 @@ export const useEmployeeList = () => {
     store.commit('employeesModule/setIsModalOpen', false);
   };
 
-  const handleAvatarSuccess = (file) => {
-    const blobFile = new Blob([ file.target.files[ 0 ] ], { type: file.target.files [ 0 ].type });
-    store.commit('employeesModule/setEmployeePicture', blobFile);
+  const goToDetail = (uuid) => {
+    router.push({ name: 'Employee detail', params: { uuid: uuid } }).catch(() => {
+    });
   };
 
-  const goToDetail = (uuid) => {
-    router.push({ name: 'Employee detail', params: { uuid: uuid } }).catch(() => {});
+  const changeFilterBoxes = (value) => {
+    store.commit('employeesModule/setStatusSearch', value);
+    store.dispatch('employeesModule/getEmployees');
   };
 
   return {
@@ -63,17 +60,15 @@ export const useEmployeeList = () => {
     employees,
     goToDetail,
     valueInput,
+    loadingBtn,
     isModalOpen,
     getProjects,
     employeeForm,
     changeSearch,
     employeesList,
-    knowledgeTags,
-    professionList,
-    getKnowledgeTags,
     changeModalState,
     createNewEmployee,
+    changeFilterBoxes,
     resetEmployeeForm,
-    handleAvatarSuccess,
   };
 };

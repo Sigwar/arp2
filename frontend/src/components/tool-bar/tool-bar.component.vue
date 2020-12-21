@@ -7,8 +7,8 @@
                   effect="dark"
                   placement="left-start">
 
-        <div @click="changeEditProfileModal"
-             class="gc-tool-bar__container__icon icon-user--yellow"></div>
+        <div class="gc-tool-bar__container__icon icon-user--yellow"
+             @click="changeEditProfileModal"></div>
 
       </gc-tooltip>
 
@@ -19,21 +19,30 @@
         <div class="gc-tool-bar__container__icon icon-doc--yellow"></div>
       </gc-tooltip>
 
-      <gc-tooltip content="Add education"
-                  effect="dark"
-                  placement="left-start">
-
-        <div @click="addNewEducation"
-             class="gc-tool-bar__container__icon icon-education--yellow"></div>
-
-      </gc-tooltip>
-
       <gc-tooltip content="Import project"
                   effect="dark"
                   placement="left-start">
 
-        <div @click="importProject"
-             class="gc-tool-bar__container__icon icon-project--yellow"></div>
+        <div class="gc-tool-bar__container__icon icon-project--yellow"
+             @click="importProject"></div>
+
+      </gc-tooltip>
+
+      <gc-tooltip content="Add certificate"
+                  effect="dark"
+                  placement="left-start">
+
+        <div class="gc-tool-bar__container__icon gc-tool-bar__container__icon--small icon-certificate--yellow"
+             @click="addNewCertificate"></div>
+
+      </gc-tooltip>
+
+      <gc-tooltip content="Add education"
+                  effect="dark"
+                  placement="left-start">
+
+        <div class="gc-tool-bar__container__icon icon-education--yellow"
+             @click="addNewEducation"></div>
 
       </gc-tooltip>
     </div>
@@ -56,12 +65,14 @@ export default defineComponent({
     const {
       importProject,
       addNewEducation,
+      addNewCertificate,
       changeEditProfileModal,
     } = useToolbar(context);
 
     return {
       importProject,
       addNewEducation,
+      addNewCertificate,
       changeEditProfileModal,
     };
   },
@@ -91,7 +102,7 @@ export default defineComponent({
   &:hover {
     border: 1px solid var(--warning);
     box-shadow: var(--input-shadow);
-    height: 27rem;
+    height: 33rem;
     transition: var(--cubic-bezier);
 
     .gc-tool-bar__icon {

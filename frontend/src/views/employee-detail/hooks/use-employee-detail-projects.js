@@ -5,6 +5,14 @@ export const useEmployeeDetailProjects = () => {
 
   const selectedProjectsToImport = ref([]);
 
+  let newRole = ref('');
+
+  let newActivities = ref('');
+
+  const getEmployeeProjects = (employeeUuid) => {
+    store.dispatch('employeeDetailModule/getEmployeeProjects', employeeUuid);
+  };
+
   const openEditProjectModal = (project) => {
     const params = {
       visibility: true,
@@ -24,12 +32,7 @@ export const useEmployeeDetailProjects = () => {
   };
 
   const updateProject = () => {
-    const params = {
-      visibility: false,
-      data: {},
-    };
-
-    store.commit('employeeDetailModule/setEditProjectModal', params);
+    store.dispatch('employeeDetailModule/updateProject');
   };
 
   const openImportModal = () => {
@@ -41,9 +44,32 @@ export const useEmployeeDetailProjects = () => {
     store.commit('employeeDetailModule/setProjectsToImportVisibility', false);
   };
 
-  const importProjects = () => {
-    store.dispatch('employeeDetailModule/importProjects', selectedProjectsToImport.value);
+  const importProjects = (employeeUuid) => {
+    const data = {
+      employeeUuid: employeeUuid,
+      projects: selectedProjectsToImport.value,
+    };
+
+    store.dispatch('employeeDetailModule/importProjects', data);
     selectedProjectsToImport.value = [];
+  };
+
+  const addNewRoles = () => {
+    store.commit('employeeDetailModule/setRolesInProject', newRole.value);
+    newRole.value = '';
+  };
+
+  const removeRole = (role) => {
+    store.commit('employeeDetailModule/removeRoleInProject', role);
+  };
+
+  const addNewActivities = () => {
+    store.commit('employeeDetailModule/setActivitiesInProject', newActivities.value);
+    newActivities.value = '';
+  };
+
+  const removeActivities = (activities) => {
+    store.commit('employeeDetailModule/removeActivitiesInProject', activities);
   };
 
   const projects = computed(() => store.state.employeeDetailModule.projects);
@@ -51,13 +77,20 @@ export const useEmployeeDetailProjects = () => {
   const projectsToImport = computed(() => store.state.employeeDetailModule.projectsToImport);
 
   return {
+    newRole,
     projects,
+    removeRole,
+    addNewRoles,
     editProject,
     updateProject,
+    newActivities,
     importProjects,
     openImportModal,
+    addNewActivities,
+    removeActivities,
     closeImportModal,
     projectsToImport,
+    getEmployeeProjects,
     openEditProjectModal,
     closeEditProjectModal,
     selectedProjectsToImport,

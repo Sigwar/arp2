@@ -8,8 +8,8 @@ export const useProject = (context) => {
 
     const params = {
       uuid: projectDetail.uuid,
-      name: projectDetail.projectName,
-      client: projectDetail.clientName,
+      name: projectDetail.name,
+      client: projectDetail.client,
       type: 'project',
     };
 

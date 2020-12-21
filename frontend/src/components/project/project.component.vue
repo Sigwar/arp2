@@ -1,53 +1,56 @@
 <template>
-  <div @mouseenter="isHover = true"
-       @mouseleave="isHover = false"
-       class="gc-project">
+  <div class="gc-project"
+       @mouseenter="isHover = true"
+       @mouseleave="isHover = false">
 
     <div class="gc-project__circle"></div>
     <div class="gc-project__content">
       <div class="gc-project__content__header">
-        <span class="gc-project__content__header__date">{{detail.date[0]}} - {{detail.date[1]}}</span>
+        <span class="gc-project__content__header__date">{{ calculateDifference(detail.dateStart, detail.dateEnd) }}</span>
 
-        <span class="gc-project__content__header__wrapper"
-              v-show="isHover">
+        <span v-show="isHover"
+              class="gc-project__content__header__wrapper">
 
-        <span @click="removeProject(detail)"
-              class="gc-project__content__header__remove">REMOVE</span>
+        <span class="gc-project__content__header__remove"
+              @click="removeProject(detail)">REMOVE</span>
 
-        <span @click="editProject(detail)"
-              class="gc-project__content__header__edit">EDIT</span>
+        <span class="gc-project__content__header__edit"
+              @click="editProject(detail)">EDIT</span>
         </span>
       </div>
 
-      <h2 class="gc-project__content__name">{{detail.projectName}}
+      <h2 class="gc-project__content__name">{{ detail.name }}
         <span class="gc-project__content__name--small">for</span>
-        {{detail.clientName}}</h2>
-      <p class="gc-project__content__description">{{detail.description}}</p>
+        {{ detail.client }}</h2>
 
-      <p class="gc-project__content__topic">
-        <span class="gc-project__content__topic__label">Topic: </span>{{detail.topic}}
+      <p v-if="detail.description !== ''"
+         class="gc-project__content__description">{{ detail.description }}</p>
+
+      <p v-if="detail.topic !== ''"
+         class="gc-project__content__topic">
+        <span class="gc-project__content__topic__label">Topic: </span>{{ detail.topic }}
       </p>
 
       <p class="gc-project__content__role">
         <span class="gc-project__content__role__label">Role: </span>
 
-        <span :key="role"
-              class="gc-project__content__role__value"
-              v-for="role in detail.roles">{{role}}</span>
+        <span v-for="role in detail.roles"
+              :key="role"
+              class="gc-project__content__role__value">{{ role }}</span>
       </p>
       <p class="gc-project__content__technologies">
         <span class="gc-project__content__technologies__label">Technologies: </span>
 
-        <span :key="technologie"
-              class="gc-project__content__role__value gc-project__content__role__value--tag"
-              v-for="technologie in detail.technologies">{{technologie}}</span>
+        <span v-for="technologie in detail.technologies"
+              :key="technologie"
+              class="gc-project__content__role__value gc-project__content__role__value--tag">{{ technologie }}</span>
       </p>
       <p class="gc-project__content__activities">
         <span class="gc-project__content__activities__label">Activities: </span>
 
-        <span :key="activitie"
-              class="gc-project__content__activities__value"
-              v-for="activitie in detail.activities">{{activitie}}</span>
+        <span v-for="activitie in detail.activities"
+              :key="activitie"
+              class="gc-project__content__activities__value">{{ activitie }}</span>
       </p>
     </div>
   </div>
@@ -56,6 +59,7 @@
 <script>
 import { defineComponent } from '@vue/composition-api';
 import { useProject }      from './hooks/use-project';
+import { useGlobals }      from '../../hooks/use-globals';
 
 export default defineComponent({
   name: 'gcProject',
@@ -71,10 +75,15 @@ export default defineComponent({
       removeProject,
     } = useProject(context);
 
+    const {
+      calculateDifference,
+    } = useGlobals();
+
     return {
       isHover,
       editProject,
       removeProject,
+      calculateDifference,
     };
   },
 });
@@ -196,6 +205,10 @@ export default defineComponent({
         }
       }
     }
+  }
+
+  &:last-child {
+    margin-bottom: 0;
   }
 }
 </style>

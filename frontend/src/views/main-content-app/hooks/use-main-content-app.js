@@ -8,18 +8,31 @@ export const useMainContentApp = () => {
   const setActiveLink = (nameClass) => {
     activeLink.value = nameClass;
     if (nameClass === 'active-employees') {
-      router.push({ name: 'Employees list' }).catch(() => {});
-    } else {
-      router.push({ name: 'Projects list' }).catch(() => {});
+      router.push({ name: 'Employees list' }).catch(() => {
+      });
+    } else if (nameClass === 'active-projects') {
+      router.push({ name: 'Projects list' }).catch(() => {
+      });
+    } else if (nameClass === 'active-settings') {
+      router.push({ name: 'Settings' }).catch(() => {
+      });
     }
   };
 
   const logOut = () => {
-    router.push({ name: 'Login' }).catch(() => {});
+    router.push({ name: 'Login' }).catch(() => {
+    });
   };
 
   onMounted(() => {
-    activeLink.value = router.currentRoute.fullPath.includes('employee') ? 'active-employees' : 'active-projects';
+    if (router.currentRoute.fullPath.includes('employee')) {
+      activeLink.value = 'active-employees';
+    } else if (router.currentRoute.fullPath.includes('projects')) {
+      activeLink.value = 'active-projects';
+
+    } else if (router.currentRoute.fullPath.includes('settings')) {
+      activeLink.value = 'active-settings';
+    }
   });
 
   return {
