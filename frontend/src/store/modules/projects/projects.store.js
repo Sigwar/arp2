@@ -99,18 +99,20 @@ const actions = {
       dispatch('getProjects');
       commit('resetForm');
       commit('setModal');
+      dispatch('notify/openNotifySuccess', 'Project has been created', { root: true });
     } catch (e) {
-      console.error(e);
+      dispatch('notify/openNotifyError', e.response, { root: true });
     }
   },
   async updateProject({ state, commit, dispatch }) {
     try {
       await axios.post('http://localhost:8081/project/update', state.projectForm);
-      commit('resetForm');
-      commit('setModal');
       dispatch('getProjects');
+      commit('setModal');
+      commit('resetForm');
+      dispatch('notify/openNotifySuccess', 'Project has been updated', { root: true });
     } catch (e) {
-      console.error(e);
+      dispatch('notify/openNotifyError', e.response, { root: true });
     }
   },
   async deleteProject({ state, commit, dispatch }) {
@@ -119,8 +121,9 @@ const actions = {
       dispatch('getProjects');
       commit('setDeleteModal');
       commit('resetProjectToDelete');
+      dispatch('notify/openNotifySuccess', 'Project has been deleted', { root: true });
     } catch (e) {
-      console.error(e);
+      dispatch('notify/openNotifyError', e.response, { root: true });
     }
   },
 };

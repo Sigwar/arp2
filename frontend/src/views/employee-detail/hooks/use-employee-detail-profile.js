@@ -12,8 +12,12 @@ export const useEmployeeDetailProfile = () => {
     store.commit('employeeDetailModule/setEditProfileModal', false);
   };
 
-  const updateProfile = () => {
-    store.dispatch('employeeDetailModule/updateProfile');
+  const updateProfile = (form) => {
+    form.validate((valid) => {
+      if (valid) {
+        store.dispatch('employeeDetailModule/updateProfile');
+      }
+    });
   };
 
   const profile = computed(() => store.state.employeeDetailModule.profile);

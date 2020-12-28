@@ -14,7 +14,7 @@ exports.getLanguages = async (req, res, next) => {
       },
     });
 
-    res.status(201).json(languages);
+    res.status(200).json(languages);
   } catch (e) {
     console.error(e);
   }
@@ -29,7 +29,7 @@ exports.getLanguagesLevel = async (req, res, next) => {
       },
     });
 
-    res.status(201).json(languagesLevel);
+    res.status(200).json(languagesLevel);
   } catch (e) {
     console.error(e);
   }
@@ -58,7 +58,7 @@ exports.getLanguagesWithLevel = async (req, res, next) => {
       });
     });
 
-    res.status(201).json(arr);
+    res.status(200).json(arr);
   } catch (e) {
     console.error(e);
   }
@@ -70,23 +70,31 @@ exports.getEmployeeLanguages = async (req, res, next) => {
 
     const employeeLanguages = await EmployeeLanguages.getAll({ raw: true, where: { employeeId: user.id } });
 
-    res.status(201).json(employeeLanguages);
+    res.status(200).json(employeeLanguages);
   } catch (e) {
     console.error(e);
   }
 };
 
 exports.create = async (req, res, next) => {
-  try {
-    const uuid = generatorUuid.v4();
-    await Languages.create({
-      uuid: uuid,
-      name: req.body.name,
-    });
+  const error = validationResult(req);
 
-    res.status(201).json();
-  } catch (e) {
-    console.error(e);
+  if (error.isEmpty()) {
+    try {
+      const uuid = generatorUuid.v4();
+      await Languages.create({
+        uuid: uuid,
+        name: req.body.name,
+      });
+
+      res.status(201).json();
+    } catch (e) {
+      console.error(e);
+    }
+  } else {
+    res.status(422).json({
+      error: error.array(),
+    });
   }
 };
 

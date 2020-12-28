@@ -139,8 +139,9 @@ const actions = {
       await axios.patch('http://localhost:8081/employee/update', { userUuid: userUuid, employee: state.profileModal });
       dispatch('getEmployeeProfile', { userUuid: userUuid, employeeUuid: state.profileModal.uuid });
       commit('setEditProfileModal', false);
+      dispatch('notify/openNotifySuccess', 'Profile has been updated', { root: true });
     } catch (e) {
-      console.error(e);
+      dispatch('notify/openNotifyError', e.response, { root: true });
     }
   },
 
@@ -148,13 +149,14 @@ const actions = {
     try {
       await axios.patch('http://localhost:8081/employee/update-project', state.editProjectModal.data);
       dispatch('getEmployeeProjects', state.profileModal.uuid);
+      dispatch('notify/openNotifySuccess', 'The project list has been updated', { root: true });
       const params = {
         visibility: false,
         data: {},
       };
       commit('setEditProjectModal', params);
     } catch (e) {
-      console.error(e);
+      dispatch('notify/openNotifyError', e.response, { root: true });
     }
   },
 
@@ -168,8 +170,9 @@ const actions = {
       };
       commit('setEditCertificateModal', params);
       dispatch('getEmployeeCertificate', payload);
+      dispatch('notify/openNotifySuccess', 'Certificate has been updated', { root: true });
     } catch (e) {
-      console.error(e);
+      dispatch('notify/openNotifyError', e.response, { root: true });
     }
   },
 
@@ -187,8 +190,9 @@ const actions = {
       };
       commit('setEditEducationModal', params);
       dispatch('getEmployeeEducation', payload);
+      dispatch('notify/openNotifySuccess', 'Education has been updated', { root: true });
     } catch (e) {
-      console.error(e);
+      dispatch('notify/openNotifyError', e.response, { root: true });
     }
   },
 
@@ -212,8 +216,9 @@ const actions = {
         },
       };
       commit('setEditEducationModal', params);
+      dispatch('notify/openNotifySuccess', 'Education has been created', { root: true });
     } catch (e) {
-      console.error(e);
+      dispatch('notify/openNotifyError', e.response, { root: true });
     }
   },
 
@@ -237,8 +242,9 @@ const actions = {
       };
       commit('setEditCertificateModal', params);
       dispatch('getEmployeeCertificate', payload);
+      dispatch('notify/openNotifySuccess', 'Certificate has been created', { root: true });
     } catch (e) {
-      console.error(e);
+      dispatch('notify/openNotifyError', e.response, { root: true });
     }
   },
 
@@ -248,8 +254,9 @@ const actions = {
       commit('setProjectsToImportVisibility', false);
       dispatch('getEmployeeProjects', payload.employeeUuid);
       dispatch('getAllProjectsToImport', payload.employeeUuid);
+      dispatch('notify/openNotifySuccess', 'Projects have been imported', { root: true });
     } catch (e) {
-      console.error(e);
+      dispatch('notify/openNotifyError', e.response, { root: true });
     }
   },
 
@@ -259,12 +266,15 @@ const actions = {
         await axios.delete('http://localhost:8081/employee/delete-project', { data: { uuid: state.deleteModalData.data.uuid } });
         dispatch('getEmployeeProjects', payload);
         dispatch('getAllProjectsToImport', payload);
+        dispatch('notify/openNotifySuccess', 'Project has been deleted', { root: true });
       } else if (state.deleteModalData.data.type === 'education') {
         await axios.delete('http://localhost:8081/employee/delete-education', { data: { uuid: state.deleteModalData.data.uuid } });
         dispatch('getEmployeeEducation', payload);
+        dispatch('notify/openNotifySuccess', 'Education has been deleted', { root: true });
       } else if (state.deleteModalData.data.type === 'certificate') {
         await axios.delete('http://localhost:8081/employee/delete-certificate', { data: { uuid: state.deleteModalData.data.uuid } });
         dispatch('getEmployeeCertificate', payload);
+        dispatch('notify/openNotifySuccess', 'Certificate has been delete', { root: true });
       }
       const params = {
         visibility: false,
@@ -277,6 +287,7 @@ const actions = {
         data: {},
       };
       commit('setDeleteModalData', params);
+      dispatch('notify/openNotifyError', e.response, { root: true });
     }
   },
 };

@@ -15,10 +15,16 @@ const Users = sequelize.define('users', {
   login: {
     type: Sequelize.STRING,
     allowNull: false,
+    validate: {
+      notEmpty: true,
+    },
   },
   password: {
     type: Sequelize.STRING,
     allowNull: false,
+    validate: {
+      notEmpty: true,
+    },
   },
 });
 

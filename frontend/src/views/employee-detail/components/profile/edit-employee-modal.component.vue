@@ -7,8 +7,9 @@
 
     <h2 class="gc-edit-employee-modal__title">Update employee</h2>
 
-    <gc-form ref="gcNewProjectModal"
-             :modal="profileModal"
+    <gc-form :form-ref.sync="refForm"
+             :rules="rules"
+             :model="profileModal"
              class="gc-edit-employee-modal__form">
 
       <div class="gc-edit-employee-modal__form__row">
@@ -24,7 +25,7 @@
 
           <gc-form-item class="gc-edit-employee-modal__form__item"
                         label="Last name:"
-                        prop="latName">
+                        prop="lastName">
 
             <gc-input v-model="profileModal.lastName"
                       class="gc-edit-employee-modal__form__item__value"></gc-input>
@@ -39,7 +40,7 @@
                         label="Profession"
                         prop="profession">
 
-            <gc-select v-model="profileModal.workstation"
+            <gc-select v-model="profileModal.profession"
                        default-first-option
                        filterable
                        placeholder="Select profession...">
@@ -146,7 +147,7 @@
 
         <gc-button class="button"
                    type="default"
-                   @click.native.prevent="updateProfile">Update
+                   @click.native.prevent="updateProfile(refForm)">Update
         </gc-button>
       </div>
     </gc-form>
@@ -157,6 +158,7 @@
 import { defineComponent }          from '@vue/composition-api';
 import { useEmployeeDetailProfile } from '../../hooks/use-employee-detail-profile';
 import { useGlobals }               from '../../../../hooks/use-globals';
+import { useRulesEmployeeModal }    from '../../../../hooks/use-rules-employee-modal';
 import gcForm                       from '@/components/form/form/form.component.vue';
 import gcInput                      from '@/components/form/input/input.component.vue';
 import gcDialog                     from '@/components/dialog/dialog.component.vue';
@@ -185,6 +187,11 @@ export default defineComponent({
   setup() {
 
     const {
+      rules,
+      refForm,
+    } = useRulesEmployeeModal();
+
+    const {
       profileModal,
       updateProfile,
       editProfileModal,
@@ -200,6 +207,8 @@ export default defineComponent({
     } = useGlobals();
 
     return {
+      rules,
+      refForm,
       projects,
       levelList,
       languages,

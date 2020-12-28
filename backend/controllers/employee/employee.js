@@ -16,7 +16,6 @@ const EmployeeLanguages = require('../../models/employeeLanguages/employeeLangua
 const ProjectItTechnologies = require('../../models/projectItTechnologies/projectItTechnologies');
 const EmployeeItTechnologies = require('../../models/employeeItTechnologies/itTechnologiesEmployee');
 
-
 const generatorUuid = require('uuid');
 const { validationResult } = require('express-validator');
 
@@ -83,11 +82,10 @@ exports.createEmployee = async (req, res, next) => {
 
       res.status(201).json({ uuid: uuid });
     } catch (e) {
-      console.error('e: ', e);
+      res.status(422).json(e);
     }
   } else {
     res.status(422).json({
-      message: 'Validation failed, data is incorrect',
       error: error.array(),
     });
   }
@@ -136,7 +134,7 @@ exports.employeeBasic = async (req, res, next) => {
       });
 
       let workstation;
-      if(employee.workstationId != null) {
+      if (employee.workstationId != null) {
         workstation = await Workstation.findOne({
           raw: true,
           where: { id: employee.workstationId },
@@ -149,7 +147,7 @@ exports.employeeBasic = async (req, res, next) => {
       }
 
       let level;
-      if(employee.levelId != null) {
+      if (employee.levelId != null) {
         level = await Level.findOne({
           raw: true,
           where: { id: employee.levelId },
@@ -201,12 +199,12 @@ exports.employeeBasic = async (req, res, next) => {
         birthday: employee.birthday,
         isActive: employee.isActive,
         itTechnologies: itTechnologies,
-        workstation: workstation.name,
+        profession: workstation.name,
         level: level.name,
         itExperience: employee.itExperience,
       };
 
-      res.status(201).json(employeeDetail);
+      res.status(200).json(employeeDetail);
     } else {
       res.status(404).json([]);
     }
@@ -216,115 +214,123 @@ exports.employeeBasic = async (req, res, next) => {
 };
 
 exports.updateEmployee = async (req, res, next) => {
-  try {
-    const employee = await Employees.findOne({
-      raw: true,
-      where: { uuid: req.body.employee.uuid },
-      attributes: {
-        exclude: [ 'updatedAt', 'createdAt' ],
-      },
-    });
-    const user = await Users.findOne({
-      raw: true,
-      where: { uuid: req.body.userUuid },
-      attributes: {
-        exclude: [ 'login', 'password', 'updatedAt', 'createdAt', 'uuid' ],
-      },
-    });
+  const error = validationResult(req);
 
-    const workstation = await Workstation.findOne({
-      raw: true,
-      where: { id: employee.workstationId },
-    });
-    const level = await Level.findOne({
-      raw: true,
-      where: { id: employee.levelId },
-    });
-
-    if (employee.userId === user.id) {
-      await Employees.update({
-          name: req.body.employee.name,
-          lastName: req.body.employee.lastName,
-          birthday: req.body.employee.birthday,
-          isActive: req.body.employee.isActive ? 1 : 0,
-          itExperience: req.body.employee.itExperience,
-        },
-        { where: { uuid: req.body.employee.uuid } });
-    }
-
-    if (req.body.employee.workstation) {
-      const newWorkstation = await Workstation.findOne({
+  if (error.isEmpty()) {
+    try {
+      const employee = await Employees.findOne({
         raw: true,
-        where: { name: req.body.employee.workstation },
-      });
-      await Employees.update({
-          workstationId: newWorkstation.id,
+        where: { uuid: req.body.employee.uuid },
+        attributes: {
+          exclude: [ 'updatedAt', 'createdAt' ],
         },
-        { where: { uuid: req.body.employee.uuid } });
-    } else {
-    }
-
-    if (req.body.employee.level) {
-      const newLevel = await Level.findOne({
+      });
+      const user = await Users.findOne({
         raw: true,
-        where: { name: req.body.employee.level },
-      });
-
-      await Employees.update({
-          levelId: newLevel.id,
+        where: { uuid: req.body.userUuid },
+        attributes: {
+          exclude: [ 'login', 'password', 'updatedAt', 'createdAt', 'uuid' ],
         },
-        { where: { uuid: req.body.employee.uuid } });
-    }
-
-    if (Array.isArray(req.body.employee.itTechnologies) && req.body.employee.itTechnologies.length) {
-      await EmployeeItTechnologies.destroy({
-        where: { employeeId: employee.id },
       });
 
-      for await(const item of req.body.employee.itTechnologies) {
-        const technology = await ItTechnologies.findOne({
+      const workstation = await Workstation.findOne({
+        raw: true,
+        where: { id: employee.workstationId },
+      });
+      const level = await Level.findOne({
+        raw: true,
+        where: { id: employee.levelId },
+      });
+
+      if (employee.userId === user.id) {
+        await Employees.update({
+            name: req.body.employee.name,
+            lastName: req.body.employee.lastName,
+            birthday: req.body.employee.birthday,
+            isActive: req.body.employee.isActive ? 1 : 0,
+            itExperience: req.body.employee.itExperience,
+          },
+          { where: { uuid: req.body.employee.uuid } });
+      }
+
+      if (req.body.employee.workstation) {
+        const newWorkstation = await Workstation.findOne({
           raw: true,
-          where: { name: item },
+          where: { name: req.body.employee.workstation },
+        });
+        await Employees.update({
+            workstationId: newWorkstation.id,
+          },
+          { where: { uuid: req.body.employee.uuid } });
+      } else {
+      }
+
+      if (req.body.employee.level) {
+        const newLevel = await Level.findOne({
+          raw: true,
+          where: { name: req.body.employee.level },
         });
 
-        await EmployeeItTechnologies.create({
-          itTechnologyId: technology.id,
-          employeeId: employee.id,
+        await Employees.update({
+            levelId: newLevel.id,
+          },
+          { where: { uuid: req.body.employee.uuid } });
+      }
+
+      if (Array.isArray(req.body.employee.itTechnologies) && req.body.employee.itTechnologies.length) {
+        await EmployeeItTechnologies.destroy({
+          where: { employeeId: employee.id },
+        });
+
+        for await(const item of req.body.employee.itTechnologies) {
+          const technology = await ItTechnologies.findOne({
+            raw: true,
+            where: { name: item },
+          });
+
+          await EmployeeItTechnologies.create({
+            itTechnologyId: technology.id,
+            employeeId: employee.id,
+          });
+        }
+
+      } else {
+        await EmployeeItTechnologies.destroy({
+          where: { employeeId: employee.id },
         });
       }
 
-    } else {
-      await EmployeeItTechnologies.destroy({
-        where: { employeeId: employee.id },
-      });
-    }
+      if (Array.isArray(req.body.employee.languages) && req.body.employee.languages.length) {
+        await EmployeeLanguages.destroy({
+          where: { employeeId: employee.id },
+        });
 
-    if (Array.isArray(req.body.employee.languages) && req.body.employee.languages.length) {
-      await EmployeeLanguages.destroy({
-        where: { employeeId: employee.id },
-      });
+        for await(const lng of req.body.employee.languages) {
+          let userLng = lng.split(' ');
 
-      for await(const lng of req.body.employee.languages) {
-        let userLng = lng.split(' ');
+          const language = await Languages.findOne({ raw: true, where: { name: userLng[ 0 ] } });
+          const level = await LanguagesLevel.findOne({ raw: true, where: { name: userLng[ 1 ] } });
 
-        const language = await Languages.findOne({ raw: true, where: { name: userLng[ 0 ] } });
-        const level = await LanguagesLevel.findOne({ raw: true, where: { name: userLng[ 1 ] } });
+          await EmployeeLanguages.create({
+            employeeId: employee.id,
+            languageId: language.id,
+            languagesLevelId: level.id,
+          });
+        }
 
-        await EmployeeLanguages.create({
-          employeeId: employee.id,
-          languageId: language.id,
-          languagesLevelId: level.id,
+      } else {
+        await EmployeeLanguages.destroy({
+          where: { employeeId: employee.id },
         });
       }
-
-    } else {
-      await EmployeeLanguages.destroy({
-        where: { employeeId: employee.id },
-      });
+      res.status(200).json();
+    } catch (e) {
+      console.error(e);
     }
-    res.status(201).json();
-  } catch (e) {
-    console.error(e);
+  } else {
+    res.status(422).json({
+      error: error.array(),
+    });
   }
 };
 
@@ -419,7 +425,7 @@ exports.employeeProjects = async (req, res, next) => {
         });
       }
 
-      res.status(201).json(projects);
+      res.status(200).json(projects);
     }
   } catch (e) {
   }
@@ -430,7 +436,7 @@ exports.deleteEmployeeProject = async (req, res, next) => {
     await EmployeeProjects.destroy({
       where: { uuid: req.body.uuid },
     });
-    res.status(201).json();
+    res.status(200).json();
   } catch (e) {
     console.error(e);
   }
@@ -526,7 +532,7 @@ exports.updateEmployeeProject = async (req, res, next) => {
       });
     }
 
-    res.status(201).json();
+    res.status(200).json();
   } catch (e) {
     console.error(e);
   }
@@ -576,7 +582,7 @@ exports.projectsToImport = async (req, res, next) => {
       }
     });
 
-    res.status(201).json(projects);
+    res.status(200).json(projects);
   } catch (e) {
 
   }
@@ -604,45 +610,53 @@ exports.importProjects = async (req, res, next) => {
         employeeId: employee.id,
       });
     }
-    res.status(201).json();
+    res.status(200).json();
   } catch (e) {
     console.error(e);
   }
 };
 
 exports.createEducation = async (req, res, next) => {
-  try {
-    const employee = await Employees.findOne({
-      raw: true,
-      where: { uuid: req.body.employeeUuid },
-      attributes: {
-        exclude: [ 'updatedAt', 'createdAt' ],
-      },
-    });
-    const user = await Users.findOne({
-      raw: true,
-      where: { uuid: req.body.userUuid },
-      attributes: {
-        exclude: [ 'updatedAt', 'createdAt' ],
-      },
-    });
+  const error = validationResult(req);
 
-    if (employee.userId === user.id) {
-      const uuid = generatorUuid.v4();
-
-      await Education.create({
-        uuid: uuid,
-        employeeId: employee.id,
-        schoolName: req.body.schoolName,
-        description: req.body.description,
-        dateStart: req.body.date[ 0 ],
-        dateEnd: req.body.date[ 1 ],
+  if (error.isEmpty()) {
+    try {
+      const employee = await Employees.findOne({
+        raw: true,
+        where: { uuid: req.body.employeeUuid },
+        attributes: {
+          exclude: [ 'updatedAt', 'createdAt' ],
+        },
+      });
+      const user = await Users.findOne({
+        raw: true,
+        where: { uuid: req.body.userUuid },
+        attributes: {
+          exclude: [ 'updatedAt', 'createdAt' ],
+        },
       });
 
-      res.status(201).json();
+      if (employee.userId === user.id) {
+        const uuid = generatorUuid.v4();
+
+        await Education.create({
+          uuid: uuid,
+          employeeId: employee.id,
+          schoolName: req.body.schoolName,
+          description: req.body.description,
+          dateStart: req.body.date[ 0 ],
+          dateEnd: req.body.date[ 1 ],
+        });
+
+        res.status(201).json();
+      }
+    } catch (e) {
+      res.status(422).json(e);
     }
-  } catch (e) {
-    console.error(e);
+  } else {
+    res.status(422).json({
+      error: error.array(),
+    });
   }
 };
 
@@ -683,7 +697,7 @@ exports.educations = async (req, res, next) => {
         });
       });
 
-      res.status(201).json(employeeEducation);
+      res.status(200).json(employeeEducation);
     }
   } catch (e) {
     console.error(e);
@@ -695,25 +709,33 @@ exports.deleteEducation = async (req, res, next) => {
     await Education.destroy({
       where: { uuid: req.body.uuid },
     });
-    res.status(201).json();
+    res.status(200).json();
   } catch (e) {
     console.error(e);
   }
 };
 
 exports.updateEducation = async (req, res, next) => {
-  try {
-    await Education.update({
-        schoolName: req.body.schoolName,
-        description: req.body.description,
-        dateStart: req.body.date[ 0 ],
-        dateEnd: req.body.date[ 1 ],
-      },
-      { where: { uuid: req.body.uuid } });
+  const error = validationResult(req);
 
-    res.status(201).json();
-  } catch (e) {
-    console.error(e);
+  if (error.isEmpty()) {
+    try {
+      await Education.update({
+          schoolName: req.body.schoolName,
+          description: req.body.description,
+          dateStart: req.body.date[ 0 ],
+          dateEnd: req.body.date[ 1 ],
+        },
+        { where: { uuid: req.body.uuid } });
+
+      res.status(200).json();
+    } catch (e) {
+      console.error(e);
+    }
+  } else {
+    res.status(422).json({
+      error: error.array(),
+    });
   }
 };
 
@@ -751,37 +773,44 @@ exports.certificate = async (req, res, next) => {
 };
 
 exports.createCertificate = async (req, res, next) => {
-  try {
-    const employee = await Employees.findOne({
-      raw: true,
-      where: { uuid: req.body.employeeUuid },
-      attributes: {
-        exclude: [ 'updatedAt', 'createdAt' ],
-      },
-    });
-    const user = await Users.findOne({
-      raw: true,
-      where: { uuid: req.body.userUuid },
-      attributes: {
-        exclude: [ 'updatedAt', 'createdAt' ],
-      },
-    });
-
-    if (employee.userId === user.id) {
-      const uuid = generatorUuid.v4();
-
-      await Certificate.create({
-        uuid: uuid,
-        employeeId: employee.id,
-        name: req.body.name,
-        credentialId: req.body.credentialId,
-        date: req.body.date,
+  const error = validationResult(req);
+  if (error.isEmpty()) {
+    try {
+      const employee = await Employees.findOne({
+        raw: true,
+        where: { uuid: req.body.employeeUuid },
+        attributes: {
+          exclude: [ 'updatedAt', 'createdAt' ],
+        },
+      });
+      const user = await Users.findOne({
+        raw: true,
+        where: { uuid: req.body.userUuid },
+        attributes: {
+          exclude: [ 'updatedAt', 'createdAt' ],
+        },
       });
 
-      res.status(201).json();
+      if (employee.userId === user.id) {
+        const uuid = generatorUuid.v4();
+
+        await Certificate.create({
+          uuid: uuid,
+          employeeId: employee.id,
+          name: req.body.name,
+          credentialId: req.body.credentialId,
+          date: req.body.date,
+        });
+
+        res.status(201).json();
+      }
+    } catch (e) {
+      console.error(e);
     }
-  } catch (e) {
-    console.error(e);
+  } else {
+    res.status(422).json({
+      error: error.array(),
+    });
   }
 };
 
@@ -790,23 +819,31 @@ exports.deleteCertificate = async (req, res, next) => {
     await Certificate.destroy({
       where: { uuid: req.body.uuid },
     });
-    res.status(201).json();
+    res.status(200).json();
   } catch (e) {
     console.error(e);
   }
 };
 
 exports.updateCertificate = async (req, res, next) => {
-  try {
-    await Certificate.update({
-        name: req.body.name,
-        credentialId: req.body.credentialId,
-        date: req.body.date,
-      },
-      { where: { uuid: req.body.uuid } });
+  const error = validationResult(req);
 
-    res.status(201).json();
-  } catch (e) {
-    console.error(e);
+  if (error.isEmpty()) {
+    try {
+      await Certificate.update({
+          name: req.body.name,
+          credentialId: req.body.credentialId,
+          date: req.body.date,
+        },
+        { where: { uuid: req.body.uuid } });
+
+      res.status(200).json();
+    } catch (e) {
+      console.error(e);
+    }
+  } else {
+    res.status(422).json({
+      error: error.array(),
+    });
   }
 };

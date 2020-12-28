@@ -17,6 +17,14 @@ export default {
 
 <style lang="scss">
 .gc-form-item {
+  .el-form-item__error {
+    padding-top: 1px;
+  }
+}
+</style>
+
+<style lang="scss">
+.gc-form-item {
   &.el-form-item {
     margin-bottom: 1.5rem;
   }

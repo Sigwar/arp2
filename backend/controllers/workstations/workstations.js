@@ -16,7 +16,7 @@ exports.getWorkstations = async (req, res, next) => {
       arr.push(el.name);
     });
 
-    res.status(201).json(arr);
+    res.status(200).json(arr);
   } catch (e) {
   }
 };
@@ -30,22 +30,30 @@ exports.getWorkstationsDetail = async (req, res, next) => {
       },
     });
 
-    res.status(201).json(data);
+    res.status(200).json(data);
   } catch (e) {
   }
 };
 
 exports.create = async (req, res, next) => {
-  try {
-    const uuid = generatorUuid.v4();
-    await Workstations.create({
-      uuid: uuid,
-      name: req.body.name,
-    });
+  const error = validationResult(req);
 
-    res.status(201).json();
-  } catch (e) {
-    console.error(e);
+  if (error.isEmpty()) {
+    try {
+      const uuid = generatorUuid.v4();
+      await Workstations.create({
+        uuid: uuid,
+        name: req.body.name,
+      });
+
+      res.status(201).json();
+    } catch (e) {
+      console.error(e);
+    }
+  } else {
+    res.status(422).json({
+      error: error.array(),
+    });
   }
 };
 

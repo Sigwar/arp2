@@ -12,8 +12,10 @@ const ItTechnologies = sequelize.define('it_technologies', {
     type: Sequelize.STRING,
     allowNull: false,
     unique: true,
+    validate: {
+      notEmpty: true,
+    },
   },
-
 });
 
 module.exports = ItTechnologies;

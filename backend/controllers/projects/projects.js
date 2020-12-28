@@ -14,7 +14,7 @@ exports.getProjects = async (req, res, next) => {
         exclude: [ 'id' ],
       },
     });
-    res.status(201).json(data);
+    res.status(200).json(data);
   } catch (e) {
   }
 };
@@ -31,7 +31,7 @@ exports.projectsForEmployee = async (req, res, next) => {
       },
     });
 
-    res.status(201).json(projects);
+    res.status(200).json(projects);
   } catch (e) {
 
   }

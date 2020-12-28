@@ -84,10 +84,18 @@ export default defineComponent({
 
   &__content {
     position: relative;
+    width: 100%;
 
     &__header {
       display: flex;
       justify-content: space-between;
+      position: relative;
+
+      &__wrapper {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
 
       &__remove {
         color: var(--red);

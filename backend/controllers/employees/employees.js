@@ -59,7 +59,7 @@ exports.getEmployees = async (req, res, next) => {
       });
     }
 
-    res.status(201).json(employees);
+    res.status(200).json(employees);
   } catch (e) {
   }
 };
@@ -77,7 +77,7 @@ exports.employeesForProject = async (req, res, next) => {
       },
     });
 
-    res.status(201).json(employee);
+    res.status(200).json(employee);
   } catch (e) {
 
   }
@@ -87,7 +87,7 @@ exports.employeesForProject = async (req, res, next) => {
 exports.delete = async (req, res, next) => {
   try {
     await Employees.destroy({ where: { uuid: req.body.uuid } });
-    res.status(201).json();
+    res.status(200).json();
   } catch (e) {
     console.error(e);
   }

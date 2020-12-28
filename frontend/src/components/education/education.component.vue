@@ -80,6 +80,7 @@ export default defineComponent({
   }
 
   &__content {
+    width: 100%;
     position: relative;
 
     &__header {
@@ -112,6 +113,12 @@ export default defineComponent({
         color: var(--gray-light);
         font-weight: var(--font-bold);
         letter-spacing: 1.7px;
+      }
+
+      &__wrapper {
+        position: absolute;
+        right: 0;
+        top: 0;
       }
     }
 

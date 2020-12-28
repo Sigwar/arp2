@@ -11,13 +11,14 @@
     <h2 v-else
         class="gc-edit-certificate-modal__title">Create new certificate</h2>
 
-    <gc-form ref="gceditCertificateModal"
-             :modal="editCertificatesModal.data"
+    <gc-form :form-ref.sync="refFormCertificate"
+             :rules="rulesCertificate"
+             :model="editCertificatesModal.data"
              class="gc-edit-certificate-modal__form">
 
       <gc-form-item class="gc-edit-certificate-modal__form__item"
                     label="Certificate"
-                    prop="certificate">
+                    prop="name">
 
         <gc-input v-model="editCertificatesModal.data.name"
                   class="gc-edit-certificate-modal__form__item__value"
@@ -55,11 +56,11 @@
 
         <gc-button v-if="!editCertificatesModal.isNew"
                    class="button"
-                   @click.native.prevent="updateCertificate(employeeUuid)">Update
+                   @click.native.prevent="updateCertificate(refFormCertificate, employeeUuid)">Update
         </gc-button>
         <gc-button v-else
                    class="button"
-                   @click.native.prevent="createCertificate(employeeUuid)">Create
+                   @click.native.prevent="createCertificate(refFormCertificate, employeeUuid)">Create
         </gc-button>
       </div>
     </gc-form>
@@ -69,6 +70,7 @@
 <script>
 import { defineComponent }              from '@vue/composition-api';
 import { useEmployeeDetailCertificate } from '../../hooks/use-employee-detail-certificate';
+import { useRulesEmployeeDetail }       from '../../rules/use-rules-employee-detail';
 import gcButton                         from '@/components/form/button/button.component.vue';
 import gcDialog                         from '@/components/dialog/dialog.component.vue';
 import gcInput                          from '@/components/form/input/input.component.vue';
@@ -90,6 +92,11 @@ export default defineComponent({
     const employeeUuid = root.$route.params.uuid;
 
     const {
+      rulesCertificate,
+      refFormCertificate,
+    } = useRulesEmployeeDetail();
+
+    const {
       createCertificate,
       updateCertificate,
       editCertificatesModal,
@@ -98,8 +105,10 @@ export default defineComponent({
 
     return {
       employeeUuid,
+      rulesCertificate,
       createCertificate,
       updateCertificate,
+      refFormCertificate,
       editCertificatesModal,
       closeEditCertificateModal,
     };

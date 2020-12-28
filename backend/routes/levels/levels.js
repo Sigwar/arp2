@@ -6,7 +6,9 @@ const router = express.Router();
 
 router.get('/levels', levelsController.getLevels);
 router.get('/levelsDetail', levelsController.getLevelsDetail);
-router.post('/create', levelsController.create);
+router.post('/create', [
+  body('name').trim().isString,
+], levelsController.create);
 router.delete('/delete', levelsController.delete);
 
 module.exports = router;

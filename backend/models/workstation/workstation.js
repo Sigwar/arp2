@@ -16,6 +16,9 @@ const Workstation = sequelize.define('workstation', {
     type: Sequelize.STRING,
     allowNull: false,
     unique: true,
+    validate: {
+      notEmpty: true,
+    },
   },
 });
 

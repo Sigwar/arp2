@@ -11,10 +11,16 @@ const Languages = sequelize.define('languages', {
   uuid: {
     type: Sequelize.STRING,
     allowNull: false,
+    validate: {
+      notEmpty: true
+    }
   },
   name: {
     type: Sequelize.STRING,
     allowNull: false,
+    validate: {
+      notEmpty: true
+    }
   },
 });
 

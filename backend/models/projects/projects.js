@@ -15,10 +15,16 @@ const Projects = sequelize.define('projects', {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
+    validate: {
+      notEmpty: true
+    }
   },
   client: {
     type: Sequelize.STRING,
     allowNull: false,
+    validate: {
+      notEmpty: true
+    }
   },
   topic: {
     type: Sequelize.STRING,

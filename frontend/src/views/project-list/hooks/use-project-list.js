@@ -31,9 +31,13 @@ export const useProjectList = () => {
     store.commit('projectsModule/resetForm');
   };
 
-  const createNewProject = async () => {
+  const createNewProject = (form) => {
     loading.value = true;
-    await store.dispatch('projectsModule/createNewProject', projectForm.value);
+    form.validate((valid) => {
+      if (valid) {
+        store.dispatch('projectsModule/createNewProject', projectForm.value);
+      }
+    });
     loading.value = false;
   };
 
@@ -56,9 +60,13 @@ export const useProjectList = () => {
     store.dispatch('projectsModule/getProjectDetail', project.uuid);
   };
 
-  const updateProject = async () => {
+  const updateProject = (form) => {
     loading.value = true;
-    await store.dispatch('projectsModule/updateProject');
+    form.validate((valid) => {
+      if (valid) {
+        store.dispatch('projectsModule/updateProject');
+      }
+    });
     loading.value = false;
   };
 

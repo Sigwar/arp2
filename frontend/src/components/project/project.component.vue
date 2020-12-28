@@ -108,6 +108,7 @@ export default defineComponent({
 
   &__content {
     position: relative;
+    width: 100%;
 
     &__header {
       display: flex;
@@ -120,6 +121,12 @@ export default defineComponent({
 
       &__edit {
         color: var(--primary-color);
+      }
+
+      &__wrapper {
+        position: absolute;
+        top: 0;
+        right: 0;
       }
 
       &__remove,

@@ -49,7 +49,7 @@ exports.detailProject = async (req, res, next) => {
         where: { uuid: req.body.projectUuid },
       });
 
-      res.status(201).json({
+      res.status(200).json({
         uuid: data.uuid,
         name: data.name,
         client: data.client,
@@ -88,7 +88,7 @@ exports.updateProject = async (req, res, next) => {
         },
         { where: { uuid: req.body.uuid } });
 
-      res.status(201).json({ uuid: req.body.uuid });
+      res.status(200).json({ uuid: req.body.uuid });
     } catch (e) {
     }
 
@@ -109,7 +109,7 @@ exports.deleteProject = async (req, res, next) => {
       await Project.destroy({
         where: { uuid: req.body.uuid },
       });
-      res.status(201).json();
+      res.status(200).json();
     } catch (e) {
     }
   } else {

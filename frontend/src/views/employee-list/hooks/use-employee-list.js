@@ -4,14 +4,6 @@ import router            from '@/router';
 
 export const useEmployeeList = () => {
 
-  const employeesList = () => {
-    store.dispatch('employeesModule/getEmployees');
-  };
-
-  const getProjects = () => {
-    store.dispatch('employeesModule/getProjects');
-  };
-
   const valueInput = ref('');
 
   const sort = computed(() => store.state.employeesModule.sort);
@@ -25,6 +17,14 @@ export const useEmployeeList = () => {
     valueInput.value = value;
   };
 
+  const employeesList = () => {
+    store.dispatch('employeesModule/getEmployees');
+  };
+
+  const getProjects = () => {
+    store.dispatch('employeesModule/getProjects');
+  };
+
   const setSort = (value) => {
     store.commit('employeesModule/setSort', value);
     store.dispatch('employeesModule/getEmployees');
@@ -34,8 +34,13 @@ export const useEmployeeList = () => {
     store.commit('employeesModule/setIsModalOpen', true);
   };
 
-  const createNewEmployee = () => {
-    store.dispatch('employeesModule/createNewEmployee');
+  const createNewEmployee = (form) => {
+
+    form.validate((valid) => {
+      if (valid) {
+        store.dispatch('employeesModule/createNewEmployee');
+      }
+    });
   };
 
   const resetEmployeeForm = () => {

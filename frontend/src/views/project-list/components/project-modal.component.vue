@@ -6,8 +6,9 @@
 
     <h2 class="gc-project-modal__title">Create new project</h2>
 
-    <gc-form ref="gcNewProjectModal"
-             :modal="projectForm"
+    <gc-form :form-ref.sync="refForm"
+             :rules="rules"
+             :model="projectForm"
              class="gc-project-modal__form">
 
       <gc-form-item class="gc-project-modal__form__item"
@@ -44,7 +45,7 @@
 
         <gc-form-item class="gc-project-modal__form__item"
                       label="Time frame:"
-                      prop="client">
+                      prop="date">
 
           <gc-date-picker v-model="projectForm.date"
                           class="gc-project-modal__form__item__value"
@@ -84,14 +85,14 @@
                    :loading="loading"
                    class="button"
                    type="default"
-                   @click.native.prevent="createNewProject">Create
+                   @click.native.prevent="createNewProject(refForm)">Create
         </gc-button>
 
         <gc-button v-if="isEditMode"
                    :loading="loading"
                    class="button"
                    type="default"
-                   @click.native.prevent="updateProject">Update
+                   @click.native.prevent="updateProject(refForm)">Update
         </gc-button>
       </div>
     </gc-form>
@@ -99,16 +100,17 @@
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api';
-import { useProjectList }  from '../hooks/use-project-list';
-import gcForm              from '@/components/form/form/form.component.vue';
-import gcInput             from '@/components/form/input/input.component.vue';
-import gcDialog            from '@/components/dialog/dialog.component.vue';
-import gcSelect            from '@/components/form/select/select.component.vue';
-import gcOption            from '@/components/form/select/option.component.vue';
-import gcButton            from '@/components/form/button/button.component.vue';
-import gcFormItem          from '@/components/form/form-item/form-item.component.vue';
-import gcDatePicker        from '@/components/date-picker/date-picker.component.vue';
+import { defineComponent }      from '@vue/composition-api';
+import { useProjectList }       from '../hooks/use-project-list';
+import { useRulesProjectModal } from '../hooks/use-rules-project-modal';
+import gcForm                   from '@/components/form/form/form.component.vue';
+import gcInput                  from '@/components/form/input/input.component.vue';
+import gcDialog                 from '@/components/dialog/dialog.component.vue';
+import gcSelect                 from '@/components/form/select/select.component.vue';
+import gcOption                 from '@/components/form/select/option.component.vue';
+import gcButton                 from '@/components/form/button/button.component.vue';
+import gcFormItem               from '@/components/form/form-item/form-item.component.vue';
+import gcDatePicker             from '@/components/date-picker/date-picker.component.vue';
 
 export default defineComponent({
   name: 'gcNewProjectModal',
@@ -123,6 +125,12 @@ export default defineComponent({
     gcDatePicker,
   },
   setup() {
+
+    const {
+      rules,
+      refForm,
+    } = useRulesProjectModal();
+
     const {
       modal,
       loading,
@@ -136,6 +144,8 @@ export default defineComponent({
 
     return {
       modal,
+      rules,
+      refForm,
       loading,
       employees,
       isEditMode,

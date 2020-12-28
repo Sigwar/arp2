@@ -11,13 +11,14 @@
     <h2 v-else
         class="gc-edit-education-modal__title">Create new education</h2>
 
-    <gc-form ref="gcEditEducationModal"
-             :modal="editEducationModal.data"
+    <gc-form :form-ref.sync="refForm"
+             :rules="rulesEducation"
+             :model="editEducationModal.data"
              class="gc-edit-education-modal__form">
 
       <gc-form-item class="gc-edit-education-modal__form__item"
                     label="School"
-                    prop="client">
+                    prop="schoolName">
 
         <gc-input v-model="editEducationModal.data.schoolName"
                   class="gc-edit-education-modal__form__item__value"
@@ -27,7 +28,7 @@
 
       <gc-form-item class="gc-edit-education-modal__form__item gc-edit-education-modal__form__item--date-picker"
                     label="Education date"
-                    prop="client">
+                    prop="date">
 
         <gc-date-picker v-model="editEducationModal.data.date"
                         class="gc-edit-education-modal__form__item__value"
@@ -38,8 +39,8 @@
       </gc-form-item>
 
       <gc-form-item class="gc-edit-education-modal__form__item"
-                    label="Start education date"
-                    prop="client">
+                    label="Description"
+                    prop="description">
 
         <gc-input v-model="editEducationModal.data.description"
                   :autosize="{minRows: 3}"
@@ -58,11 +59,11 @@
 
         <gc-button v-if="!editEducationModal.isNew"
                    class="button"
-                   @click.native.prevent="updateEducation(employeeUuid)">Update
+                   @click.native.prevent="updateEducation(refForm, employeeUuid)">Update
         </gc-button>
         <gc-button v-else
                    class="button"
-                   @click.native.prevent="createEducation(employeeUuid)">Create
+                   @click.native.prevent="createEducation(refForm, employeeUuid)">Create
         </gc-button>
       </div>
     </gc-form>
@@ -72,6 +73,7 @@
 <script>
 import { defineComponent }            from '@vue/composition-api';
 import { useEmployeeDetailEducation } from '../../hooks/use-employee-detail-education';
+import { useRulesEmployeeDetail }     from '../../rules/use-rules-employee-detail';
 import gcButton                       from '@/components/form/button/button.component.vue';
 import gcDialog                       from '@/components/dialog/dialog.component.vue';
 import gcInput                        from '@/components/form/input/input.component.vue';
@@ -93,6 +95,11 @@ export default defineComponent({
     const employeeUuid = root.$route.params.uuid;
 
     const {
+      refForm,
+      rulesEducation,
+    } = useRulesEmployeeDetail();
+
+    const {
       createEducation,
       updateEducation,
       editEducationModal,
@@ -100,7 +107,9 @@ export default defineComponent({
     } = useEmployeeDetailEducation();
 
     return {
+      refForm,
       employeeUuid,
+      rulesEducation,
       createEducation,
       updateEducation,
       editEducationModal,

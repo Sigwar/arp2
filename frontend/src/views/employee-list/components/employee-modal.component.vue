@@ -7,8 +7,9 @@
 
     <h2 class="gc-employee-modal__title">Create new employee</h2>
 
-    <gc-form ref="gcNewProjectModal"
-             :modal="employeeForm"
+    <gc-form :form-ref.sync="refForm"
+             :rules="rules"
+             :model="employeeForm"
              class="gc-employee-modal__form">
 
       <div class="gc-employee-modal__form__row">
@@ -24,7 +25,7 @@
 
           <gc-form-item class="gc-employee-modal__form__item"
                         label="Last name:"
-                        prop="latName">
+                        prop="lastName">
 
             <gc-input v-model="employeeForm.lastName"
                       class="gc-employee-modal__form__item__value"></gc-input>
@@ -163,7 +164,7 @@
         <gc-button :loading="loadingBtn"
                    class="button"
                    type="default"
-                   @click.native.prevent="createNewEmployee">Create
+                   @click.native.prevent="createNewEmployee(refForm)">Create
         </gc-button>
       </div>
     </gc-form>
@@ -171,19 +172,20 @@
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api';
-import { useEmployeeList } from '../hooks/use-employee-list';
-import { useGlobals }      from '../../../hooks/use-globals';
-import gcForm              from '@/components/form/form/form.component.vue';
-import gcInput             from '@/components/form/input/input.component.vue';
-import gcDialog            from '@/components/dialog/dialog.component.vue';
-import gcSelect            from '@/components/form/select/select.component.vue';
-import gcOption            from '@/components/form/select/option.component.vue';
-import gcButton            from '@/components/form/button/button.component.vue';
-import gcUpload            from '@/components/upload/uplaod.component.vue';
-import gcSwitch            from '@/components/form/switch/switch.component.vue';
-import gcFormItem          from '@/components/form/form-item/form-item.component.vue';
-import gcDatePicker        from '@/components/date-picker/date-picker.component.vue';
+import { defineComponent }       from '@vue/composition-api';
+import { useEmployeeList }       from '../hooks/use-employee-list';
+import { useGlobals }            from '../../../hooks/use-globals';
+import { useRulesEmployeeModal } from '../../../hooks/use-rules-employee-modal';
+import gcForm                    from '@/components/form/form/form.component.vue';
+import gcInput                   from '@/components/form/input/input.component.vue';
+import gcDialog                  from '@/components/dialog/dialog.component.vue';
+import gcSelect                  from '@/components/form/select/select.component.vue';
+import gcOption                  from '@/components/form/select/option.component.vue';
+import gcButton                  from '@/components/form/button/button.component.vue';
+import gcUpload                  from '@/components/upload/uplaod.component.vue';
+import gcSwitch                  from '@/components/form/switch/switch.component.vue';
+import gcFormItem                from '@/components/form/form-item/form-item.component.vue';
+import gcDatePicker              from '@/components/date-picker/date-picker.component.vue';
 
 export default defineComponent({
   name: 'gcNewEmployeeModal',
@@ -200,6 +202,11 @@ export default defineComponent({
     gcDatePicker,
   },
   setup() {
+
+    const {
+      rules,
+      refForm,
+    } = useRulesEmployeeModal();
 
     const {
       loadingBtn,
@@ -219,6 +226,8 @@ export default defineComponent({
     } = useGlobals();
 
     return {
+      rules,
+      refForm,
       projects,
       languages,
       levelList,

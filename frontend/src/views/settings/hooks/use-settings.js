@@ -10,8 +10,10 @@ export const useSettings = () => {
   };
 
   const addItTechnologies = () => {
-    store.dispatch('createNewItTechnologies', newItTechnologies.value);
-    newItTechnologies.value = '';
+    if (newItTechnologies.value.length) {
+      store.dispatch('createNewItTechnologies', newItTechnologies.value);
+      newItTechnologies.value = '';
+    }
   };
 
   const newLanguage = ref('');
@@ -21,8 +23,10 @@ export const useSettings = () => {
   };
 
   const addLanguage = () => {
-    store.dispatch('createNewLanguages', newLanguage.value);
-    newLanguage.value = '';
+    if (newLanguage.value) {
+      store.dispatch('createNewLanguages', newLanguage.value);
+      newLanguage.value = '';
+    }
   };
 
   const newLevel = ref('');
@@ -32,8 +36,10 @@ export const useSettings = () => {
   };
 
   const addLevel = () => {
-    store.dispatch('createNewLevel', newLevel.value);
-    newLevel.value = '';
+    if (newLevel.value) {
+      store.dispatch('createNewLevel', newLevel.value);
+      newLevel.value = '';
+    }
   };
 
   const newWorkstation = ref('');
@@ -43,8 +49,10 @@ export const useSettings = () => {
   };
 
   const addWorkstation = () => {
-    store.dispatch('createNewWorkstation', newWorkstation.value);
-    newWorkstation.value = '';
+    if (newWorkstation.value) {
+      store.dispatch('createNewWorkstation', newWorkstation.value);
+      newWorkstation.value = '';
+    }
   };
 
   return {

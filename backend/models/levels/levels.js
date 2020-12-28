@@ -15,6 +15,9 @@ const Levels = sequelize.define('levels', {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
+    validate: {
+      notEmpty: true
+    }
   },
 
 });

@@ -8,7 +8,7 @@
     <h2 class="gc-edit-project-modal__title">Update project</h2>
 
     <gc-form ref="gcEditProject"
-             :modal="editProject.data"
+             :model="editProject.data"
              class="gc-edit-project-modal__form">
 
       <div class="gc-edit-project-modal__form__wrapper">
@@ -138,7 +138,7 @@
         </gc-button>
 
         <gc-button class="button"
-                   @click.native.prevent="updateProject">Update
+                   @click.native.prevent="updateProject()">Update
         </gc-button>
       </div>
 
@@ -151,6 +151,7 @@ import { defineComponent }           from '@vue/composition-api';
 import { useEmployeeDetailProfile }  from '../../hooks/use-employee-detail-profile';
 import { useEmployeeDetailProjects } from '../../hooks/use-employee-detail-projects';
 import { useGlobals }                from '../../../../hooks/use-globals';
+import { useRulesEmployeeDetail }     from '../../rules/use-rules-employee-detail';
 import gcButton                      from '@/components/form/button/button.component.vue';
 import gcDialog                      from '@/components/dialog/dialog.component.vue';
 import gcInput                       from '@/components/form/input/input.component.vue';
@@ -180,6 +181,11 @@ export default defineComponent({
     } = useEmployeeDetailProfile();
 
     const {
+      refFormProject,
+      rulesProject,
+    } = useRulesEmployeeDetail();
+
+    const {
       newRole,
       removeRole,
       addNewRoles,
@@ -198,10 +204,12 @@ export default defineComponent({
       removeRole,
       editProject,
       addNewRoles,
+      rulesProject,
       knowledgeTags,
       updateProject,
       newActivities,
       itTechnologies,
+      refFormProject,
       removeActivities,
       addNewActivities,
       closeEditProjectModal,

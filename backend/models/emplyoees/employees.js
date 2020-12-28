@@ -15,10 +15,16 @@ const Employees = sequelize.define('employees', {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
+    validate: {
+      notEmpty: true
+    }
   },
   lastName: {
     type: Sequelize.STRING,
     allowNull: false,
+    validate: {
+      notEmpty: true
+    }
   },
   birthday: {
     type: Sequelize.STRING,

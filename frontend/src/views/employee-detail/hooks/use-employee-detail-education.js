@@ -11,8 +11,12 @@ export const useEmployeeDetailEducation = () => {
     store.dispatch('employeeDetailModule/deleteItem', uuid);
   };
 
-  const updateEducation = (uuid) => {
-    store.dispatch('employeeDetailModule/updateEducation', uuid);
+  const updateEducation = (form, uuid) => {
+    form.validate((valid) => {
+      if (valid) {
+        store.dispatch('employeeDetailModule/updateEducation', uuid);
+      }
+    });
   };
 
   const closeEditEducationModal = () => {
@@ -55,8 +59,12 @@ export const useEmployeeDetailEducation = () => {
     store.commit('employeeDetailModule/setEditEducationModal', params);
   };
 
-  const createEducation = (uuid) => {
-    store.dispatch('employeeDetailModule/createNewEducation', uuid);
+  const createEducation = (form, uuid) => {
+    form.validate((valid) => {
+      if (valid) {
+        store.dispatch('employeeDetailModule/createNewEducation', uuid);
+      }
+    });
   };
 
   const educations = computed(() => store.state.employeeDetailModule.educations);

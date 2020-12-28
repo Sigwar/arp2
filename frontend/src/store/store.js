@@ -1,6 +1,7 @@
 import Vue                  from 'vue';
 import Vuex                 from 'vuex';
 import axios                from 'axios';
+import notify               from './notify.store';
 import employeesModule      from './modules/employees/employees.store.js';
 import projectsModule       from './modules/projects/projects.store.js';
 import employeeDetailModule from './modules/employee-detail/employee-detail.store.js';
@@ -113,9 +114,10 @@ export default new Vuex.Store({
     async createNewItTechnologies({ dispatch }, payload) {
       try {
         await axios.post('http://localhost:8081/itTechnologies/create', { name: payload });
+        dispatch('notify/openNotifySuccess', 'New It technologies have been updated', { root: true });
         dispatch('getItTechnologies');
       } catch (e) {
-        console.error(e);
+        dispatch('notify/openNotifyError', e.response, { root: true });
       }
     },
 
@@ -123,8 +125,9 @@ export default new Vuex.Store({
       try {
         await axios.delete('http://localhost:8081/itTechnologies/delete', { data: { name: payload } });
         dispatch('getItTechnologies');
+        dispatch('notify/openNotifySuccess', 'It technologies have been deleted', { root: true });
       } catch (e) {
-        console.error(e);
+        dispatch('notify/openNotifyError', e.response, { root: true });
       }
     },
 
@@ -132,8 +135,9 @@ export default new Vuex.Store({
       try {
         await axios.post('http://localhost:8081/languages/create', { name: payload });
         dispatch('getLanguagesWithoutLevel');
+        dispatch('notify/openNotifySuccess', 'New language has been created', { root: true });
       } catch (e) {
-        console.error(e);
+        dispatch('notify/openNotifyError', e.response, { root: true });
       }
     },
 
@@ -141,8 +145,9 @@ export default new Vuex.Store({
       try {
         await axios.delete('http://localhost:8081/languages/delete', { data: { uuid: payload } });
         dispatch('getLanguagesWithoutLevel');
+        dispatch('notify/openNotifySuccess', 'Language has been deleted', { root: true });
       } catch (e) {
-        console.error(e);
+        dispatch('notify/openNotifyError', e.response, { root: true });
       }
     },
 
@@ -150,8 +155,9 @@ export default new Vuex.Store({
       try {
         await axios.post('http://localhost:8081/levels/create', { name: payload });
         dispatch('getLevelDetailList');
+        dispatch('notify/openNotifySuccess', 'New level has been created', { root: true });
       } catch (e) {
-        console.error(e);
+        dispatch('notify/openNotifyError', e.response, { root: true });
       }
     },
 
@@ -159,8 +165,9 @@ export default new Vuex.Store({
       try {
         await axios.delete('http://localhost:8081/levels/delete', { data: { uuid: payload } });
         dispatch('getLevelDetailList');
+        dispatch('notify/openNotifySuccess', 'New level has been deleted', { root: true });
       } catch (e) {
-        console.error(e);
+        dispatch('notify/openNotifyError', e.response, { root: true });
       }
     },
 
@@ -168,8 +175,9 @@ export default new Vuex.Store({
       try {
         await axios.post('http://localhost:8081/workstations/create', { name: payload });
         dispatch('getWorkstationDetail');
+        dispatch('notify/openNotifySuccess', 'New workstation has been created', { root: true });
       } catch (e) {
-        console.error(e);
+        dispatch('notify/openNotifyError', e.response, { root: true });
       }
     },
 
@@ -177,12 +185,14 @@ export default new Vuex.Store({
       try {
         await axios.delete('http://localhost:8081/workstations/delete', { data: { uuid: payload } });
         dispatch('getWorkstationDetail');
+        dispatch('notify/openNotifySuccess', 'New workstation has been deleted', { root: true });
       } catch (e) {
-        console.error(e);
+        dispatch('notify/openNotifyError', e.response, { root: true });
       }
     },
   },
   modules: {
+    notify,
     projectsModule,
     employeesModule,
     employeeDetailModule,

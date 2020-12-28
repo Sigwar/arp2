@@ -11,8 +11,12 @@ export const useEmployeeDetailCertificate = () => {
     store.dispatch('employeeDetailModule/deleteItem', uuid);
   };
 
-  const updateCertificate = (uuid) => {
-    store.dispatch('employeeDetailModule/updateCertificate', uuid);
+  const updateCertificate = (form, uuid) => {
+    form.validate((valid) => {
+      if (valid) {
+        store.dispatch('employeeDetailModule/updateCertificate', uuid);
+      }
+    });
   };
 
   const closeEditCertificateModal = () => {
@@ -51,8 +55,13 @@ export const useEmployeeDetailCertificate = () => {
     store.commit('employeeDetailModule/setEditCertificateModal', params);
   };
 
-  const createCertificate = (uuid) => {
-    store.dispatch('employeeDetailModule/createNewCertificate', uuid);
+  const createCertificate = (form, uuid) => {
+    form.validate((valid) => {
+      if (valid) {
+        store.dispatch('employeeDetailModule/createNewCertificate', uuid);
+
+      }
+    });
   };
 
   const certificates = computed(() => store.state.employeeDetailModule.certificates);

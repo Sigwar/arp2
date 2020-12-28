@@ -76,9 +76,10 @@ const actions = {
       commit('setIsModalOpen', false);
       commit('resetEmployeeForm');
       commit('setLoadingBtn', false);
+      dispatch('notify/openNotifySuccess', 'Employee has been created', { root: true });
     } catch (e) {
       commit('setLoadingBtn', false);
-      console.error(e);
+      dispatch('notify/openNotifyError', e.response, { root: true });
     }
   },
   async getProjects({ commit }) {

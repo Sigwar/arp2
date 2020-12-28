@@ -28,7 +28,7 @@
         </p>
 
         <p class="profession-and-level">
-          {{ profile.level }} {{ profile.workstation }}
+          {{ profile.level }} {{ profile.profession }}
         </p>
       </div>
     </div>
