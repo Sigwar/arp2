@@ -28,6 +28,7 @@ export const useProjectList = () => {
   const changeModalState = () => {
     store.commit('projectsModule/setEditMode', false);
     store.commit('projectsModule/setModal');
+    store.dispatch('projectsModule/getEmployees');
     store.commit('projectsModule/resetForm');
   };
 
@@ -57,6 +58,7 @@ export const useProjectList = () => {
 
   const setProjectDetail = (project) => {
     store.commit('projectsModule/setEditMode', true);
+    store.dispatch('projectsModule/getEmployeesWithoutProject', project.uuid);
     store.dispatch('projectsModule/getProjectDetail', project.uuid);
   };
 

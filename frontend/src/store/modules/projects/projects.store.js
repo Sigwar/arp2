@@ -88,6 +88,21 @@ const actions = {
       console.error(e);
     }
   },
+  async getEmployeesWithoutProject({ commit }, payload) {
+    const uuid = store.getters[ 'userUuid' ];
+
+    const reqData = {
+      uuid: uuid,
+      projectUuid: payload,
+    };
+
+    try {
+      const { data } = await axios.post('http://localhost:8081/employees/employeeListWithoutProject', reqData);
+      commit('setEmployees', data);
+    } catch (e) {
+      console.error(e);
+    }
+  },
   async createNewProject({ commit, dispatch }, payload) {
     const reqData = {
       ...payload,

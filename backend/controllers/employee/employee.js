@@ -584,7 +584,7 @@ exports.projectsToImport = async (req, res, next) => {
 
     res.status(200).json(projects);
   } catch (e) {
-
+    res.status(422).json(e);
   }
 };
 
@@ -612,7 +612,7 @@ exports.importProjects = async (req, res, next) => {
     }
     res.status(200).json();
   } catch (e) {
-    console.error(e);
+    res.status(422).json(e);
   }
 };
 

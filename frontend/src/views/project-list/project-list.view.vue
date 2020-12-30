@@ -36,7 +36,6 @@ export default defineComponent({
   },
   setup() {
     store.dispatch('projectsModule/getProjects');
-    store.dispatch('projectsModule/getEmployees');
 
     const {
       setSort,

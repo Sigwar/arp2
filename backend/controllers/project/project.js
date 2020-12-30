@@ -1,5 +1,7 @@
-const Project = require('../../models/projects/projects');
 const Users = require('../../models/users/users');
+const Project = require('../../models/projects/projects');
+const Employee = require('../../models/emplyoees/employees');
+const EmployeeProject = require('../../models/employeeProjects/employeeProjects');
 const generatorUuid = require('uuid');
 const { validationResult } = require('express-validator');
 
@@ -26,6 +28,28 @@ exports.createProject = async (req, res, next) => {
         dateEnd: dateEnd,
         userId: user.id,
       });
+
+      const project = await Project.findOne({
+        raw: true,
+        where: { uuid: uuid },
+      });
+
+      for await(const employee of req.body.employees) {
+        const uuid = generatorUuid.v4();
+
+        const emp = await Employee.findOne({
+          raw: true,
+          where: { uuid: employee },
+        });
+
+        await EmployeeProject.create({
+          uuid: uuid,
+          dateStart: project.dateStart,
+          dateEnd: project.dateEnd,
+          projectId: project.id,
+          employeeId: emp.id,
+        });
+      }
 
       res.status(201).json({ uuid: uuid });
     } catch (e) {
@@ -86,7 +110,30 @@ exports.updateProject = async (req, res, next) => {
           dateStart: dateStart,
           dateEnd: dateEnd,
         },
-        { where: { uuid: req.body.uuid } });
+        { where: { uuid: req.body.uuid } },
+      );
+
+      const project = await Project.findOne({
+        raw: true,
+        where: { uuid: req.body.uuid },
+      });
+
+      for await(const employee of req.body.employees) {
+        const uuid = generatorUuid.v4();
+
+        const emp = await Employee.findOne({
+          raw: true,
+          where: { uuid: employee },
+        });
+
+        await EmployeeProject.create({
+          uuid: uuid,
+          dateStart: project.dateStart,
+          dateEnd: project.dateEnd,
+          projectId: project.id,
+          employeeId: emp.id,
+        });
+      }
 
       res.status(200).json({ uuid: req.body.uuid });
     } catch (e) {

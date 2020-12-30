@@ -7,4 +7,6 @@ router.post('/employees', employeesController.getEmployees);
 
 router.post('/employeeList', employeesController.employeesForProject);
 
+router.post('/employeeListWithoutProject', employeesController.employeeWithoutProject)
+
 module.exports = router;

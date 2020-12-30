@@ -1,7 +1,9 @@
-const Employees = require('../../models/emplyoees/employees');
 const Users = require('../../models/users/users');
-const Workstation = require('../../models/workstation/workstation');
 const Levels = require('../../models/levels/levels');
+const Employees = require('../../models/emplyoees/employees');
+const Workstation = require('../../models/workstation/workstation');
+const EmployeeProjects = require('../../models/employeeProjects/employeeProjects');
+const Project = require('../../models/projects/projects');
 
 const generatorUuid = require('uuid');
 const { validationResult } = require('express-validator');
@@ -90,5 +92,46 @@ exports.delete = async (req, res, next) => {
     res.status(200).json();
   } catch (e) {
     console.error(e);
+  }
+};
+
+//GET EMPLOYEE WITHOUT PROJECT
+exports.employeeWithoutProject = async (req, res, next) => {
+
+  try {
+    const user = await Users.findOne({ raw: true, where: { uuid: req.body.uuid } });
+
+    const employees = await Employees.findAll({
+      raw: true,
+      where: { userId: user.id },
+      attributes: {
+        exclude: [ 'birthday', 'itExperience', 'isActive', 'workstationId', 'levelId', 'userId', 'updatedAt', 'createdAt' ],
+      },
+    });
+
+    const project = await Project.findOne({
+      where: { uuid: req.body.projectUuid }, attributes: {
+        exclude: [ 'name', 'client', 'topic', 'description', 'dateEnd', 'dateStart', 'updatedAt', 'createdAt' ],
+      },
+
+    });
+
+    if (project.userId === user.id) {
+      const employeeList = [];
+
+      for await(const employee of employees) {
+        const doesItHave = await EmployeeProjects.findOne({
+          where: { employeeId: employee.id, projectId: project.id },
+        });
+
+        if (doesItHave === null) {
+          employeeList.push(employee);
+        }
+      }
+
+      res.status(200).json(employeeList);
+    }
+  } catch (e) {
+    res.status(422).json(e);
   }
 };
