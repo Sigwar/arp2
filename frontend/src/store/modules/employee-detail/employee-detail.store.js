@@ -42,12 +42,32 @@ const state = {
     visibility: false,
     data: {},
   },
+
+  pdfModal: false,
+  pdfModalLoading: false,
+  pdfSettings: {
+    blind: false,
+    showEducation: true,
+    shoeEducationDescription: true,
+    showCertificate: true,
+    showDescriptionProject: true,
+    showTopicProject: true,
+  },
 };
 
 // getters
 const getters = {
   profile: (state) => {
     return state.profile;
+  },
+  pdfSettings: (state) => {
+    return state.pdfSettings;
+  },
+  pdfModalLoading: (state) => {
+    return state.pdfModalLoading;
+  },
+  pdfModal: (state) => {
+    return state.pdfModal;
   },
   educations: (state) => {
     return state.educations;
@@ -294,6 +314,15 @@ const actions = {
 
 // mutations
 const mutations = {
+  setPdfModal: (state, payload) => {
+    state.pdfModal = payload;
+  },
+  setPdfSettings: (state, payload) => {
+    state.pdfSettings = payload;
+  },
+  setPdfModalLoading: (state, payload) => {
+    state.pdfModalLoading = payload;
+  },
   setEmployeeProfile: (state, payload) => {
     state.profile = {
       ...payload,

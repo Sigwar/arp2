@@ -8,8 +8,8 @@
     <h2 class="gc-employee-modal__title">Create new employee</h2>
 
     <gc-form :form-ref.sync="refForm"
-             :rules="rules"
              :model="employeeForm"
+             :rules="rules"
              class="gc-employee-modal__form">
 
       <div class="gc-employee-modal__form__row">

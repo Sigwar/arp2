@@ -151,7 +151,7 @@ import { defineComponent }           from '@vue/composition-api';
 import { useEmployeeDetailProfile }  from '../../hooks/use-employee-detail-profile';
 import { useEmployeeDetailProjects } from '../../hooks/use-employee-detail-projects';
 import { useGlobals }                from '../../../../hooks/use-globals';
-import { useRulesEmployeeDetail }     from '../../rules/use-rules-employee-detail';
+import { useRulesEmployeeDetail }    from '../../rules/use-rules-employee-detail';
 import gcButton                      from '@/components/form/button/button.component.vue';
 import gcDialog                      from '@/components/dialog/dialog.component.vue';
 import gcInput                       from '@/components/form/input/input.component.vue';

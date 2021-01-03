@@ -4,68 +4,78 @@
     <gc-tool-bar @add-new-education="openNewEducationModal"
                  @change-edit-profile-modal="openEditProfileModal"
                  @add-new-certificate="openNewCertificateModal"
+                 @open-pdf-modal="openPdfModal"
                  @import-project="openImportModal"></gc-tool-bar>
 
-    <div class="gc-employee-detail__base-info">
-      <div class="gc-employee-detail__base-info__picture">
+    <div id="profile">
+      <div class="gc-employee-detail__base-info">
+        <div v-show="!pdfSettings.blind"
+             class="gc-employee-detail__base-info__picture">
 
-        <img v-if="profile.picture"
-             :alt="profile.lastName"
-             :class="{'active': profile.isActive}"
-             :src="profile.picture.url"
-             class="avatar" />
+          <img v-if="profile.picture"
+               :alt="profile.lastName"
+               :class="{'active': profile.isActive}"
+               :src="profile.picture.url"
+               class="avatar" />
 
-        <img v-else
-             :alt="profile.lastName"
-             :class="{'active': profile.isActive}"
-             class="avatar icon"
-             src="@/assets/icons/user/user-fill.svg" />
+          <img v-else
+               :alt="profile.lastName"
+               :class="{'active': profile.isActive}"
+               class="avatar icon"
+               src="@/assets/icons/user/user-fill.svg" />
+        </div>
+
+        <div class="gc-employee-detail__base-info__credentials">
+
+          <p v-show="!pdfSettings.blind"
+             class="name">
+            {{ profile.name }} {{ profile.lastName }}
+          </p>
+
+          <p class="profession-and-level">
+            {{ profile.level }} {{ profile.profession }}
+          </p>
+        </div>
       </div>
 
-      <div class="gc-employee-detail__base-info__credentials">
-        <p class="name">
-          {{ profile.name }} {{ profile.lastName }}
-        </p>
+      <gc-employee-detail-profile />
 
-        <p class="profession-and-level">
-          {{ profile.level }} {{ profile.profession }}
-        </p>
-      </div>
+      <gc-employee-detail-projects />
+
+      <gc-employee-detail-certificate v-show="pdfSettings.showCertificate" />
+
+      <gc-employee-detail-education v-show="pdfSettings.showEducation" />
     </div>
 
-    <gc-employee-detail-profile></gc-employee-detail-profile>
+    <gc-delete-modal />
 
-    <gc-employee-detail-projects></gc-employee-detail-projects>
+    <gc-pdf-modal />
 
-    <gc-employee-detail-certificate></gc-employee-detail-certificate>
+    <gc-edit-education-modal />
 
-    <gc-employee-detail-education></gc-employee-detail-education>
+    <gc-edit-project-modal />
 
-    <gc-delete-modal></gc-delete-modal>
+    <gc-edit-profile-modal />
 
-    <gc-edit-education-modal></gc-edit-education-modal>
+    <gc-import-projects-modal />
 
-    <gc-edit-project-modal></gc-edit-project-modal>
-
-    <gc-edit-profile-modal></gc-edit-profile-modal>
-
-    <gc-import-projects-modal></gc-import-projects-modal>
-
-    <gc-edit-certificate-modal></gc-edit-certificate-modal>
+    <gc-edit-certificate-modal />
 
   </div>
 </template>
 
 <script>
 import { defineComponent }              from '@vue/composition-api';
+import { useGlobals }                   from '../../hooks/use-globals';
+import { usePdfGenerator }              from './hooks/use-pdf-generator';
 import { useEmployeeDetail }            from './hooks/use-employee-detail';
 import { useEmployeeDetailProfile }     from './hooks/use-employee-detail-profile';
 import { useEmployeeDetailEducation }   from './hooks/use-employee-detail-education';
 import { useEmployeeDetailProjects }    from './hooks/use-employee-detail-projects';
 import { useEmployeeDetailCertificate } from './hooks/use-employee-detail-certificate';
-import { useGlobals }                   from '../../hooks/use-globals';
-import gcToolBar                        from '@/components/tool-bar/tool-bar.component.vue';
+import gcPdfModal                       from './components/pdf-modal.component';
 import gcDeleteModal                    from './components/delete-modal.component.vue';
+import gcToolBar                        from '@/components/tool-bar/tool-bar.component.vue';
 import gcEditProjectModal               from './components/project/edit-project-modal.component.vue';
 import gcEditProfileModal               from './components/profile/edit-employee-modal.component.vue';
 import gcImportProjectsModal            from './components/project/import-projects-modal.component.vue';
@@ -80,6 +90,7 @@ export default defineComponent({
   name: 'gcEmployeeDetail',
   components: {
     gcToolBar,
+    gcPdfModal,
     gcDeleteModal,
     gcEditProjectModal,
     gcEditProfileModal,
@@ -95,6 +106,11 @@ export default defineComponent({
   setup(props, { root }) {
 
     const employeeUuid = root.$route.params.uuid;
+
+    const {
+      pdfSettings,
+      openPdfModal,
+    } = usePdfGenerator();
 
     const {
       getEducation,
@@ -146,6 +162,8 @@ export default defineComponent({
 
     return {
       profile,
+      pdfSettings,
+      openPdfModal,
       openImportModal,
       openEditProfileModal,
       openNewEducationModal,

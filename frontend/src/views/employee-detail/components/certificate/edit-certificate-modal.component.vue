@@ -12,8 +12,8 @@
         class="gc-edit-certificate-modal__title">Create new certificate</h2>
 
     <gc-form :form-ref.sync="refFormCertificate"
-             :rules="rulesCertificate"
              :model="editCertificatesModal.data"
+             :rules="rulesCertificate"
              class="gc-edit-certificate-modal__form">
 
       <gc-form-item class="gc-edit-certificate-modal__form__item"

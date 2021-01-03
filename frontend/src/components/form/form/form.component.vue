@@ -1,7 +1,7 @@
 <template>
-  <el-form v-bind="$attrs"
+  <el-form ref="form"
+           v-bind="$attrs"
            v-on="$listeners"
-           ref="form"
            class="gc-form">
 
     <slot v-for="(_, slot) of $slots"
@@ -16,7 +16,7 @@ import { defineComponent, ref, onMounted } from '@vue/composition-api';
 export default defineComponent({
   name: 'gcForm',
 
-  setup(props, context ) {
+  setup(props, context) {
     const form = ref(null);
 
     onMounted(() => {

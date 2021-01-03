@@ -86,7 +86,7 @@ export default defineComponent({
 
       &__content {
         padding: 2rem;
-        margin-left: 19rem;
+        margin-left: 18rem;
 
         &__wrapper {
           display: flex;

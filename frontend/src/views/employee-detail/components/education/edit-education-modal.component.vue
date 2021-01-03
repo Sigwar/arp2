@@ -12,8 +12,8 @@
         class="gc-edit-education-modal__title">Create new education</h2>
 
     <gc-form :form-ref.sync="refForm"
-             :rules="rulesEducation"
              :model="editEducationModal.data"
+             :rules="rulesEducation"
              class="gc-edit-education-modal__form">
 
       <gc-form-item class="gc-edit-education-modal__form__item"

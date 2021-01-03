@@ -9,6 +9,9 @@ export const useRulesEmployeeDetail = () => {
       { required: true, message: 'School name is required', trigger: [ 'blur', 'change' ] },
       { min: 3, message: 'Name must have min. 3 chars', trigger: [ 'blur', 'change' ] },
     ],
+    description: [
+      { max: 254, message: 'Up to 254 characters', trigger: [ 'blur', 'change' ] },
+    ],
     date: [
       { validator: checkDate, message: 'Date is required', trigger: [ 'blur', 'change' ] },
     ],

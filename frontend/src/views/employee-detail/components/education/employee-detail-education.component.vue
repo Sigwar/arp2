@@ -17,6 +17,7 @@
           <gc-education v-for="education in educations"
                         :key="education.uuid"
                         :detail="education"
+                        :show-description="pdfSettings.shoeEducationDescription"
                         @edit-education="openEditModal"
                         @remove-education="openDeleteModal"></gc-education>
 
@@ -30,6 +31,7 @@
 import { defineComponent }            from '@vue/composition-api';
 import { useEmployeeDetail }          from '../../hooks/use-employee-detail';
 import { useEmployeeDetailEducation } from '../../hooks/use-employee-detail-education';
+import { usePdfGenerator }            from '../../hooks/use-pdf-generator';
 import gcCollapse                     from '@/components/collapse/collapse.component.vue';
 import gcCollapseItem                 from '@/components/collapse/collapse-item.component.vue';
 import gcEducation                    from '@/components/education/education.component.vue';
@@ -47,6 +49,10 @@ export default defineComponent({
     const activeNames = 'education';
 
     const {
+      pdfSettings,
+    } = usePdfGenerator();
+
+    const {
       profile,
       openDeleteModal,
     } = useEmployeeDetail();
@@ -60,6 +66,7 @@ export default defineComponent({
       profile,
       educations,
       activeNames,
+      pdfSettings,
       openEditModal,
       openDeleteModal,
     };
@@ -86,7 +93,7 @@ export default defineComponent({
 
       &__content {
         padding: 2rem;
-        margin-left: 19rem;
+        margin-left: 18rem;
 
         &__wrapper {
           display: flex;

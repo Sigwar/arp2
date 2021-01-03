@@ -17,6 +17,8 @@
           <gc-project v-for="project in projects"
                       :key="project.uuid"
                       :detail="project"
+                      :show-description="pdfSettings.showDescriptionProject"
+                      :show-topic="pdfSettings.showTopicProject"
                       @edit-project="openEditProjectModal"
                       @remove-project="openDeleteModal"></gc-project>
         </div>
@@ -29,6 +31,7 @@
 import { defineComponent }           from '@vue/composition-api';
 import { useEmployeeDetailProjects } from '../../hooks/use-employee-detail-projects';
 import { useEmployeeDetail }         from '../../hooks/use-employee-detail';
+import { usePdfGenerator }           from '../../hooks/use-pdf-generator';
 import gcProject                     from '@/components/project/project.component.vue';
 import gcCollapse                    from '@/components/collapse/collapse.component.vue';
 import gcCollapseItem                from '@/components/collapse/collapse-item.component.vue';
@@ -45,6 +48,10 @@ export default defineComponent({
     const activeNames = 'Projects';
 
     const {
+      pdfSettings,
+    } = usePdfGenerator();
+
+    const {
       openDeleteModal,
     } = useEmployeeDetail();
 
@@ -55,6 +62,7 @@ export default defineComponent({
 
     return {
       projects,
+      pdfSettings,
       activeNames,
       openDeleteModal,
       openEditProjectModal,
@@ -82,7 +90,7 @@ export default defineComponent({
 
       &__content {
         padding: 2rem;
-        margin-left: 19rem;
+        margin-left: 18rem;
 
         &__wrapper {
           display: flex;

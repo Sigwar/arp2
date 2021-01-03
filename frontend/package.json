@@ -15,10 +15,10 @@
     "element-ui": "^2.13.2",
     "express": "latest",
     "express-handlebars": "latest",
+    "jspdf": "^2.2.0",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "moment-precise-range-plugin": "^1.3.0",
-    "vue": "^2.6.11",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0"

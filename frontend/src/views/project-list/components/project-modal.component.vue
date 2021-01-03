@@ -7,8 +7,8 @@
     <h2 class="gc-project-modal__title">Create new project</h2>
 
     <gc-form :form-ref.sync="refForm"
-             :rules="rules"
              :model="projectForm"
+             :rules="rules"
              class="gc-project-modal__form">
 
       <gc-form-item class="gc-project-modal__form__item"

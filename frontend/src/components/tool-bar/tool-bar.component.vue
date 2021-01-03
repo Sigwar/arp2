@@ -16,7 +16,9 @@
                   effect="dark"
                   placement="left-start">
 
-        <div class="gc-tool-bar__container__icon icon-doc--yellow"></div>
+        <div class="gc-tool-bar__container__icon icon-doc--yellow"
+             @click="openPdfModal"></div>
+
       </gc-tooltip>
 
       <gc-tooltip content="Import project"
@@ -63,6 +65,7 @@ export default defineComponent({
   setup(props, context) {
 
     const {
+      openPdfModal,
       importProject,
       addNewEducation,
       addNewCertificate,
@@ -70,6 +73,7 @@ export default defineComponent({
     } = useToolbar(context);
 
     return {
+      openPdfModal,
       importProject,
       addNewEducation,
       addNewCertificate,

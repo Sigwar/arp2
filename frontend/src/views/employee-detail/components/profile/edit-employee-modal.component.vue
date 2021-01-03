@@ -8,8 +8,8 @@
     <h2 class="gc-edit-employee-modal__title">Update employee</h2>
 
     <gc-form :form-ref.sync="refForm"
-             :rules="rules"
              :model="profileModal"
+             :rules="rules"
              class="gc-edit-employee-modal__form">
 
       <div class="gc-edit-employee-modal__form__row">

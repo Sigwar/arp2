@@ -20,7 +20,8 @@
         </span>
       </div>
       <h2 class="gc-education__content__name">{{ detail.schoolName }}</h2>
-      <p class="gc-education__content__description">{{ detail.description }}</p>
+      <p v-show="showDescription"
+         class="gc-education__content__description">{{ detail.description }}</p>
     </div>
   </div>
 </template>
@@ -34,6 +35,7 @@ export default defineComponent({
   name: 'gcEducation',
   props: {
     detail: Object,
+    showDescription: Boolean,
   },
 
   setup(props, context) {

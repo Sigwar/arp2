@@ -24,10 +24,13 @@
         {{ detail.client }}</h2>
 
       <p v-if="detail.description !== ''"
+         v-show="showDescription"
          class="gc-project__content__description">{{ detail.description }}</p>
 
       <p v-if="detail.topic !== ''"
+         v-show="showTopic"
          class="gc-project__content__topic">
+
         <span class="gc-project__content__topic__label">Topic: </span>{{ detail.topic }}
       </p>
 
@@ -65,6 +68,8 @@ export default defineComponent({
   name: 'gcProject',
   props: {
     detail: Object,
+    showDescription: true,
+    showTopic: true,
   },
 
   setup(props, context) {
