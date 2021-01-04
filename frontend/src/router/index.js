@@ -1,7 +1,8 @@
 import Vue            from 'vue';
 import VueRouter      from 'vue-router';
-import Settings       from '../views/settings/settings.view';
 import Login          from '../views/login/login.view.vue';
+import Settings       from '../views/settings/settings.view';
+import Registration   from '../views/registration/registration.view';
 import ProjectList    from '../views/project-list/project-list.view.vue';
 import EmployeeList   from '../views/employee-list/employee-list.view.vue';
 import EmployeeDetail from '../views/employee-detail/employee-detail.view.vue';
@@ -42,6 +43,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/registration',
+    name: 'Registration',
+    component: Registration,
   },
 ];
 

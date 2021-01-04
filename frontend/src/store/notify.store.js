@@ -20,7 +20,7 @@ const actions = {
       setTimeout(() => {
         ElNotification.error({
           title: 'Error',
-          message: `${item.msg} - ${item.param}`,
+          message: `${item.msg}  ${item.param}`,
           type: 'error',
           customClass: 'el-notification--error',
         });

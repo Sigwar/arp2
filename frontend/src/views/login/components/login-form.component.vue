@@ -13,7 +13,6 @@
                     prop="login">
 
         <gc-input v-model="loginForm.login"></gc-input>
-
       </gc-form-item>
 
       <gc-form-item class="gc-login-form__form__item"
@@ -32,6 +31,8 @@
                    @click="signIn">Login
         </gc-button>
 
+        <span class="gc-login-form__form__item__register"
+              @click="goToRegisterPage">Register an account</span>
       </gc-form-item>
     </gc-form>
   </div>
@@ -59,11 +60,13 @@ export default defineComponent({
     const {
       signIn,
       loginForm,
+      goToRegisterPage,
     } = useLoginForm();
 
     return {
       signIn,
       loginForm,
+      goToRegisterPage,
     };
   },
 });
@@ -73,7 +76,6 @@ export default defineComponent({
        scoped>
 .gc-login-form {
   background: var(--white);
-  height: 40rem;
   width: 40rem;
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
@@ -93,6 +95,19 @@ export default defineComponent({
       &__btn {
         margin: 2rem auto 0;
         display: block;
+      }
+
+      &__register {
+        font-size: 1.8rem;
+        margin-top: 1rem;
+        text-align: center;
+        display: block;
+
+        &:hover {
+          color: var(--warning);
+          text-decoration: underline;
+          cursor: pointer;
+        }
       }
     }
   }

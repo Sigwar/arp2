@@ -1,13 +1,13 @@
 const express = require('express');
 
 //ROUTES
-
 const levelsRoutes = require('./routes/levels/levels');
 const projectRoutes = require('./routes/project/project');
 const projectsRoutes = require('./routes/projects/projects');
 const employeeRoutes = require('./routes/employee/employee');
 const employeesRoutes = require('./routes/employees/employees');
 const languagesRoutes = require('./routes/languages/languages');
+const Registration = require('./routes/registration/registration');
 const workstationsRoutes = require('./routes/workstations/workstations');
 const itTechnologiesRoutes = require('./routes/itTechnologies/itTechnologies');
 
@@ -82,6 +82,8 @@ app.use('/itTechnologies', itTechnologiesRoutes);
 app.use('/workstations', workstationsRoutes);
 
 app.use('/languages', languagesRoutes);
+
+app.use('/registration', Registration);
 
 sequelize.sync().then(() => { //REBUILD DATABASE -> { force: true }
   app.listen(8081);

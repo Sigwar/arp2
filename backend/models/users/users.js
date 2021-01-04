@@ -12,8 +12,9 @@ const Users = sequelize.define('users', {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  login: {
+  name: {
     type: Sequelize.STRING,
+    unique: true,
     allowNull: false,
     validate: {
       notEmpty: true,
@@ -21,6 +22,14 @@ const Users = sequelize.define('users', {
   },
   password: {
     type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true,
+    },
+  },
+  email: {
+    type: Sequelize.STRING,
+    unique: true,
     allowNull: false,
     validate: {
       notEmpty: true,

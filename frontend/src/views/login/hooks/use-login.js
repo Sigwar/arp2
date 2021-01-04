@@ -12,8 +12,14 @@ export const useLoginForm = () => {
     });
   };
 
+  const goToRegisterPage = () => {
+    router.push({ name: 'Registration' }).catch(() => {
+    });
+  };
+
   return {
-    loginForm,
     signIn,
+    loginForm,
+    goToRegisterPage,
   };
 };

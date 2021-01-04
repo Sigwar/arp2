@@ -2,18 +2,26 @@ import Vue                  from 'vue';
 import Vuex                 from 'vuex';
 import axios                from 'axios';
 import notify               from './notify.store';
-import employeesModule      from './modules/employees/employees.store.js';
 import projectsModule       from './modules/projects/projects.store.js';
+import employeesModule      from './modules/employees/employees.store.js';
+import registrationModule   from './modules/registration/registration.store';
 import employeeDetailModule from './modules/employee-detail/employee-detail.store.js';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  modules: {
+    notify,
+    projectsModule,
+    employeesModule,
+    registrationModule,
+    employeeDetailModule,
+  },
   state: {
     global: {
       user: {
         uuid: 'c2c7c31e-6083-419a-83cc-844e8f70ee90',
-        login: 'admin',
+        name: 'admin',
       },
       languages: [],
       levelList: [],
@@ -190,12 +198,6 @@ export default new Vuex.Store({
         dispatch('notify/openNotifyError', e.response, { root: true });
       }
     },
-  },
-  modules: {
-    notify,
-    projectsModule,
-    employeesModule,
-    employeeDetailModule,
   },
   getters: {
     user: (state) => {

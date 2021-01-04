@@ -7,7 +7,9 @@
                  @open-pdf-modal="openPdfModal"
                  @import-project="openImportModal"></gc-tool-bar>
 
-    <div id="profile">
+    <div id="profile"
+         class="gc-employee-detail__wrapper">
+
       <div class="gc-employee-detail__base-info">
         <div v-show="!pdfSettings.blind"
              class="gc-employee-detail__base-info__picture">
@@ -181,6 +183,10 @@ export default defineComponent({
   max-width: 1280px;
   margin: 0 auto;
   position: relative;
+
+  &__wrapper {
+    padding: 4rem 8rem;
+  }
 
   &__base-info {
     display: flex;
