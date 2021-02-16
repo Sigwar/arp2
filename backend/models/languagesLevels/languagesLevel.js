@@ -16,8 +16,8 @@ const LanguagesLevel = sequelize.define('languages_level', {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: true
-    }
+      notEmpty: true,
+    },
   },
 });
 

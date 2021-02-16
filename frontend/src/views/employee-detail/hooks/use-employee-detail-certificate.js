@@ -59,7 +59,6 @@ export const useEmployeeDetailCertificate = () => {
     form.validate((valid) => {
       if (valid) {
         store.dispatch('employeeDetailModule/createNewCertificate', uuid);
-
       }
     });
   };

@@ -1,4 +1,5 @@
 import { reactive } from '@vue/composition-api';
+import store        from '@/store/store';
 import router       from '@/router';
 
 export const useLoginForm = () => {
@@ -8,8 +9,7 @@ export const useLoginForm = () => {
   });
 
   const signIn = () => {
-    router.push({ name: 'Home' }).catch(() => {
-    });
+    store.dispatch('signIn', loginForm);
   };
 
   const goToRegisterPage = () => {

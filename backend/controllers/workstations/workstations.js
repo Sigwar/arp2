@@ -1,37 +1,70 @@
-const Workstations = require('../../models/workstation/workstation');
 const generatorUuid = require('uuid');
+const Users = require('../../models/users/users');
 const { validationResult } = require('express-validator');
+const Workstations = require('../../models/workstation/workstation');
 
 exports.getWorkstations = async (req, res, next) => {
+
   try {
-    const data = await Workstations.findAll({
+    const { id } = await Users.findOne({
       raw: true,
+      where: { uuid: req.body.userUuid },
       attributes: {
-        exclude: [ 'id', 'createdAt', 'updatedAt', 'uuid' ],
+        exclude: [ 'login', 'password', 'updatedAt', 'createdAt', 'uuid', 'email' ],
       },
     });
 
-    const arr = [];
-    data.forEach(el => {
-      arr.push(el.name);
-    });
+    if (id) {
+      const data = await Workstations.findAll({
+        raw: true,
+        where: { userId: id },
+        attributes: {
+          exclude: [ 'id', 'createdAt', 'updatedAt', 'uuid' ],
+        },
+      });
 
-    res.status(200).json(arr);
+      const arr = [];
+      data.forEach(el => {
+        arr.push(el.name);
+      });
+
+      res.status(200).json(arr);
+    } else {
+      res.status(401).json();
+    }
   } catch (e) {
+    console.error(e);
+    throw new Error(e);
   }
 };
 
 exports.getWorkstationsDetail = async (req, res, next) => {
+
   try {
-    const data = await Workstations.findAll({
+    const { id } = await Users.findOne({
       raw: true,
+      where: { uuid: req.body.userUuid },
       attributes: {
-        exclude: [ 'id', 'createdAt', 'updatedAt' ],
+        exclude: [ 'login', 'password', 'updatedAt', 'createdAt', 'uuid', 'email' ],
       },
     });
 
-    res.status(200).json(data);
+    if (id) {
+      const data = await Workstations.findAll({
+        raw: true,
+        where: { userId: id },
+        attributes: {
+          exclude: [ 'id', 'createdAt', 'updatedAt' ],
+        },
+      });
+
+      res.status(200).json(data);
+    } else {
+      res.status(401).json();
+    }
   } catch (e) {
+    console.error(e);
+    throw new Error(e);
   }
 };
 
@@ -40,13 +73,26 @@ exports.create = async (req, res, next) => {
 
   if (error.isEmpty()) {
     try {
-      const uuid = generatorUuid.v4();
-      await Workstations.create({
-        uuid: uuid,
-        name: req.body.name,
+      const { id } = await Users.findOne({
+        raw: true,
+        where: { uuid: req.body.userUuid },
+        attributes: {
+          exclude: [ 'login', 'password', 'updatedAt', 'createdAt', 'uuid', 'email' ],
+        },
       });
 
-      res.status(201).json();
+      if (id) {
+        const uuid = generatorUuid.v4();
+        await Workstations.create({
+          uuid: uuid,
+          name: req.body.name,
+          userId: id,
+        });
+
+        res.status(201).json();
+      } else {
+        res.status(401).json();
+      }
     } catch (e) {
       console.error(e);
     }
@@ -65,5 +111,6 @@ exports.delete = async (req, res, next) => {
     res.status(200).json();
   } catch (e) {
     console.error(e);
+    throw new Error(e);
   }
 };

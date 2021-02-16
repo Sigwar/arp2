@@ -1,28 +1,18 @@
-import Vue                  from 'vue';
-import Vuex                 from 'vuex';
-import axios                from 'axios';
-import notify               from './notify.store';
-import projectsModule       from './modules/projects/projects.store.js';
-import employeesModule      from './modules/employees/employees.store.js';
-import registrationModule   from './modules/registration/registration.store';
-import employeeDetailModule from './modules/employee-detail/employee-detail.store.js';
+import Vue    from 'vue';
+import Vuex   from 'vuex';
+import axios  from 'axios';
+import notify from './notify.store';
+import router from '@/router';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
     notify,
-    projectsModule,
-    employeesModule,
-    registrationModule,
-    employeeDetailModule,
   },
   state: {
     global: {
-      user: {
-        uuid: 'c2c7c31e-6083-419a-83cc-844e8f70ee90',
-        name: 'admin',
-      },
+      user: {},
       languages: [],
       levelList: [],
       professions: [],
@@ -33,6 +23,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    setUser: (state, payload) => {
+      state.global.user = payload;
+    },
     setLevelList: (state, payload) => {
       state.global.levelList = payload;
     },
@@ -54,14 +47,49 @@ export default new Vuex.Store({
     setWorkstationDetail: (state, payload) => {
       state.global.workstationDetail = payload;
     },
+    logout(state) {
+      sessionStorage.removeItem('user');
+      sessionStorage.removeItem('token');
+      state.global.user = {};
+    },
+    restAllGlobals(state) {
+      state.global.user = {},
+        state.global.languages = [],
+        state.global.levelList = [],
+        state.global.professions = [],
+        state.global.itTechnologies = [],
+        state.global.levelDetailList = [],
+        state.global.workstationDetail = [],
+        state.global.languagesWithoutLevel = [];
+    },
   },
   actions: {
+    async signIn({ commit, dispatch }, payload) {
+      try {
+        const { data } = await axios.post('http://localhost:8081/auth/signIn', {
+          login: payload.login,
+          password: payload.password,
+        });
+
+        sessionStorage.setItem('token', JSON.stringify(data.token));
+        sessionStorage.setItem('user', JSON.stringify(data.login));
+
+        commit('setUser', data);
+        router.push({ name: 'Home' }).catch(() => {
+        });
+        dispatch('notify/openNotifySuccess', 'You have been logged in', { root: true });
+      } catch (e) {
+        dispatch('notify/openNotifyError', 'Wrong login or password', { root: true });
+        throw new Error(e);
+      }
+    },
+
     async getLevelList({ commit }) {
       try {
         const { data } = await axios.get('http://localhost:8081/levels/levels');
         commit('setLevelList', data);
       } catch (e) {
-        console.error(e);
+        throw new Error(e);
       }
     },
 
@@ -70,7 +98,7 @@ export default new Vuex.Store({
         const { data } = await axios.get('http://localhost:8081/levels/levelsDetail');
         commit('setLevelDetailList', data);
       } catch (e) {
-        console.error(e);
+        throw new Error(e);
       }
     },
 
@@ -79,7 +107,7 @@ export default new Vuex.Store({
         const { data } = await axios.get('http://localhost:8081/languages/languages');
         commit('setLanguages', data);
       } catch (e) {
-        console.error(e);
+        throw new Error(e);
       }
     },
 
@@ -88,7 +116,7 @@ export default new Vuex.Store({
         const { data } = await axios.get('http://localhost:8081/itTechnologies/technologies');
         commit('setItTechnologies', data);
       } catch (e) {
-        console.error(e);
+        throw new Error(e);
       }
     },
 
@@ -97,7 +125,7 @@ export default new Vuex.Store({
         const { data } = await axios.get('http://localhost:8081/workstations/workstations');
         commit('setProfessions', data);
       } catch (e) {
-        console.error(e);
+        throw new Error(e);
       }
     },
 
@@ -106,7 +134,7 @@ export default new Vuex.Store({
         const { data } = await axios.get('http://localhost:8081/workstations/workstations-detail');
         commit('setWorkstationDetail', data);
       } catch (e) {
-        console.error(e);
+        throw new Error(e);
       }
     },
 
@@ -115,7 +143,7 @@ export default new Vuex.Store({
         const { data } = await axios.get('http://localhost:8081/languages/languages-without-level');
         commit('setLanguageWithoutLevel', data);
       } catch (e) {
-        console.error(e);
+        throw new Error(e);
       }
     },
 
@@ -203,9 +231,6 @@ export default new Vuex.Store({
     user: (state) => {
       return state.global.user;
     },
-    userUuid: (state) => {
-      return state.global.user.uuid;
-    },
     levelList: (state) => {
       return state.global.levelList;
     },
@@ -223,6 +248,9 @@ export default new Vuex.Store({
     },
     workstationDetail: (state) => {
       return state.global.workstationDetail;
+    },
+    token: () => {
+      return JSON.parse(sessionStorage.getItem('token')) ? JSON.parse(sessionStorage.getItem('token')) : '';
     },
   },
 });

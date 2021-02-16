@@ -5,6 +5,8 @@ import JsPDF        from 'jspdf';
 
 export const usePdfGenerator = () => {
 
+  const name = computed(() => store.state.employeeDetailModule.profile.name);
+  const lastName = computed(() => store.state.employeeDetailModule.profile.lastName);
   const pdfModal = computed(() => store.state.employeeDetailModule.pdfModal);
   const pdfModalLoading = computed(() => store.state.employeeDetailModule.pdfModalLoading);
   const pdfSettings = computed(() => store.state.employeeDetailModule.pdfSettings);
@@ -28,12 +30,15 @@ export const usePdfGenerator = () => {
   const generateCv = () => {
     store.commit('employeeDetailModule/setPdfModalLoading', true);
 
+    const divHeight = document.getElementById('profile').offsetHeight;
+    const divWidth = document.getElementById('profile').offsetWidth;
+
     html2canvas(document.getElementById('profile'), {
       scale: 2,
-      height: document.getElementById('profile').offsetHeight,
+      height: divHeight,
     }).then((canvas) => {
       let img = canvas.toDataURL('image/jpg', 2);
-      let pdf = new JsPDF();
+      let pdf = new JsPDF({ unit: 'px', format: [ divWidth / 2, divHeight / 2 ] });
       const bufferX = 5;
       const bufferY = 5;
       const imgProps = (pdf).getImageProperties(img);
@@ -41,7 +46,7 @@ export const usePdfGenerator = () => {
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
       pdf.addImage(img, 'JPEG', bufferX, bufferY, pdfWidth, pdfHeight, undefined, 'MEDIUM');
 
-      pdf.save('cv.pdf');
+      pdf.save(`${name.value}_${lastName.value}.pdf`);
       store.commit('employeeDetailModule/setPdfModalLoading', false);
     });
   };

@@ -1,22 +1,37 @@
-const itTechnologies = require('../../models/itTechnologies/itTechnologies');
+const Users = require('../../models/users/users');
 const { validationResult } = require('express-validator');
+const itTechnologies = require('../../models/itTechnologies/itTechnologies');
 
 exports.getItTechnologies = async (req, res, next) => {
   try {
-    const data = await itTechnologies.findAll({
+
+    const { id } = await Users.findOne({
       raw: true,
+      where: { uuid: req.body.userUuid },
       attributes: {
-        exclude: [ 'id', 'createdAt', 'updatedAt', 'uuid' ],
+        exclude: [ 'login', 'password', 'updatedAt', 'createdAt', 'uuid', 'email' ],
       },
     });
 
-    const arr = [];
+    if (id) {
+      const data = await itTechnologies.findAll({
+        raw: true,
+        where: { userId: id },
+        attributes: {
+          exclude: [ 'id', 'createdAt', 'updatedAt', 'uuid' ],
+        },
+      });
 
-    data.forEach(el => {
-      arr.push(el.name);
-    });
+      const arr = [];
+      data.forEach(el => {
+        arr.push(el.name);
+      });
 
-    res.status(200).json(arr);
+      res.status(200).json(arr);
+    } else {
+      res.status(401).json();
+    }
+
   } catch (e) {
   }
 };
@@ -26,11 +41,25 @@ exports.create = async (req, res, next) => {
 
   if (error.isEmpty()) {
     try {
-      await itTechnologies.create({
-        name: req.body.name,
+
+      const { id } = await Users.findOne({
+        raw: true,
+        where: { uuid: req.body.userUuid },
+        attributes: {
+          exclude: [ 'login', 'password', 'updatedAt', 'createdAt', 'uuid', 'email' ],
+        },
       });
 
-      res.status(201).json();
+      if (id) {
+        await itTechnologies.create({
+          userId: id,
+          name: req.body.name,
+        });
+
+        res.status(201).json();
+      } else {
+        res.status(401).json();
+      }
     } catch (e) {
       console.error(e);
     }

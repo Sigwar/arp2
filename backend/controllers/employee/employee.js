@@ -425,6 +425,10 @@ exports.employeeProjects = async (req, res, next) => {
         });
       }
 
+      projects.sort((projectA, projectB) => {
+        return new Date(projectB.dateEnd) - new Date(projectA.dateEnd);
+      });
+
       res.status(200).json(projects);
     }
   } catch (e) {

@@ -12,8 +12,8 @@ const Activities = sequelize.define('activities', {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: true
-    }
+      notEmpty: true,
+    },
   },
 
 });

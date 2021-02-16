@@ -16,8 +16,8 @@ const Educations = sequelize.define('educations', {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: true
-    }
+      notEmpty: true,
+    },
   },
   description: {
     type: Sequelize.STRING,

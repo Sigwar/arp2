@@ -3,21 +3,21 @@
     <div class="gc-tool-bar__icon icon-settings"></div>
 
     <div class="gc-tool-bar__container">
-      <gc-tooltip content="Edit profile"
-                  effect="dark"
-                  placement="left-start">
-
-        <div class="gc-tool-bar__container__icon icon-user--yellow"
-             @click="changeEditProfileModal"></div>
-
-      </gc-tooltip>
-
       <gc-tooltip content="Generate CV"
                   effect="dark"
                   placement="left-start">
 
         <div class="gc-tool-bar__container__icon icon-doc--yellow"
              @click="openPdfModal"></div>
+
+      </gc-tooltip>
+
+      <gc-tooltip content="Edit profile"
+                  effect="dark"
+                  placement="left-start">
+
+        <div class="gc-tool-bar__container__icon icon-user--yellow"
+             @click="changeEditProfileModal"></div>
 
       </gc-tooltip>
 

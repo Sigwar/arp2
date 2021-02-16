@@ -28,7 +28,7 @@
 
         <gc-button class="gc-login-form__form__item__btn"
                    type="default"
-                   @click="signIn">Login
+                   @click.stop.prevent="signIn">Login
         </gc-button>
 
         <span class="gc-login-form__form__item__register"

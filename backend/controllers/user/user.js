@@ -13,10 +13,10 @@ exports.createAccount = async (req, res, next) => {
       const uuid = generatorUuid.v4();
 
       const cypt = Crypto.createHash('sha256');
-      let hash = cypt.update(req.body.password).digest('hex');
+      const hash = cypt.update(req.body.password).digest('hex');
 
       await Users.create({
-        name: req.body.name,
+        login: req.body.name,
         password: hash,
         email: req.body.email,
         uuid: uuid,

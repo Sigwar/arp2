@@ -1,5 +1,7 @@
 import Vue            from 'vue';
+import axios          from 'axios';
 import VueRouter      from 'vue-router';
+import store          from '../store/store';
 import Login          from '../views/login/login.view.vue';
 import Settings       from '../views/settings/settings.view';
 import Registration   from '../views/registration/registration.view';
@@ -56,5 +58,34 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+
+axios.interceptors.request.use((config) => {
+  if (config.url.includes('signIn') || config.url.includes('registration')) {
+    return config;
+  } else {
+    const token = store.getters[ 'token' ];
+    config.headers[ 'authorization' ] = `${token}`;
+    return config;
+  }
+});
+
+axios.interceptors.response.use((config) => {
+    return config;
+  }, async (error) => {
+    if ([ 401, 403 ].includes(error.response.status) && router.currentRoute.name !== 'Login' && router.currentRoute.name !== 'Registration') {
+      sessionStorage.removeItem('user');
+      sessionStorage.removeItem('token');
+      store.commit('setUser', {});
+      await router.push({ name: 'Login' }).catch(() => {
+      });
+    } else if (error.response.status.toString().startsWith('5') && [ 502, 504 ].includes(error.response.status)) {
+      await router.push({ name: 'Login' }).catch(() => {
+        },
+      );
+    }
+
+    return Promise.reject(error);
+  },
+);
 
 export default router;

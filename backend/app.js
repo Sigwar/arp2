@@ -1,6 +1,8 @@
 const express = require('express');
+require('dotenv').config({ path: '.env' });
 
 //ROUTES
+const authRoutes = require('./routes/auth/auth');
 const levelsRoutes = require('./routes/levels/levels');
 const projectRoutes = require('./routes/project/project');
 const projectsRoutes = require('./routes/projects/projects');
@@ -56,6 +58,10 @@ Activities.belongsTo(EmployeeProjects);
 
 Projects.belongsTo(Users);
 Employees.belongsTo(Users);
+Workstation.belongsTo(Users);
+ItTechnologies.belongsTo(Users);
+Levels.belongsTo(Users);
+Languages.belongsTo(Users);
 
 const app = express();
 app.use(multer().single('image'));
@@ -69,6 +75,8 @@ app.use((req, res, next) => {
 });
 
 //ROUTES
+app.use('/auth', authRoutes);
+
 app.use('/employees', employeesRoutes);
 app.use('/employee', employeeRoutes);
 

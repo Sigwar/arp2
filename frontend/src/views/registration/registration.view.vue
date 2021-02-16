@@ -5,14 +5,24 @@
 </template>
 
 <script>
-import gcRegistrationForm from './components/registration-form.component';
+import { defineComponent, onUnmounted } from '@vue/composition-api';
+import gcRegistrationForm               from './components/registration-form.component';
+import store                            from '@/store/store';
+import registrationModule               from './store/registration.store';
 
-export default {
+export default defineComponent({
   name: 'gcRegistration',
   components: {
     gcRegistrationForm,
   },
-};
+  setup() {
+    store.registerModule('registrationModule', registrationModule);
+
+    onUnmounted(() => {
+      store.unregisterModule('registrationModule');
+    });
+  },
+});
 </script>
 
 <style lang="scss"

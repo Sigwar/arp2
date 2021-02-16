@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { defineComponent }              from '@vue/composition-api';
+import { defineComponent, onUnmounted } from '@vue/composition-api';
 import { useGlobals }                   from '../../hooks/use-globals';
 import { usePdfGenerator }              from './hooks/use-pdf-generator';
 import { useEmployeeDetail }            from './hooks/use-employee-detail';
@@ -75,6 +75,8 @@ import { useEmployeeDetailProfile }     from './hooks/use-employee-detail-profil
 import { useEmployeeDetailEducation }   from './hooks/use-employee-detail-education';
 import { useEmployeeDetailProjects }    from './hooks/use-employee-detail-projects';
 import { useEmployeeDetailCertificate } from './hooks/use-employee-detail-certificate';
+import store                            from '@/store/store';
+import employeeDetailModule             from './store/employee-detail.store';
 import gcPdfModal                       from './components/pdf-modal.component';
 import gcDeleteModal                    from './components/delete-modal.component.vue';
 import gcToolBar                        from '@/components/tool-bar/tool-bar.component.vue';
@@ -106,6 +108,11 @@ export default defineComponent({
   },
 
   setup(props, { root }) {
+    store.registerModule('employeeDetailModule', employeeDetailModule);
+
+    onUnmounted(() => {
+      store.unregisterModule('employeeDetailModule');
+    });
 
     const employeeUuid = root.$route.params.uuid;
 
@@ -143,7 +150,7 @@ export default defineComponent({
     } = useEmployeeDetailCertificate();
 
     const {
-      getProjects,
+      // getProjects,
       getLanguages,
       getLevelList,
       getWorkstation,
@@ -151,7 +158,7 @@ export default defineComponent({
     } = useGlobals();
 
     // GET DATA FROM API
-    getProjects();
+    // getProjects();
     getLanguages();
     getLevelList();
     getWorkstation();

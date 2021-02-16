@@ -10,6 +10,7 @@ const { validationResult } = require('express-validator');
 
 //GET EMPLOYEES LIST
 exports.getEmployees = async (req, res, next) => {
+
   try {
     const user = await Users.findOne({ raw: true, where: { uuid: req.body.userUuid } });
 

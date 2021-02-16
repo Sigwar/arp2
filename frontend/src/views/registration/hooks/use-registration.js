@@ -37,7 +37,7 @@ export const useRegistrationForm = () => {
     ],
     password: [
       { required: true, message: 'Password is required', trigger: [ 'blur', 'change' ] },
-      { min: 6, message: 'Password must have min. 3 chars', trigger: [ 'blur', 'change' ] },
+      { min: 6, message: 'Password must have min. 6 chars', trigger: [ 'blur', 'change' ] },
     ],
     repeatPassword: [
       { required: true, message: 'Password is required', trigger: [ 'blur', 'change' ] },

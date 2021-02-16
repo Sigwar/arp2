@@ -1,5 +1,6 @@
 const express = require('express');
 const { body } = require('express-validator');
+const authenticateToken = require('../../utils/authenticate');
 const projectController = require('../../controllers/project/project');
 
 const router = express.Router();
@@ -7,19 +8,19 @@ const router = express.Router();
 //PROJECT
 router.post('/getDetail', [
   body('projectUuid').trim().isLength({ min: 36, max: 36 }),
-], projectController.detailProject);
+], [ authenticateToken, projectController.detailProject ]);
 
 router.post('/create', [
   body('name').trim().isLength({ min: 2 }),
   body('client').trim().isLength({ min: 2 }),
-], projectController.createProject);
+], [ authenticateToken, projectController.createProject ]);
 
 router.post('/update',
   body('name').trim().isLength({ min: 2 }),
   body('client').trim().isLength({ min: 2 }),
   projectController.updateProject);
 
-router.delete('/delete', projectController.deleteProject);
+router.delete('/delete', [ authenticateToken, projectController.deleteProject ]);
 
 
 module.exports = router;

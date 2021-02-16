@@ -1,5 +1,4 @@
 import axios from 'axios';
-import store from '../../store';
 
 const state = {
   profile: {},
@@ -100,6 +99,7 @@ const getters = {
 };
 
 // actions
+
 const actions = {
   async getEmployeeProfile({ commit }, payload) {
     try {
@@ -107,57 +107,50 @@ const actions = {
       commit('setEmployeeProfile', { ...data });
       commit('setProfileModal', { ...data });
     } catch (e) {
-      console.error(e);
+      throw new Error(e);
     }
   },
 
   async getEmployeeEducation({ commit }, payload) {
-    const userUuid = store.getters[ 'userUuid' ];
-
     try {
-      const { data } = await axios.post('http://localhost:8081/employee/educations', { userUuid: userUuid, employeeUuid: payload });
+      const { data } = await axios.post('http://localhost:8081/employee/educations', { employeeUuid: payload });
       commit('setEmployeeEducation', data);
     } catch (e) {
-      console.error(e);
+      throw new Error(e);
     }
   },
 
   async getEmployeeProjects({ commit }, payload) {
-    const userUuid = store.getters[ 'userUuid' ];
     try {
-      const { data } = await axios.post('http://localhost:8081/employee/projects', { userUuid: userUuid, employeeUuid: payload });
+      const { data } = await axios.post('http://localhost:8081/employee/projects', { employeeUuid: payload });
       commit('setEmployeeProjects', data);
     } catch (e) {
-      console.error(e);
+      throw new Error(e);
     }
   },
 
   async getEmployeeCertificate({ commit }, payload) {
-    const userUuid = store.getters[ 'userUuid' ];
-
     try {
-      const { data } = await axios.post('http://localhost:8081/employee/certificate', { userUuid: userUuid, employeeUuid: payload });
+      const { data } = await axios.post('http://localhost:8081/employee/certificate', { employeeUuid: payload });
       commit('setCertificate', data);
     } catch (e) {
-      console.error(e);
+      throw new Error(e);
     }
   },
 
   async getAllProjectsToImport({ commit }, payload) {
-    const userUuid = store.getters[ 'userUuid' ];
     try {
-      const { data } = await axios.post('http://localhost:8081/employee/projects-to-import', { userUuid: userUuid, employeeUuid: payload });
+      const { data } = await axios.post('http://localhost:8081/employee/projects-to-import', { employeeUuid: payload });
       commit('setProjectsToImport', data);
     } catch (e) {
-      console.error(e);
+      throw new Error(e);
     }
   },
 
   async updateProfile({ state, dispatch, commit }) {
-    const userUuid = store.getters[ 'userUuid' ];
     try {
-      await axios.patch('http://localhost:8081/employee/update', { userUuid: userUuid, employee: state.profileModal });
-      dispatch('getEmployeeProfile', { userUuid: userUuid, employeeUuid: state.profileModal.uuid });
+      await axios.patch('http://localhost:8081/employee/update', { employee: state.profileModal });
+      dispatch('getEmployeeProfile', { employeeUuid: state.profileModal.uuid });
       commit('setEditProfileModal', false);
       dispatch('notify/openNotifySuccess', 'Profile has been updated', { root: true });
     } catch (e) {
@@ -217,10 +210,8 @@ const actions = {
   },
 
   async createNewEducation({ state, commit, dispatch }, payload) {
-    const user = store.getters[ 'user' ];
     try {
       const data = {
-        userUuid: user.uuid,
         employeeUuid: payload,
         ...state.editEducationModal.data,
       };
@@ -243,10 +234,8 @@ const actions = {
   },
 
   async createNewCertificate({ state, commit, dispatch }, payload) {
-    const user = store.getters[ 'user' ];
     try {
       const data = {
-        userUuid: user.uuid,
         employeeUuid: payload,
         ...state.editCertificatesModal.data,
       };

@@ -1,5 +1,6 @@
-import { onMounted, ref } from '@vue/composition-api';
 import router             from '@/router';
+import store              from '../../../store/store';
+import { onMounted, ref } from '@vue/composition-api';
 
 export const useMainContentApp = () => {
 
@@ -20,8 +21,11 @@ export const useMainContentApp = () => {
   };
 
   const logOut = () => {
+    store.commit('logout');
+    store.commit('restAllGlobals');
     router.push({ name: 'Login' }).catch(() => {
     });
+    store.dispatch('notify/openNotifySuccess', 'You have been logged out', { root: true });
   };
 
   onMounted(() => {

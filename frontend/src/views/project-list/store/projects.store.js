@@ -1,5 +1,4 @@
 import axios from 'axios';
-import store from '../../store';
 
 const state = {
   isModalOpen: false,
@@ -53,64 +52,45 @@ const getters = {
 //actions
 const actions = {
   async getProjects({ state, commit }) {
-    const reqData = {
-      userUuid: store.getters[ 'userUuid' ],
-      ...state.sort,
-    };
 
     try {
-      const { data } = await axios.post('http://localhost:8081/projects/projects', reqData);
+      const { data } = await axios.post('http://localhost:8081/projects/projects', state.sort);
       commit('setProjects', data);
     } catch (e) {
-      console.error(e);
+      throw new Error(e);
     }
   },
   async getProjectDetail({ commit }, payload) {
-    const reqData = {
-      userUuid: store.getters[ 'userUuid' ],
-      projectUuid: payload,
-    };
 
     try {
-      const { data } = await axios.post('http://localhost:8081/project/getDetail', reqData);
+      const { data } = await axios.post('http://localhost:8081/project/getDetail', payload);
       commit('setProjectForm', data);
       commit('setModal');
     } catch (e) {
-      console.error(e);
+      throw new Error(e);
     }
   },
   async getEmployees({ commit }) {
-    const uuid = store.getters[ 'userUuid' ];
     try {
-      const { data } = await axios.post('http://localhost:8081/employees/employeeList', { userUuid: uuid });
+      const { data } = await axios.post('http://localhost:8081/employees/employeeList');
       commit('setEmployees', data);
     } catch (e) {
-      console.error(e);
+      throw new Error(e);
     }
   },
   async getEmployeesWithoutProject({ commit }, payload) {
-    const uuid = store.getters[ 'userUuid' ];
-
-    const reqData = {
-      uuid: uuid,
-      projectUuid: payload,
-    };
 
     try {
-      const { data } = await axios.post('http://localhost:8081/employees/employeeListWithoutProject', reqData);
+      const { data } = await axios.post('http://localhost:8081/employees/employeeListWithoutProject', payload);
       commit('setEmployees', data);
     } catch (e) {
-      console.error(e);
+      throw new Error(e);
     }
   },
   async createNewProject({ commit, dispatch }, payload) {
-    const reqData = {
-      ...payload,
-      userUuid: store.getters[ 'userUuid' ],
-    };
 
     try {
-      await axios.post('http://localhost:8081/project/create', reqData);
+      await axios.post('http://localhost:8081/project/create', payload);
       dispatch('getProjects');
       commit('resetForm');
       commit('setModal');
@@ -119,6 +99,7 @@ const actions = {
       dispatch('notify/openNotifyError', e.response, { root: true });
     }
   },
+
   async updateProject({ state, commit, dispatch }) {
     try {
       await axios.post('http://localhost:8081/project/update', state.projectForm);

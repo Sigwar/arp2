@@ -16,16 +16,16 @@ const Certificates = sequelize.define('certificates', {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: true
-    }
+      notEmpty: true,
+    },
   },
   credentialId: {
     type: Sequelize.STRING,
     allowNull: false,
     unique: true,
     validate: {
-      notEmpty: true
-    }
+      notEmpty: true,
+    },
   },
   date: {
     type: Sequelize.DATE,

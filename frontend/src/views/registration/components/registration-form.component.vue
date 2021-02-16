@@ -10,7 +10,7 @@
              class="gc-registration-form__form">
 
       <gc-form-item class="gc-registration-form__form__item"
-                    label="Name / Company name"
+                    label="Login / Company name"
                     prop="name">
 
         <gc-input v-model="registrationForm.name"></gc-input>
@@ -25,8 +25,8 @@
 
       <gc-form-item class="gc-registration-form__form__item"
                     label="Password"
-                    type="password"
-                    prop="password">
+                    prop="password"
+                    type="password">
 
         <gc-input v-model="registrationForm.password"
                   type="password"></gc-input>
@@ -34,9 +34,9 @@
       </gc-form-item>
 
       <gc-form-item class="gc-registration-form__form__item"
-                    type="password"
                     label="Repeat password"
-                    prop="repeatPassword">
+                    prop="repeatPassword"
+                    type="password">
 
         <gc-input v-model="registrationForm.repeatPassword"
                   type="password"></gc-input>

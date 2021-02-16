@@ -1,5 +1,4 @@
 import axios from 'axios';
-import store from '../../store';
 
 const state = {
   employees: [],
@@ -51,27 +50,18 @@ const getters = {
 const actions = {
   async getEmployees({ state, commit }) {
 
-    const reqData = {
-      userUuid: store.getters[ 'userUuid' ],
-      ...state.sort,
-    };
-
     try {
-      const { data } = await axios.post('http://localhost:8081/employees/employees', reqData);
+      const { data } = await axios.post('http://localhost:8081/employees/employees', state.sort);
       commit('setEmployees', data);
     } catch (e) {
-      console.error(e);
+      throw new Error(e);
     }
   },
   async createNewEmployee({ state, commit, dispatch }) {
     commit('setLoadingBtn', true);
-    const reqData = {
-      userUuid: store.getters[ 'userUuid' ],
-      ...state.employeeForm,
-    };
 
     try {
-      await axios.post('http://localhost:8081/employee/create', reqData);
+      await axios.post('http://localhost:8081/employee/create', state.employeeForm);
       dispatch('getEmployees');
       commit('setIsModalOpen', false);
       commit('resetEmployeeForm');
@@ -83,12 +73,11 @@ const actions = {
     }
   },
   async getProjects({ commit }) {
-    const uuid = store.getters[ 'userUuid' ];
     try {
-      const { data } = await axios.post('http://localhost:8081/projects/projectsList', { userUuid: uuid });
+      const { data } = await axios.post('http://localhost:8081/projects/projectsList');
       commit('setProjects', data);
     } catch (e) {
-      console.error(e);
+      throw new Error(e);
     }
   },
 };

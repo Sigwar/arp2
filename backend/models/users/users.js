@@ -12,7 +12,7 @@ const Users = sequelize.define('users', {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  name: {
+  login: {
     type: Sequelize.STRING,
     unique: true,
     allowNull: false,

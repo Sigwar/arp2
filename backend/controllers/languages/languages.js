@@ -1,20 +1,34 @@
+const generatorUuid = require('uuid');
+const Users = require('../../models/users/users');
+const { validationResult } = require('express-validator');
 const Languages = require('../../models/languages/languages');
 const LanguagesLevel = require('../../models/languagesLevels/languagesLevel');
 const EmployeeLanguages = require('../../models/employeeLanguages/employeeLanguages');
-const User = require('../../models/users/users');
-const generatorUuid = require('uuid');
 
 //GET LANGUAGES
 exports.getLanguages = async (req, res, next) => {
   try {
-    const languages = await Languages.findAll({
+    const { id } = await Users.findOne({
       raw: true,
+      where: { uuid: req.body.userUuid },
       attributes: {
-        exclude: [ 'id', 'updatedAt', 'createdAt' ],
+        exclude: [ 'login', 'password', 'updatedAt', 'createdAt', 'uuid', 'email' ],
       },
     });
 
-    res.status(200).json(languages);
+    if (id) {
+      const languages = await Languages.findAll({
+        raw: true,
+        where: { userId: id },
+        attributes: {
+          exclude: [ 'id', 'updatedAt', 'createdAt' ],
+        },
+      });
+
+      res.status(200).json(languages);
+    } else {
+      res.status(401).json();
+    }
   } catch (e) {
     console.error(e);
   }
@@ -44,21 +58,34 @@ exports.getLanguagesWithLevel = async (req, res, next) => {
       },
     });
 
-    const languages = await Languages.findAll({
+    const { id } = await Users.findOne({
       raw: true,
+      where: { uuid: req.body.userUuid },
       attributes: {
-        exclude: [ 'id', 'updatedAt', 'createdAt' ],
+        exclude: [ 'login', 'password', 'updatedAt', 'createdAt', 'uuid', 'email' ],
       },
     });
+    if (id) {
 
-    let arr = [];
-    languages.forEach(language => {
-      languagesLevel.forEach(level => {
-        arr.push(`${language.name} ${level.name}`);
+      const languages = await Languages.findAll({
+        raw: true,
+        where: { userId: id },
+        attributes: {
+          exclude: [ 'id', 'updatedAt', 'createdAt' ],
+        },
       });
-    });
 
-    res.status(200).json(arr);
+      let arr = [];
+      languages.forEach(language => {
+        languagesLevel.forEach(level => {
+          arr.push(`${language.name} ${level.name}`);
+        });
+      });
+
+      res.status(200).json(arr);
+    } else {
+      res.status(401).json();
+    }
   } catch (e) {
     console.error(e);
   }
@@ -81,13 +108,25 @@ exports.create = async (req, res, next) => {
 
   if (error.isEmpty()) {
     try {
-      const uuid = generatorUuid.v4();
-      await Languages.create({
-        uuid: uuid,
-        name: req.body.name,
+      const { id } = await Users.findOne({
+        raw: true,
+        where: { uuid: req.body.userUuid },
+        attributes: {
+          exclude: [ 'login', 'password', 'updatedAt', 'createdAt', 'uuid', 'email' ],
+        },
       });
+      if (id) {
+        const uuid = generatorUuid.v4();
+        await Languages.create({
+          uuid: uuid,
+          name: req.body.name,
+          userId: id,
+        });
 
-      res.status(201).json();
+        res.status(201).json();
+      } else {
+        res.status(401).json();
+      }
     } catch (e) {
       console.error(e);
     }
