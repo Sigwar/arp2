@@ -32,6 +32,7 @@ export default {
 
       &:hover {
         background: var(--primary-color);
+        color: var(--white)
       }
     }
 

@@ -93,6 +93,16 @@ app.use('/languages', languagesRoutes);
 
 app.use('/registration', Registration);
 
+console.log(process.env);
+
+if(process.env.NODE_ENV === 'production') {
+  console.log('tutaj:',)
+
+  app.use(express.static(__dirname + '/public/'));
+
+  app.get(/.*/, (req, res) => res.sendFile(__dirname + '/public/index.html'));
+}
+
 sequelize.sync().then(() => { //REBUILD DATABASE -> { force: true }
   app.listen(8081);
 }).catch(() => {
