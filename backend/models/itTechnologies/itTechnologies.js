@@ -11,7 +11,6 @@ const ItTechnologies = sequelize.define('it_technologies', {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true,
     validate: {
       notEmpty: true,
     },

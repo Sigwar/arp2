@@ -54,12 +54,12 @@ export default new Vuex.Store({
     },
     restAllGlobals(state) {
       state.global.user = {},
-        state.global.languages = [],
-        state.global.levelList = [],
-        state.global.professions = [],
-        state.global.itTechnologies = [],
-        state.global.levelDetailList = [],
-        state.global.workstationDetail = [],
+        state.global.languages = [];
+        state.global.levelList = [];
+        state.global.professions = [];
+        state.global.itTechnologies = [];
+        state.global.levelDetailList = [];
+        state.global.workstationDetail = [];
         state.global.languagesWithoutLevel = [];
     },
   },
@@ -79,7 +79,7 @@ export default new Vuex.Store({
         });
         dispatch('notify/openNotifySuccess', 'You have been logged in', { root: true });
       } catch (e) {
-        dispatch('notify/openNotifyError', 'Wrong login or password', { root: true });
+        dispatch('notify/openNotifyError', e.response, { root: true });
         throw new Error(e);
       }
     },

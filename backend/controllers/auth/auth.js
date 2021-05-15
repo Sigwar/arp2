@@ -1,11 +1,8 @@
 const Crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-const generatorUuid = require('uuid');
 const Users = require('../../models/users/users');
-const { validationResult } = require('express-validator');
 
 exports.signIn = async (req, res, next) => {
-
   const { login, password } = req.body;
   if (login && password) {
     try {
@@ -32,7 +29,7 @@ exports.signIn = async (req, res, next) => {
           res.status(401).json({ error: 'Wrong e-mail or password' });
         }
       } else {
-        res.status(404).json({ error: 'User not existing' });
+        res.status(404).json({ error: [ { msg: 'Wrong login or password', param: '' } ] });
       }
     } catch (e) {
       console.error(e);
