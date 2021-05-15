@@ -81,11 +81,11 @@
                      prop="uuid">
 
       <template slot-scope="scope">
-        <span class="gc-employee-list-table__column__action gc-employee-list-table__column__action--red">PDF {{ scope.row.index }}</span>
-        <span class="gc-employee-list-table__column__action gc-employee-list-table__column__action--red-dark">BLIND PDF</span>
+<!--        <span class="gc-employee-list-table__column__action gc-employee-list-table__column__action&#45;&#45;red">PDF {{ scope.row.index }}</span>-->
+<!--        <span class="gc-employee-list-table__column__action gc-employee-list-table__column__action&#45;&#45;red-dark">BLIND PDF</span>-->
 
         <span class="gc-employee-list-table__column__action gc-employee-list-table__column__action--yellow"
-              @click="goToDetail(scope.row.uuid)">EDIT</span>
+              @click="goToDetail(scope.row.uuid)">DETAILS</span>
 
       </template>
     </gc-table-column>

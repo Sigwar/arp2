@@ -77,15 +77,23 @@ exports.create = async (req, res, next) => {
       });
 
       if (id) {
-
-        const uuid = generatorUuid.v4();
-        await Levels.create({
-          uuid: uuid,
-          name: req.body.name,
-          userId: id,
+        const isExist = await Levels.findOne({
+          raw: true,
+          where: { name: req.body.name }
         });
 
-        res.status(201).json();
+        if(!isExist) {
+          const uuid = generatorUuid.v4();
+          await Levels.create({
+            uuid: uuid,
+            name: req.body.name,
+            userId: id,
+          });
+
+          res.status(201).json();
+        } else {
+          res.status(409).json({ error: [{msg: 'Level is already exists', param: ''}] });
+        }
       } else {
         res.status(401).json();
       }

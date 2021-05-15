@@ -51,12 +51,21 @@ exports.create = async (req, res, next) => {
       });
 
       if (id) {
-        await itTechnologies.create({
-          userId: id,
-          name: req.body.name,
+        const isExist = await itTechnologies.findOne({
+          raw: true,
+          where: { name: req.body.name }
         });
 
-        res.status(201).json();
+        if (!isExist) {
+          await itTechnologies.create({
+            userId: id,
+            name: req.body.name,
+          });
+
+          res.status(201).json();
+        } else {
+          res.status(409).json({ error: [ { msg: 'Technologie is already exists', param: '' } ] });
+        }
       } else {
         res.status(401).json();
       }

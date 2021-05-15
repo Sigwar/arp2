@@ -200,6 +200,7 @@ export default defineComponent({
     margin: 3.7rem 0 5.1rem;
 
     &__picture {
+      display: none;
       width: 17rem;
       height: 17rem;
 

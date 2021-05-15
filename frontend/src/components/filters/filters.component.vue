@@ -5,6 +5,7 @@
 
       <gc-input v-model="valueInput"
                 placeholder="Search..."
+                disabled
                 @input="changeValueInput"></gc-input>
     </div>
 

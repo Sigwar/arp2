@@ -1,0 +1,40 @@
+services:
+  db:
+    image: mysql/mysql-server
+    environment:
+       - MYSQL_DATABASE=hrp
+       - MYSQL_ROOT_PASSWORD=root
+       - MYSQL_USER=user
+       - MYSQL_PASSWORD=admin
+       - MYSQL_ROOT_HOST=0.0.0.0
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data:/var/lib/mysql
+    networks:
+      - local
+    healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+        timeout: 20s
+        retries: 10
+
+  backend:
+         build: ./backend
+         ports:
+           - 8081:8081
+         networks:
+           - local
+         links:
+           - 'db:db'
+         depends_on:
+            db:
+              condition: service_healthy
+  frontend:
+         build: ./frontend
+         ports: 
+           - 8080:8080
+         networks:
+           - local
+networks:
+    local:
+        driver: bridge
