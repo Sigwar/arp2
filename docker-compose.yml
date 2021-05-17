@@ -23,6 +23,14 @@ services:
     build:
       context: backend
       dockerfile: Dockerfile
+    environment:
+    - MYSQL_DATABASE=hrp
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_USER=user
+    - MYSQL_PASSWORD=admin
+    - MYSQL_HOST=database
+    - MYSQL_PORT=3306
+    - MYSQL_ADDRESS=database
     ports:
     - "8081:8081"
     links:
